@@ -7,7 +7,7 @@ const headerVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.25, 0.1, 0.25, 1] } },
 }
 
-// Updated helper to use the BASE variable and look in companyLogos/
+
 const getLocalLogo = (companyName) => {
   const name = companyName.toLowerCase().trim()
  // Mapping based on the exact filenames in your screenshot
