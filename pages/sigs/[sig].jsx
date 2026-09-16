@@ -1,25 +1,28 @@
+import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import Navbar from '../components/Navbar'
-import Hero from '../components/Hero'
-import TataBreach from '../components/Tatabreach'
-import Domains from '../components/Domains'
-import Works from '../components/Works'
-import CyberWorks from '../components/CyberWorks'
-import Explorations from '../components/Explorations'
-import Members from '../components/Members'
-import Events from '../components/Events'
-import Stats from '../components/Stats'
-import Achievements from '../components/Achievements'
-import InternshipsAndPapers from '../components/papersandinternship'
-import WhyJoin from '../components/WhyJoin'
-import Manifesto from '../components/Manifesto'
-import Contact from '../components/Contact'
-import Spores from '../components/Spores'
-import StrangerWidgets from '../components/StrangerWidgets'
-import PsychicSequence from '../components/PsychicSequence'
-import { sigs } from '../data/sigs'
-import CinematicExperience from '../components/CinematicExperience'
+import { useRouter } from 'next/router'
+import Navbar from '../../components/Navbar'
+import Hero from '../../components/Hero'
+import TataBreach from '../../components/Tatabreach'
+import Domains from '../../components/Domains'
+import Works from '../../components/Works'
+import CyberWorks from '../../components/CyberWorks'
+import Explorations from '../../components/Explorations'
+import Members from '../../components/Members'
+import Events from '../../components/Events'
+import Stats from '../../components/Stats'
+import Achievements from '../../components/Achievements'
+import InternshipsAndPapers from '../../components/papersandinternship'
+import WhyJoin from '../../components/WhyJoin'
+import Manifesto from '../../components/Manifesto'
+import Contact from '../../components/Contact'
+import Spores from '../../components/Spores'
+import StrangerWidgets from '../../components/StrangerWidgets'
+import PsychicSequence from '../../components/PsychicSequence'
+import CinematicExperience from '../../components/CinematicExperience'
+
+// Pulling in the real data from your newly created data folder!
+import { sigs } from '../../data/sigs'
 
 const sectionIds = [
   'home',
@@ -34,8 +37,8 @@ const sectionIds = [
 ]
 
 export default function RecruitmentPage() {
-  const navigate = useNavigate()
-  const { sig: sigId } = useParams()
+  const router = useRouter() 
+  const { sig: sigId } = router.query 
 
   const [activeSig, setActiveSig] = useState(
     () => sigs.find((s) => s.id === sigId) || null
@@ -47,10 +50,19 @@ export default function RecruitmentPage() {
   const [isUpsideDown, setIsUpsideDown] = useState(false)
   const [isPsychicSequenceActive, setIsPsychicSequenceActive] = useState(false)
 
+  // This will run when Next.js hydrates the URL parameters
   useEffect(() => {
-    setActiveSig(sigs.find((s) => s.id === sigId) || null)
-    setActiveSection('home')
-    window.scrollTo(0, 0)
+    if (sigId) {
+      setActiveSig(sigs.find((s) => s.id === sigId) || null)
+      setActiveSection('home')
+      
+      // THE FIX: Adding a tiny delay guarantees Next.js finishes rendering 
+      // BEFORE we force the scrollbar to the absolute top.
+      setTimeout(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+        document.documentElement.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+      }, 50) 
+    }
   }, [sigId])
 
   const toggleTelekinesis = () => {
@@ -63,7 +75,7 @@ export default function RecruitmentPage() {
   }
 
   const goBackToSigSelection = () => {
-    navigate(-1)
+    router.back() 
   }
 
   useEffect(() => {
@@ -141,7 +153,16 @@ export default function RecruitmentPage() {
                 : ''
             }`}
           >
-            <Hero sig={activeSig} />
+            {/* THE SECOND FIX: Adding key={sigId} forces React to reset the animation completely! */}
+            <motion.div
+              key={sigId}
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+              className="pt-36 sm:pt-40 md:pt-48"
+            >
+              <Hero sig={activeSig} />
+            </motion.div>
 
             <TataBreach sig={activeSig} />
 
@@ -251,7 +272,7 @@ export default function RecruitmentPage() {
             </p>
 
             <button
-              onClick={() => navigate('/')}
+              onClick={() => router.push('/')}
               className="px-6 py-3 rounded-full bg-red-600 hover:bg-red-700 text-white font-retro font-bold text-xs uppercase tracking-widest cursor-pointer border border-red-500"
             >
               Go to the Gate
