@@ -101,7 +101,8 @@ export default function Achievements({ sig }) {
             )}
 
             <div className="mb-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {data.people.map(([name, role, company, domain], i) => {
+              {/* Added optional chaining (?) to data.people here */}
+              {data.people?.map(([name, role, company, domain], i) => {
                 const localLogoUrl = getLocalLogo(company)
                 return (
                   <motion.div

@@ -33,11 +33,19 @@ function useCountUp(target, active, duration = 1600) {
 export default function Stats({ sig }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: false, margin: '-100px' })
-  const seed = sig.id.length
+  
+  // Safely grab the length just in case id is missing
+  const seed = sig.id?.length || 0 
+  
   const stats = [
     { num: 35 + seed * 3, suffix: '+', label: baseStats[0][0], description: baseStats[0][1] },
-    { num: 12 + sig.projects.length * 4, suffix: '+', label: baseStats[1][0], description: baseStats[1][1] },
-    { num: 8 + sig.events.length * 3, suffix: '+', label: baseStats[2][0], description: baseStats[2][1] },
+    
+    // Fixed: Added ?. and || 0 to prevent crashing if projects array is missing
+    { num: 12 + (sig.projects?.length || 0) * 4, suffix: '+', label: baseStats[1][0], description: baseStats[1][1] },
+    
+    // Fixed: Added ?. and || 0 to prevent crashing if events array is missing
+    { num: 8 + (sig.events?.length || 0) * 3, suffix: '+', label: baseStats[2][0], description: baseStats[2][1] },
+    
     { num: 3 + seed, suffix: '', label: baseStats[3][0], description: baseStats[3][1] },
   ]
 
@@ -57,7 +65,8 @@ export default function Stats({ sig }) {
             <div className="h-px w-8 bg-red-900/50" />
           </div>
           <h2 className="text-4xl font-extrabold uppercase leading-tight text-neutral-200 font-display md:text-5xl">
-            {sig.shortName} telemetry <span className="text-red-600 stranger-glow">recorded</span>
+            {/* Added fallback to sig.title if shortName is missing */}
+            {sig.shortName || sig.title} telemetry <span className="text-red-600 stranger-glow">recorded</span>
           </h2>
         </motion.div>
 

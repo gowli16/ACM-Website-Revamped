@@ -30,7 +30,8 @@ export default function Domains({ sig }) {
         </motion.div>
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {sig.domains.map(([title, description, tags], i) => (
+          {/* We added the optional chaining (?) right here! */}
+          {sig.domains?.map(([title, description, tags], i) => (
             <DomainCard key={title} title={title} description={description} tags={tags} index={i} />
           ))}
         </div>
@@ -71,7 +72,7 @@ function DomainCard({ title, description, tags, index }) {
 
       {/* Maximized Keywords Tag Section Layout */}
       <div className="mt-auto flex flex-wrap gap-3">
-        {tags.map((tag) => (
+        {tags?.map((tag) => (
           <span 
             key={tag} 
             className="text-base font-black uppercase tracking-wider border-2 border-red-500/50 bg-red-950/40 text-red-400 px-4 py-2 rounded-xl font-retro drop-shadow-[0_0_10px_rgba(239,68,68,0.4)] md:text-lg transition-all duration-300 group-hover:border-red-400"
