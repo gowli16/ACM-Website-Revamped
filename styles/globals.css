@@ -42,3 +42,510 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:var(--font-display),sans-serif;lett
 @media(max-width:580px){.year-switcher{grid-template-columns:1fr}.core-page .people-grid{gap:14px}.faculty-clean-page .people-grid .person-card{flex-basis:100%}.core-page .people-grid>*{flex-basis:100%}.core-page .people-hero{padding-block:32px}}
 .alumni-destinations{display:grid;grid-template-columns:.82fr 1.18fr;align-items:center;gap:70px;margin-bottom:90px;padding:38px;background:rgba(15,7,27,.82);border:1px solid rgba(225,159,255,.17);box-shadow:0 30px 90px rgba(0,0,0,.28)}.alumni-destinations-copy{padding:20px}.alumni-destinations-copy h2{margin:24px 0 20px;font-size:clamp(35px,4vw,52px);line-height:1.04}.alumni-destinations-copy h2 span{color:var(--cyan)}.alumni-destinations-copy>p:not(.section-kicker){color:#9686a5;font-size:13px;line-height:1.75}.alumni-destinations-copy>b{display:block;margin-top:30px;color:#685776;font-size:8px;letter-spacing:.15em}.alumni-company-wall{position:relative;min-height:340px;display:grid;place-items:center;overflow:hidden;background:#020817;border:1px solid rgba(255,79,163,.18)}.alumni-company-wall:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(90,50,150,.18),transparent 62%);pointer-events:none}.alumni-company-wall img{position:relative;width:min(100%,590px);height:auto;image-rendering:auto}.alumni-company-wall:after{content:"COMPANY NETWORK / VERIFIED ALUMNI OUTCOMES";position:absolute;right:14px;bottom:10px;color:#4b415e;font:700 7px var(--font-body);letter-spacing:.13em}@media(max-width:900px){.alumni-destinations{grid-template-columns:1fr;gap:25px}.alumni-company-wall{min-height:300px}}@media(max-width:580px){.alumni-destinations{width:100%;margin-bottom:60px;padding:16px}.alumni-destinations-copy{padding:15px 8px}.alumni-company-wall{min-height:220px}.alumni-company-wall:after{display:none}}
 .events-archive{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.event-archive-card{position:relative;min-height:570px;padding:38px;display:flex;flex-direction:column;background:rgba(16,8,29,.9);border:1px solid rgba(225,159,255,.15);overflow:hidden;transition:.3s}.event-archive-card:before{content:"";position:absolute;width:230px;height:230px;right:-120px;top:-120px;border-radius:50%;border:1px solid rgba(255,79,163,.13);box-shadow:0 0 70px rgba(116,70,220,.08)}.event-archive-card:hover{transform:translateY(-5px);border-color:rgba(255,79,163,.45);background:#190c2a}.event-archive-card.featured{grid-column:1/-1;min-height:520px;display:grid;grid-template-columns:1.1fr .9fr;column-gap:80px;background:linear-gradient(120deg,rgba(93,41,153,.3),rgba(16,8,29,.92) 58%)}.event-archive-card.featured .event-card-head,.event-archive-card.featured .event-card-title{grid-column:1}.event-archive-card.featured>p{grid-column:1}.event-archive-card.featured>dl{grid-column:2;grid-row:2/4;align-self:center}.event-archive-card.featured>ul{grid-column:1}.event-archive-card.featured>a{grid-column:2;grid-row:4;align-self:end}.event-card-head{display:flex;justify-content:space-between;color:var(--cyan)}.event-card-head span{font-size:8px;letter-spacing:.15em}.event-card-head svg{font-size:29px}.event-card-title{margin-top:58px}.event-card-title small{color:#776687;font-size:8px;text-transform:uppercase;letter-spacing:.15em}.event-card-title h2{margin:10px 0 0;font-size:clamp(38px,4vw,58px)}.event-archive-card>p{max-width:610px;color:#9584a5;font-size:13px;line-height:1.75;margin:22px 0 28px}.event-archive-card dl{display:grid;gap:1px;margin:0 0 27px;background:rgba(225,159,255,.12)}.event-archive-card dl>div{display:grid;grid-template-columns:75px 1fr;gap:15px;padding:12px;background:#160a26}.event-archive-card dt{color:#665574;font-size:8px;text-transform:uppercase;letter-spacing:.1em}.event-archive-card dd{margin:0;color:#c4b5ce;font-size:10px}.event-archive-card ul{display:flex;flex-wrap:wrap;gap:6px;padding:0;margin:0 0 26px;list-style:none}.event-archive-card li{padding:7px 9px;border:1px solid rgba(225,159,255,.15);color:#806f8e;font-size:7px;text-transform:uppercase;letter-spacing:.1em}.event-archive-card>a{width:max-content;margin-top:auto;display:flex;align-items:center;gap:10px;color:var(--cyan);font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;border-bottom:1px solid rgba(255,79,163,.45);padding-bottom:5px}.event-placeholder{min-height:330px;grid-column:1/-1;justify-content:center;border-style:dashed;background:rgba(255,79,163,.025)}.event-placeholder>span{color:var(--cyan);font-size:8px;letter-spacing:.14em}.event-placeholder h2{max-width:600px;margin:20px 0 8px;font-size:40px}.event-placeholder>p{margin:0}.site-header nav{gap:14px}.site-header nav>a:not(.nav-cta){font-size:9px}@media(max-width:900px){.events-archive{grid-template-columns:1fr}.event-archive-card.featured{grid-column:auto;display:flex;min-height:620px}.event-archive-card.featured>dl,.event-archive-card.featured>ul,.event-archive-card.featured>a{grid-column:auto;grid-row:auto}.event-placeholder{grid-column:auto}}@media(max-width:580px){.event-archive-card{min-height:560px;padding:27px}.event-card-title{margin-top:45px}.event-placeholder{min-height:320px}.event-placeholder h2{font-size:31px}}
+
+/* =========================================================
+   PEOPLE REVEAL
+   ========================================================= */
+
+.people-reveal {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100px;
+}
+
+.people-reveal-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 55px;
+}
+
+.people-reveal-header h2 {
+  margin: 18px 0 0;
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+}
+
+.people-reveal-header h2 span {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--cyan);
+}
+
+/* =========================
+   PROGRESS
+   ========================= */
+
+.people-reveal-progress {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 240px;
+  flex-shrink: 0;
+  padding-bottom: 7px;
+}
+
+.people-reveal-progress > span {
+  color: #806d90;
+  font: 700 9px var(--font-body);
+  letter-spacing: 0.12em;
+}
+
+.people-reveal-progress > span:first-child {
+  color: var(--cyan);
+}
+
+.progress-line {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  overflow: hidden;
+  background: rgba(225, 159, 255, 0.18);
+}
+
+.progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: var(--cyan);
+  box-shadow: 0 0 12px var(--cyan);
+}
+
+/* =========================================================
+   ACTIVE CARD STAGE
+   ========================================================= */
+
+.people-reveal-stage {
+  position: relative;
+  width: 100%;
+  min-height: 700px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Important: names and cards must be allowed to extend
+     beyond the stage without being cropped. */
+  overflow: visible;
+}
+
+/* =========================
+   LARGE BACKGROUND NAME
+   ========================= */
+
+.people-background-name {
+  position: absolute;
+  inset: 0;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  pointer-events: none;
+  z-index: 2;
+
+  overflow: visible;
+}
+
+.people-first-name,
+.people-last-name {
+  position: relative;
+
+  min-width: 0;
+
+  font-family: var(--font-heading);
+  font-size: clamp(72px, 9vw, 155px);
+  font-weight: 900;
+  line-height: 0.8;
+  letter-spacing: -0.075em;
+  text-transform: uppercase;
+
+  color: rgba(133, 113, 156, 0.25);
+
+  white-space: nowrap;
+  user-select: none;
+
+  text-shadow: 0 0 40px rgba(255, 79, 163, 0.04);
+
+  overflow: visible;
+}
+
+/* First name stays on the LEFT side */
+.people-first-name {
+  grid-column: 1;
+
+  width: 100%;
+  padding-right: 25px;
+
+  text-align: right;
+}
+
+/* Last name stays on the RIGHT side */
+.people-last-name {
+  grid-column: 2;
+
+  width: 100%;
+  padding-left: 25px;
+
+  text-align: left;
+}
+
+/* =========================
+   ACTIVE CARD
+   ========================= */
+
+.people-reveal-active {
+  position: relative;
+  z-index: 10;
+
+  width: min(390px, 82vw);
+
+  cursor: pointer;
+  user-select: none;
+}
+
+.people-reveal-card {
+  position: relative;
+}
+
+.people-reveal-card .person-card {
+  width: 100%;
+
+  border-color: rgba(255, 79, 163, 0.5);
+
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.55),
+    0 0 80px rgba(255, 79, 163, 0.08);
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.people-reveal-active:hover .person-card {
+  transform: translateY(-5px);
+
+  border-color: var(--cyan);
+
+  box-shadow:
+    0 35px 90px rgba(0, 0, 0, 0.6),
+    0 0 80px rgba(255, 79, 163, 0.14);
+}
+
+/* The old text prompt is no longer needed.
+   The card itself is the interaction. */
+.people-reveal-hint {
+  display: none !important;
+}
+
+/* =========================
+   NAVIGATION
+   ========================= */
+
+.people-navigation {
+  position: absolute;
+  top: 50%;
+  z-index: 20;
+
+  width: 54px;
+  height: 54px;
+
+  border: 1px solid rgba(255, 79, 163, 0.6);
+  border-radius: 50%;
+
+  background: rgba(10, 5, 20, 0.55);
+  color: var(--cyan);
+
+  font-size: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transform: translateY(-50%);
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.people-navigation:hover {
+  background: var(--cyan);
+  color: #08040d;
+  border-color: var(--cyan);
+
+  transform: translateY(-50%) scale(1.08);
+}
+
+.people-navigation-left {
+  left: 5%;
+}
+
+.people-navigation-right {
+  right: 5%;
+}
+
+/* =========================================================
+   FINAL GRID
+   ========================================================= */
+
+.people-final-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+  width: 100%;
+}
+
+.people-final-card {
+  min-width: 0;
+
+  transition:
+    transform 0.3s ease,
+    filter 0.3s ease;
+}
+
+.people-final-card:hover {
+  transform: translateY(-6px);
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .people-first-name,
+  .people-last-name {
+    font-size: clamp(64px, 9vw, 125px);
+  }
+
+  .people-first-name {
+    padding-right: 18px;
+  }
+
+  .people-last-name {
+    padding-left: 18px;
+  }
+
+  .people-final-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .orbit-two {
+    width: 620px;
+    height: 620px;
+  }
+
+  .orbit-three {
+    width: 780px;
+    height: 780px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .people-reveal-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .people-reveal-progress {
+    width: min(100%, 300px);
+  }
+
+  .people-reveal-stage {
+    min-height: 620px;
+  }
+
+  .people-final-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .people-navigation-left {
+    left: 2%;
+  }
+
+  .people-navigation-right {
+    right: 2%;
+  }
+}
+
+@media (max-width: 700px) {
+  .people-reveal-stage {
+    min-height: 610px;
+  }
+
+  .people-first-name,
+  .people-last-name {
+    font-size: 72px;
+  }
+
+  .people-first-name {
+    padding-right: 12px;
+  }
+
+  .people-last-name {
+    padding-left: 12px;
+  }
+
+  .people-navigation {
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+
+  .orbit-one {
+    width: 430px;
+    height: 430px;
+  }
+
+  .orbit-two {
+    width: 520px;
+    height: 520px;
+  }
+
+  .orbit-three {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .people-first-name,
+  .people-last-name {
+    font-size: 52px;
+  }
+
+  .people-first-name {
+    padding-right: 8px;
+  }
+
+  .people-last-name {
+    padding-left: 8px;
+  }
+
+  .people-navigation {
+    display: none;
+  }
+
+  .people-final-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .people-reveal-active,
+  .people-reveal-card .person-card,
+  .people-final-card {
+    transition: none !important;
+  }
+}
+
+
+/* =========================================================
+   PEOPLE HERO
+   ========================================================= */
+
+.people-clean-page {
+  padding-bottom: 140px !important;
+}
+
+.people-hero {
+  min-height: 470px;
+
+  padding-top: 115px;
+
+  display: grid;
+
+  /*
+   * Give the heading most of the space,
+   * but keep enough room for the description.
+   */
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+
+  column-gap: 70px;
+
+  align-content: center;
+}
+
+.people-hero > .section-kicker {
+  grid-column: 1 / -1;
+  margin-bottom: 25px;
+}
+
+.people-hero h1 {
+  margin: 0;
+
+  font: 600 clamp(58px, 7vw, 102px) / 0.88 var(--font-display);
+
+  letter-spacing: -0.065em;
+
+  text-transform: uppercase;
+
+  min-width: 0;
+}
+
+/*
+ * THIS IS IMPORTANT.
+ * Each sentence/line gets its own row.
+ */
+.people-hero h1 span {
+  display: block;
+
+  width: max-content;
+  max-width: 100%;
+}
+
+.people-hero h1 .outlined {
+  color: transparent;
+
+  -webkit-text-stroke: 1.3px var(--cyan);
+}
+
+.people-hero > div {
+  align-self: end;
+
+  max-width: 440px;
+
+  padding-left: 25px;
+
+  border-left: 1px solid rgba(255, 79, 163, 0.5);
+}
+
+.people-hero > div p {
+  margin: 0;
+
+  color: #a294b2;
+
+  font-size: 16px;
+
+  line-height: 1.75;
+}
+
+.people-hero > div b {
+  display: block;
+
+  margin-top: 26px;
+
+  color: var(--cyan);
+
+  font-size: 8px;
+
+  letter-spacing: 0.16em;
+}
