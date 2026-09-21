@@ -11,13 +11,109 @@ const sigs = [
 
 export default function About() {
   const [active, setActive] = useState(0);
-  return <div className="subpage about-page">
-    <section className="subpage-hero section-shell">
-      <div><p className="section-kicker">[ Identity / chapter 001 ]</p><motion.h1 initial={{opacity:0,y:25}} animate={{opacity:1,y:0}}>Built by the<br /><span>terminally curious.</span></motion.h1></div>
-      <div className="subpage-intro"><b>ACM · AMRITAPURI</b><p>We are a student-led computing community built around self-education, shared ambition, and making ideas real together.</p></div>
-    </section>
-    <section className="about-visual section-shell"><div className="about-photo"><Image src="/group.png" alt="The ACM Amritapuri community" fill sizes="100vw" priority /><div className="photo-code">COMMUNITY_FRAME / 2024</div></div></section>
-    <section className="about-metrics section-shell">{[["03+","Years building"],["89+","Active members"],["100+","Projects"],["26","Events hosted"],["08","Papers published"]].map(([value,label])=><div key={label}><strong>{value}</strong><span>{label}</span></div>)}</section>
-    <section className="sig-console section-shell"><div className="console-tabs">{sigs.map((sig,i)=><button className={active===i?"active":""} onClick={()=>setActive(i)} key={sig.title}><small>{sig.id}</small>{sig.title}</button>)}</div><AnimatePresence mode="wait"><motion.div key={active} className="console-panel" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}><p className="section-kicker">[ Active frequency ]</p><h2>{sigs[active].title}</h2><p>{sigs[active].desc}</p><div>{sigs[active].wins.map((win,i)=><span key={win}><i>0{i+1}</i>{win}</span>)}</div></motion.div></AnimatePresence></section>
-  </div>;
+  
+  return (
+    <div className="subpage about-page min-h-screen bg-[#020204] text-white">
+      
+      {/* 
+        This style block forces the new theme colors onto your existing custom CSS classes 
+        so the old orange/yellow theme stops taking over the bottom half of the page.
+      */}
+      <style dangerouslySetInnerHTML={{__html: `
+        .about-page .section-kicker,
+        .about-page .subpage-intro b { 
+          color: #22d3ee !important; /* cyan-400 */
+        }
+        .about-page h1 span {
+          background: linear-gradient(to right, #22d3ee, #3b82f6, #a855f7) !important;
+          -webkit-background-clip: text !important;
+          -webkit-text-fill-color: transparent !important;
+        }
+        .about-page .photo-code {
+          color: #22d3ee !important;
+        }
+        .about-page .about-metrics strong {
+          background: linear-gradient(to right, #22d3ee, #3b82f6) !important;
+          -webkit-background-clip: text !important;
+          -webkit-text-fill-color: transparent !important;
+        }
+        .about-page .console-tabs button.active {
+          color: #22d3ee !important;
+          border-left-color: #22d3ee !important;
+          border-bottom-color: #22d3ee !important;
+        }
+        .about-page .console-panel i { 
+          color: #a855f7 !important; /* purple-500 */
+        }
+      `}} />
+
+      <section className="subpage-hero section-shell">
+        <div>
+          <p className="section-kicker tracking-[0.3em]">[ Identity / chapter 001 ]</p>
+          <motion.h1 initial={{opacity:0,y:25}} animate={{opacity:1,y:0}}>
+            Built by the<br />
+            <span>
+              terminally curious.
+            </span>
+          </motion.h1>
+        </div>
+        <div className="subpage-intro">
+          <b className="tracking-widest block mb-2">ACM · AMRITAPURI</b>
+          <p className="text-neutral-400">
+            We are a student-led computing community built around self-education, shared ambition, and making ideas real together.
+          </p>
+        </div>
+      </section>
+      
+      <section className="about-visual section-shell">
+        <div className="about-photo">
+          <Image src="/group.png" alt="The ACM Amritapuri community" fill sizes="100vw" priority />
+          <div className="photo-code bg-[#020204]/80 backdrop-blur-sm px-3 py-1">
+            COMMUNITY_FRAME / 2024
+          </div>
+        </div>
+      </section>
+      
+      <section className="about-metrics section-shell">
+        {[["03+","Years building"],["89+","Active members"],["100+","Projects"],["26","Events hosted"],["08","Papers published"]].map(([value,label]) => (
+          <div key={label}>
+            <strong>{value}</strong>
+            <span className="text-neutral-400 uppercase tracking-widest">{label}</span>
+          </div>
+        ))}
+      </section>
+      
+      <section className="sig-console section-shell">
+        <div className="console-tabs">
+          {sigs.map((sig,i) => (
+            <button 
+              className={`${active === i ? "active" : "text-neutral-500 hover:text-neutral-300"} transition-colors`} 
+              onClick={() => setActive(i)} 
+              key={sig.title}
+            >
+              <small className="opacity-70">{sig.id}</small>
+              {sig.title}
+            </button>
+          ))}
+        </div>
+        
+        <AnimatePresence mode="wait">
+          <motion.div key={active} className="console-panel" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
+            <p className="section-kicker tracking-widest">[ Active frequency ]</p>
+            <h2 className="text-white">{sigs[active].title}</h2>
+            <p className="text-neutral-400">{sigs[active].desc}</p>
+            <div>
+              {sigs[active].wins.map((win,i) => (
+                <span key={win} className="text-neutral-300 flex items-center gap-3">
+                  <i className="font-mono not-italic">0{i+1}</i>
+                  {win}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </section>
+      
+    </div>
+  );
 }

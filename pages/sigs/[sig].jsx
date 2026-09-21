@@ -22,9 +22,40 @@ import PsychicSequence from '../../components/PsychicSequence'
 import CinematicExperience from '../../components/CinematicExperience'
 import Web3DBackground from '../../components/Web3DBackground'
 
-import { sigs } from '../../data/sigs'
+
 
 const sectionIds = ['home', 'what-we-do', 'works', 'achievements', 'members', 'events', 'stats', 'why-join', 'contact']
+const sigs = [
+  {
+    id: "ai",
+    code: "AI / 01",
+    title: "Artificial Intelligence",
+    text: "Machine learning, applied research, intelligent products, and experiments that turn ambitious ideas into working systems.",
+    focus: ["ML foundations", "Applied AI", "Research"]
+  },
+  {
+    id: "cyber",
+    code: "CYBER / 02",
+    title: "Cybersecurity",
+    text: "Offensive and defensive security learned through CTFs, security labs, workshops, and shared investigation.",
+    focus: ["CTFs", "Web security", "Forensics"]
+  },
+  {
+    id: "web",
+    code: "DEV / 03",
+    title: "Web & App",
+    text: "Product-minded design and development for useful experiences on the web, mobile devices, and campus.",
+    focus: ["Frontend", "Backend", "Mobile"]
+  },
+  {
+    id: "glitch",
+    code: "GAME / 04",
+    title: "Glitch",
+    text: "Game design, creative coding, visual systems, and interactive worlds explored through collaborative jams.",
+    focus: ["Unity", "Design", "Creative code"]
+  }
+];
+
 
 export default function RecruitmentPage() {
   const router = useRouter() 

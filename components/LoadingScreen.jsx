@@ -38,7 +38,7 @@ export default function LoadingScreen({ onComplete }) {
 
   return (
     <motion.div
-      className="fixed h-screen inset-0 z-[9999] bg-[#08040f] flex flex-col overflow-hidden vhs-noise"
+      className="fixed h-screen inset-0 z-[9999] bg-[#020204] flex flex-col overflow-hidden vhs-noise"
       exit={{ opacity: 0 }}
       transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
     >
@@ -125,17 +125,17 @@ export default function LoadingScreen({ onComplete }) {
         }
       `}</style>
 
-      {/* ── Stormy Sky Backdrop ── */}
+      {/* ── Cyber Aurora Sky Backdrop ── */}
       <div 
         className="absolute inset-0 pointer-events-none z-0 animate-storm-flash opacity-25"
         style={{
-          background: 'radial-gradient(circle at 50% 40%, rgba(255, 79, 163, 0.45) 0%, rgba(18, 11, 34, 0.2) 60%, rgba(8, 4, 15, 1) 100%)'
+          background: 'radial-gradient(circle at 50% 40%, rgba(34, 211, 238, 0.35) 0%, rgba(59, 130, 246, 0.15) 60%, rgba(2, 2, 4, 1) 100%)'
         }}
       />
 
       {/* ── Lightning Strike ── */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        <svg viewBox="0 0 200 400" className="absolute top-8 left-[38%] w-1/4 h-2/3 text-[#fffaff] fill-none stroke-current opacity-0 animate-lightning pointer-events-none" style={{ filter: 'drop-shadow(0 0 10px #ff4fa3) drop-shadow(0 0 25px #9b6cff)' }}>
+        <svg viewBox="0 0 200 400" className="absolute top-8 left-[38%] w-1/4 h-2/3 text-[#fffaff] fill-none stroke-current opacity-0 animate-lightning pointer-events-none" style={{ filter: 'drop-shadow(0 0 15px #22d3ee) drop-shadow(0 0 25px #3b82f6)' }}>
           <path d="M 50,0 L 70,80 L 40,140 L 90,200 L 30,290 L 70,400" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" />
           <path d="M 70,80 L 95,120 L 110,160" strokeWidth="2.5" strokeLinecap="round" />
           <path d="M 40,140 L 15,180 L 5,210" strokeWidth="2.5" strokeLinecap="round" />
@@ -147,11 +147,11 @@ export default function LoadingScreen({ onComplete }) {
       <div 
         className="absolute inset-x-0 bottom-12 top-0 flex items-center justify-center pointer-events-none z-0 transition-all duration-300"
         style={{
-          opacity: (count / 100) * 0.12,
+          opacity: (count / 100) * 0.15,
           transform: `scale(${0.92 + (count / 100) * 0.14})`
         }}
       >
-        <svg viewBox="0 0 1000 600" className="w-full max-w-5xl h-full text-[#1a1030] fill-current" style={{ filter: 'drop-shadow(0 0 12px rgba(255, 79, 163, 0.15))' }}>
+        <svg viewBox="0 0 1000 600" className="w-full max-w-5xl h-full text-[#050b14] fill-current" style={{ filter: 'drop-shadow(0 0 15px rgba(34, 211, 238, 0.2))' }}>
           {/* Main Body Spike Head */}
           <path d="M 480,380 C 480,380 500,260 500,260 C 500,260 520,380 520,380 Z" className="flayer-body" />
           
@@ -173,12 +173,12 @@ export default function LoadingScreen({ onComplete }) {
       </div>
 
       {/* ── Horizonal Horizon Silhouette (Matching the picture) ── */}
-      <div className="absolute bottom-0 inset-x-0 h-28 bg-[#08040f]/90 z-10 border-t border-[#120b22] pointer-events-none select-none">
-        <svg viewBox="0 0 1000 100" preserveAspectRatio="none" className="w-full h-full text-[#08040f] fill-current absolute bottom-0">
+      <div className="absolute bottom-0 inset-x-0 h-28 bg-[#020204]/90 z-10 border-t border-white/5 pointer-events-none select-none">
+        <svg viewBox="0 0 1000 100" preserveAspectRatio="none" className="w-full h-full text-[#020204] fill-current absolute bottom-0">
           <path d="M 0,100 L 0,60 Q 150,55 300,68 Q 450,75 600,60 Q 750,55 900,68 L 1000,60 L 1000,100 Z" />
           {/* Small towers/antennas silhouettes like the photo */}
           <rect x="440" y="25" width="6" height="40" fill="#000000" />
-          <circle cx="443" cy="22" r="3.5" fill="#000000" stroke="#ff4fa3" strokeWidth="1" className="animate-pulse" />
+          <circle cx="443" cy="22" r="3.5" fill="#000000" stroke="#22d3ee" strokeWidth="1" className="animate-pulse" />
           
           <path d="M 280,68 L 285,42 M 285,42 L 278,45" stroke="#000000" strokeWidth="2" />
           <path d="M 720,68 L 722,46 L 726,48" stroke="#000000" strokeWidth="2" />
@@ -186,8 +186,8 @@ export default function LoadingScreen({ onComplete }) {
       </div>
 
       {/* ── Snapping Demogorgon (Pulsing silhouette in bottom-right corner) ── */}
-      <div className="absolute bottom-28 right-10 md:right-16 z-20 pointer-events-none select-none opacity-[0.06]">
-        <svg viewBox="0 0 100 100" className="w-24 h-24 text-[#ff4fa3] fill-current animate-petal">
+      <div className="absolute bottom-28 right-10 md:right-16 z-20 pointer-events-none select-none opacity-[0.08]">
+        <svg viewBox="0 0 100 100" className="w-24 h-24 text-[#a855f7] fill-current animate-petal" style={{ filter: 'drop-shadow(0 0 8px rgba(168, 85, 247, 0.4))' }}>
           {/* Neck / base */}
           <path d="M 42,80 Q 30,95 20,100 L 80,100 Q 70,95 58,80 Z" />
           {/* Inner core mouth cavity */}
@@ -215,10 +215,10 @@ export default function LoadingScreen({ onComplete }) {
       >
         <img src="/acm/assets/acm-amritapuri-logo.png" alt="ACM Amritapuri" className="h-10 w-auto object-contain" />
         <div className="flex flex-col gap-1">
-          <span className="text-xs text-[#ff4fa3] font-retro tracking-[0.3em] font-bold">
+          <span className="text-xs text-cyan-400 font-retro tracking-[0.3em] font-bold">
             ACM AMRITAPURI
           </span>
-          <span className="text-[10px] text-[#a294b2] uppercase tracking-[0.2em] font-retro">
+          <span className="text-[10px] text-blue-300 uppercase tracking-[0.2em] font-retro">
             S1 Induction - SIG Recruitment
           </span>
         </div>
@@ -231,7 +231,7 @@ export default function LoadingScreen({ onComplete }) {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut', delay: 0.15 }}
       >
-        <span className="text-[15px] text-[#ff4fa3]/70 uppercase tracking-[0.25em] font-retro">
+        <span className="text-[15px] text-cyan-400/70 uppercase tracking-[0.25em] font-retro">
           fueling curiosity - igniting ideas
         </span>
       </motion.div>
@@ -241,7 +241,7 @@ export default function LoadingScreen({ onComplete }) {
         <AnimatePresence mode="wait">
           <motion.span
             key={wordIndex}
-            className="text-3xl md:text-5xl lg:text-6xl font-display font-black text-[#ff4fa3] select-none stranger-glow uppercase tracking-wider text-center px-4"
+            className="text-3xl md:text-5xl lg:text-6xl font-display font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 select-none uppercase tracking-wider text-center px-4"
             initial={{ y: 20, opacity: 0, scale: 0.95 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: -20, opacity: 0, scale: 1.05 }}
@@ -250,7 +250,7 @@ export default function LoadingScreen({ onComplete }) {
             {words[wordIndex]}
           </motion.span>
         </AnimatePresence>
-        <span className="text-xs text-[#a294b2] uppercase tracking-[0.3em] font-retro font-bold mt-2">
+        <span className="text-xs text-blue-400 uppercase tracking-[0.3em] font-retro font-bold mt-2 opacity-80">
           RECRUITMENT PORTAL
         </span>
       </div>
@@ -258,22 +258,22 @@ export default function LoadingScreen({ onComplete }) {
       {/* Bottom — counter + progress bar */}
       <div className="px-8 md:px-10 pb-8 md:pb-10 z-10">
         <div className="flex items-end justify-between mb-2">
-          <span className="text-xs text-[#a294b2]/80 uppercase tracking-[0.25em] font-retro self-end mb-2 font-bold">
+          <span className="text-xs text-cyan-400/70 uppercase tracking-[0.25em] font-retro self-end mb-2 font-bold">
             OPENING ACM PORTAL
           </span>
-          <span className="text-7xl md:text-9xl font-retro text-[#ff4fa3] stranger-glow tabular-nums leading-none">
+          <span className="text-7xl md:text-9xl font-retro text-transparent bg-clip-text bg-gradient-to-br from-cyan-300 to-blue-500 tabular-nums leading-none">
             {String(count).padStart(3, '0')}%
           </span>
         </div>
 
         {/* Progress bar */}
-        <div className="h-[4px] bg-[#120b22] rounded-full overflow-hidden border border-[#1a1030]">
+        <div className="h-[4px] bg-[#0a0a14] rounded-full overflow-hidden border border-white/10">
           <motion.div
-            className="h-full bg-[#ff4fa3] rounded-full"
+            className="h-full bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full"
             style={{
               scaleX: count / 100,
               transformOrigin: 'left',
-              boxShadow: '0 0 10px rgba(255, 79, 163, 0.75)',
+              boxShadow: '0 0 15px rgba(34, 211, 238, 0.5)',
             }}
           />
         </div>
