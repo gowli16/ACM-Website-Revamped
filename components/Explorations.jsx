@@ -10,7 +10,7 @@ const BASE = import.meta.env.BASE_URL;
 // Helper to fix paths dynamically
 const fixPath = (path) => path.startsWith('http') ? path : `${BASE}${path.startsWith('../') ? path.slice(3) : path}`;
 
-// Image arrays with pathing fix
+// --- IMAGE ARRAYS RESTORED ---
 const defaultCards = [
   { id: 1, image: fixPath('assets/aiAchievements/agenticaiworkshop.jpeg'), width: 480 },
   { id: 2, image: fixPath('assets/aiAchievements/aiachievement1.jpeg'), width: 460 },
@@ -47,6 +47,7 @@ const webCards = [
   { id: 5, image: fixPath('assets/webexplorations/5.jpeg'), width: 480 },
   { id: 10, image: fixPath('assets/webexplorations/10.jpeg'), width: 460 },
 ]
+// -----------------------------
 
 function generateStars(count) {
   return Array.from({ length: count }, (_, i) => ({
@@ -135,52 +136,80 @@ export default function Explorations({ sig = {} }) {
 
   return (
     <>
-      <section ref={sectionRef} id="achievements" className="relative bg-bg" style={{ minHeight: `${SCROLL_VH}vh` }}>
-        <div ref={pinnedRef} className="relative h-screen w-full overflow-hidden bg-gradient-to-b from-[#020204] via-red-950/5 to-[#020204]">
+      <section ref={sectionRef} id="achievements" className="relative z-10" style={{ minHeight: `${SCROLL_VH}vh` }}>
+        <div ref={pinnedRef} className="relative h-screen w-full overflow-hidden bg-gradient-to-b from-transparent via-[#020204]/40 to-[#020204]">
           <style>{`
-            @keyframes lightning-flash { 0%, 93%, 95%, 97%, 100% { opacity: 0; } 94%, 96% { opacity: 0.2; background-color: #ff1a1a; } }
-            @keyframes pulse-rift { 0%, 100% { opacity: 0.3; filter: drop-shadow(0 0 8px #ff1a1a); } 50% { opacity: 0.65; filter: drop-shadow(0 0 20px #e50914); } }
+            /* Plasma Orange lightning flashes */
+            @keyframes lightning-flash { 0%, 93%, 95%, 97%, 100% { opacity: 0; } 94%, 96% { opacity: 0.15; background-color: #f97316; } }
+            /* Orange/Amber background pulse */
+            @keyframes pulse-rift { 0%, 100% { opacity: 0.2; filter: drop-shadow(0 0 8px #f97316); } 50% { opacity: 0.5; filter: drop-shadow(0 0 20px #eab308); } }
             @keyframes twinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.8; } }
             .animate-lightning { animation: lightning-flash 9s infinite alternate; }
             .animate-pulse-rift { animation: pulse-rift 4s infinite ease-in-out; }
           `}</style>
+          
           <div className="absolute inset-0 pointer-events-none z-[2] animate-lightning" />
+          
           <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-64 pointer-events-none z-0 flex items-center justify-center animate-pulse-rift">
-            <svg viewBox="0 0 100 800" className="h-full w-full text-red-600 fill-current opacity-40">
+            <svg viewBox="0 0 100 800" className="h-full w-full text-orange-600 fill-current opacity-20">
               <path d="M 50,0 Q 48,100 52,200 Q 55,300 48,400 Q 43,500 51,600 Q 55,700 50,800 L 51,800 Q 56,700 52,600 Q 44,500 49,400 Q 56,300 53,200 Q 49,100 51,0 Z" />
-              <path d="M 50,250 Q 30,230 15,200 M 52,380 Q 75,410 90,430 M 47,550 Q 25,580 10,620 M 53,150 Q 70,120 85,90" stroke="#ff1a1a" strokeWidth="1.5" fill="none" className="opacity-60" />
+              <path d="M 50,250 Q 30,230 15,200 M 52,380 Q 75,410 90,430 M 47,550 Q 25,580 10,620 M 53,150 Q 70,120 85,90" stroke="#f97316" strokeWidth="1.5" fill="none" className="opacity-40" />
             </svg>
           </div>
+          
           <div className="absolute inset-0 pointer-events-none z-0">
-            {stars.map(star => (
-              <div key={star.id} className="absolute rounded-full bg-red-600/30 shadow-[0_0_6px_#ff1a1a]" style={{ top: star.top, left: star.left, width: star.size, height: star.size, opacity: star.opacity, animation: `twinkle ${star.duration}s ${star.delay}s ease-in-out infinite alternate` }} />
+            {stars.map((star, i) => (
+              <div 
+                key={star.id} 
+                className="absolute rounded-full" 
+                style={{ 
+                  top: star.top, left: star.left, width: star.size, height: star.size, opacity: star.opacity, 
+                  animation: `twinkle ${star.duration}s ${star.delay}s ease-in-out infinite alternate`,
+                  background: i % 2 === 0 ? 'rgba(249,115,22,0.3)' : 'rgba(234,179,8,0.3)',
+                  boxShadow: i % 2 === 0 ? '0 0 6px #f97316' : '0 0 6px #eab308'
+                }} 
+              />
             ))}
           </div>
+
           <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
             {activeCards.map((card, index) => (
               <SpiralCard key={card.id} card={card} onCardClick={() => setLightbox(card)} innerRef={el => (cardRefs.current[index] = el)} />
             ))}
           </div>
+          
           {sig?.id !== 'cyber' && (
             <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
               <motion.div className="text-center px-6 max-w-md pointer-events-auto" initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}>
                 <div className="flex items-center justify-center gap-3 mb-3">
-                  <div className="w-8 h-px bg-red-900/50" />
-                  <span className="text-[10px] text-red-500 uppercase tracking-[0.35em] font-bold">INVESTIGATIONS</span>
-                  <div className="w-8 h-px bg-red-900/50" />
+                  <div className="w-8 h-px bg-orange-500/50" />
+                  <span className="text-[10px] text-orange-500 uppercase tracking-[0.35em] font-bold font-retro">INVESTIGATIONS</span>
+                  <div className="w-8 h-px bg-orange-500/50" />
                 </div>
-                <h2 className="text-5xl md:text-6xl font-extrabold uppercase text-neutral-200 leading-tight mb-4">
-                  <span className="text-red-600 drop-shadow-[0_0_20px_rgba(255,26,26,0.8)]">Gallery</span>
+                <h2 className="text-5xl md:text-6xl font-extrabold uppercase text-neutral-200 leading-tight mb-4 font-display">
+                  <span className="bg-gradient-to-r from-orange-500 to-yellow-400 bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(249,115,22,0.4)]">
+                    Gallery
+                  </span>
                 </h2>
               </motion.div>
             </div>
           )}
         </div>
       </section>
+
       <AnimatePresence>
         {lightbox && (
           <motion.div className="fixed inset-0 z-[9998] bg-black/90 backdrop-blur-md flex items-center justify-center p-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setLightbox(null)}>
-            <motion.img src={lightbox.image} alt="" className="max-w-full max-h-full rounded-2xl border border-red-950/40 object-contain shadow-2xl shadow-red-950/10" initial={{ scale: 0.85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.85, opacity: 0 }} transition={{ duration: 0.3 }} onClick={e => e.stopPropagation()} />
+            <motion.img 
+              src={lightbox.image} 
+              alt="" 
+              className="max-w-full max-h-full rounded-2xl border border-white/10 object-contain shadow-[0_0_40px_rgba(249,115,22,0.15)]" 
+              initial={{ scale: 0.85, opacity: 0 }} 
+              animate={{ scale: 1, opacity: 1 }} 
+              exit={{ scale: 0.85, opacity: 0 }} 
+              transition={{ duration: 0.3 }} 
+              onClick={e => e.stopPropagation()} 
+            />
           </motion.div>
         )}
       </AnimatePresence>
@@ -192,10 +221,16 @@ function SpiralCard({ card, onCardClick, innerRef }) {
   return (
     <div className="absolute pointer-events-auto" style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: card.width }}>
       <div ref={innerRef}>
-        <motion.div className="relative rounded-2xl overflow-hidden cursor-pointer border border-red-950/40 shadow-2xl shadow-red-950/20 backdrop-blur-sm" style={{ boxShadow: '0 0 30px rgba(255, 26, 26, 0.2), 0 20px 40px rgba(0, 0, 0, 0.6)' }} whileHover={{ scale: 1.08, boxShadow: '0 0 50px rgba(255, 26, 26, 0.5), 0 30px 60px rgba(0, 0, 0, 0.8)' }} transition={{ duration: 0.4, ease: 'easeOut' }} onClick={onCardClick}>
-          <img src={card.image} alt="" loading="lazy" className="w-full aspect-[21/9] object-cover opacity-85" draggable={false} />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-red-950/40 pointer-events-none" />
-          <div className="absolute inset-0 border border-red-500/10 rounded-2xl pointer-events-none" />
+        <motion.div 
+          className="relative rounded-2xl overflow-hidden cursor-pointer border border-white/10 bg-white/[0.02] backdrop-blur-md" 
+          style={{ boxShadow: '0 0 30px rgba(249, 115, 22, 0.1), 0 20px 40px rgba(0, 0, 0, 0.6)' }} 
+          whileHover={{ scale: 1.08, boxShadow: '0 0 40px rgba(249, 115, 22, 0.3), 0 30px 60px rgba(0, 0, 0, 0.8)', borderColor: 'rgba(249, 115, 22, 0.5)' }} 
+          transition={{ duration: 0.4, ease: 'easeOut' }} 
+          onClick={onCardClick}
+        >
+          <img src={card.image} alt="" loading="lazy" className="w-full aspect-[21/9] object-cover opacity-80 transition-opacity duration-300 hover:opacity-100" draggable={false} />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#020204]/80 pointer-events-none" />
+          <div className="absolute inset-0 border border-orange-500/20 rounded-2xl pointer-events-none" />
         </motion.div>
       </div>
     </div>

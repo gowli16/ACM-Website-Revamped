@@ -3,11 +3,13 @@ import {
     useScroll, useTransform, useMotionValueEvent, motion
 } from "framer-motion";
 
-// Use the BASE_URL so the sequence loads correctly on cPanel subdirectories
-const BASE = import.meta.env.BASE_URL;
+// Safeguard the base path to ensure it always starts and ends correctly for Next.js public folder
+const BASE = import.meta.env.BASE_URL || '/';
+const getSafeBase = () => BASE.endsWith('/') ? BASE : `${BASE}/`;
+
 const FRAME_COUNT = 240; 
 const currentFrame = (i) =>
-    `${BASE}sequence/frame_${i.toString().padStart(3, "0")}_delay-0.071s.jpg`;
+    `${getSafeBase()}sequence/frame_${i.toString().padStart(3, "0")}_delay-0.071s.jpg`;
 
 const CINEMATIC = {
     SCROLL_VH: 2900,
@@ -75,14 +77,14 @@ function SyllabusCard({ step, index, scrollYProgress }) {
             }}
             className="z-30 pointer-events-none"
         >
-            <div style={{ maxWidth: "min(42vw, 620px)", textAlign: isLeft ? "left" : "right" }}>
-                <p style={{ fontSize: "clamp(0.6rem, 1vw, 0.7rem)", letterSpacing: "0.5em", color: "#ff8a3d", fontWeight: 600, marginBottom: "0.6rem", fontFamily: "'Space Grotesk', system-ui, sans-serif" }}>
+            <div style={{ maxWidth: "min(42vw, 620px)", textAlign: isLeft ? "left" : "right" }} className="bg-[#020204]/40 p-6 rounded-3xl backdrop-blur-sm border border-white/5 shadow-[0_0_30px_rgba(249,115,22,0.08)]">
+                <p style={{ fontSize: "clamp(0.6rem, 1vw, 0.7rem)", letterSpacing: "0.5em", color: "#f97316", fontWeight: 600, marginBottom: "0.6rem", fontFamily: "'Space Grotesk', system-ui, sans-serif" }}>
                     STAGE {step.n} / 07
                 </p>
                 <motion.h3 style={{ fontSize: "clamp(2.6rem, 5.5vw, 5rem)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.02, color: "#ffffff", margin: "0 0 0.8rem 0", fontFamily: "'Space Grotesk', system-ui, sans-serif" }}>
                     {step.title}
                 </motion.h3>
-                <p style={{ fontSize: "clamp(0.9rem, 1.2vw, 1.05rem)", lineHeight: 1.55, color: "rgba(255,255,255,0.6)", margin: 0, fontFamily: "'Space Grotesk', system-ui, sans-serif" }}>
+                <p style={{ fontSize: "clamp(0.9rem, 1.2vw, 1.05rem)", lineHeight: 1.55, color: "rgba(255,255,255,0.7)", margin: 0, fontFamily: "'Space Grotesk', system-ui, sans-serif" }}>
                     {step.copy}
                 </p>
             </div>
@@ -146,6 +148,9 @@ export default function CinematicExperience() {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
         const img = imagesRef.current[Math.round(index)];
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
         if (!img || !img.complete || img.naturalWidth === 0) return;
 
         canvas.width = window.innerWidth;
@@ -154,8 +159,6 @@ export default function CinematicExperience() {
         const ox = (canvas.width - img.width * ratio) / 2;
         const oy = (canvas.height - img.height * ratio) / 2;
 
-        ctx.fillStyle = "#0a0704";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0, img.width, img.height, ox, oy, img.width * ratio, img.height * ratio);
     }, []);
 
@@ -182,26 +185,41 @@ export default function CinematicExperience() {
     const titleY = useTransform(scrollYProgress, [0, 0.03], [0, -20]);
 
     return (
-        <div id="roadmap" ref={containerRef} className="w-full bg-[#0a0704]" style={{ position: "relative", height: `${CINEMATIC.SCROLL_VH}vh` }}>
-            <div className="sticky top-0 h-screen w-full overflow-hidden" style={{ background: "#0a0704" }}>
-                <img src={currentFrame(0)} alt="Roadmap" className="absolute inset-0 w-full h-full object-cover z-0" />
+        <div id="roadmap" ref={containerRef} className="w-full relative z-10" style={{ height: `${CINEMATIC.SCROLL_VH}vh` }}>
+            <div className="sticky top-0 h-screen w-full overflow-hidden">
+                <img 
+                    src={currentFrame(0)} 
+                    alt="" 
+                    className="absolute inset-0 w-full h-full object-cover z-0 opacity-40 mix-blend-screen" 
+                    onError={(e) => e.target.style.display = 'none'} 
+                />
                 {!imagesLoaded && (
-                    <div className="absolute inset-0 flex items-center justify-center z-20 bg-black/40 backdrop-blur-sm" style={{ color: "#ff7a1a", letterSpacing: "0.25em", fontSize: "11px", textTransform: "uppercase" }}>
-                        LOADING ARCHIVES...
+                    <div className="absolute inset-0 flex items-center justify-center z-20" style={{ color: "#f97316", letterSpacing: "0.25em", fontSize: "11px", textTransform: "uppercase" }}>
+                        SYNCING ROADMAP...
                     </div>
                 )}
-                <canvas ref={canvasRef} className="h-full w-full absolute inset-0 z-10" />
+                <canvas ref={canvasRef} className="h-full w-full absolute inset-0 z-10 mix-blend-screen opacity-50" />
+                
                 <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
                     {EMBERS.map((e) => (
-                        <span key={e.id} style={{ position: "absolute", left: e.left, bottom: "-5%", width: `${e.size}px`, height: `${e.size}px`, borderRadius: "50%", background: "#ff9d4d", boxShadow: "0 0 6px 2px rgba(255,140,50,0.7)", animation: `emberRise ${e.duration} linear ${e.delay} infinite`, opacity: 0 }} />
+                        <span key={e.id} style={{ 
+                            position: "absolute", left: e.left, bottom: "-5%", 
+                            width: `${e.size}px`, height: `${e.size}px`, borderRadius: "50%", 
+                            background: e.id % 2 === 0 ? "#f97316" : "#eab308", 
+                            boxShadow: e.id % 2 === 0 ? "0 0 8px 2px rgba(249,115,22,0.7)" : "0 0 8px 2px rgba(234,179,8,0.7)", 
+                            animation: `emberRise ${e.duration} linear ${e.delay} infinite`, opacity: 0 
+                        }} />
                     ))}
                 </div>
                 <style>{`@keyframes emberRise { 0% { transform: translateY(0) translateX(0); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.3; } 100% { transform: translateY(-105vh) translateX(20px); opacity: 0; } }`}</style>
-                <div className="absolute inset-0 pointer-events-none z-20" style={{ background: "linear-gradient(to bottom, rgba(10,7,4,0.7) 0%, rgba(10,7,4,0.0) 35%, rgba(10,7,4,0.0) 65%, rgba(10,7,4,0.8) 100%)" }} />
+                
+                <div className="absolute inset-0 pointer-events-none z-20 bg-gradient-to-b from-transparent via-transparent to-[#020204]/80" />
+                
                 <motion.div style={{ opacity: titleOpacity, y: titleY }} className="absolute top-6 right-8 flex flex-col items-end gap-1 z-30 pointer-events-none">
-                    <p style={{ fontSize: "clamp(1.05rem, 1.2vw, 0.72rem)", letterSpacing: "0.55em", color: "#ff7a1a", fontWeight: 500, textTransform: "uppercase" }}>WEB &amp; APP DEV SIG</p>
-                    <h2 style={{ fontSize: "clamp(3.6rem, 8vw, 3rem)", fontWeight: 700, letterSpacing: "-0.04em", lineHeight: 1, color: "#fff3e6", textAlign: "right", textShadow: "0 0 40px rgba(255,106,26,0.5)", margin: 0 }}>ROADMAP</h2>
+                    <p style={{ fontSize: "clamp(1.05rem, 1.2vw, 0.72rem)", letterSpacing: "0.55em", color: "#f97316", fontWeight: 500, textTransform: "uppercase" }}>WEB &amp; APP DEV SIG</p>
+                    <h2 style={{ fontSize: "clamp(3.6rem, 8vw, 3rem)", fontWeight: 700, letterSpacing: "-0.04em", lineHeight: 1, color: "#ffffff", textAlign: "right", textShadow: "0 0 40px rgba(249,115,22,0.5)", margin: 0 }}>ROADMAP</h2>
                 </motion.div>
+                
                 {STEPS.map((step, i) => (
                     <SyllabusCard key={step.n} step={step} index={i} scrollYProgress={scrollYProgress} />
                 ))}

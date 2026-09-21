@@ -50,7 +50,8 @@ export default function Stats({ sig }) {
   ]
 
   return (
-    <section id="stats" className="border-t border-red-950/40 bg-bg py-16 md:py-24">
+    // Changed bg-bg and border to transparent/glass theme
+    <section id="stats" className="border-t border-white/10 relative z-10 py-16 md:py-24">
       <div className="mx-auto max-w-[1200px] px-6 md:px-10 lg:px-16">
         <motion.div
           className="mb-12 text-center md:mb-16"
@@ -60,17 +61,18 @@ export default function Stats({ sig }) {
           transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <div className="mb-4 flex items-center justify-center gap-3">
-            <div className="h-px w-8 bg-red-900/50" />
-            <span className="text-xs font-bold uppercase tracking-[0.3em] text-red-500 font-retro">METRICS</span>
-            <div className="h-px w-8 bg-red-900/50" />
+            <div className="h-px w-8 bg-orange-500/50" />
+            <span className="text-xs font-bold uppercase tracking-[0.3em] text-orange-500 font-retro">METRICS</span>
+            <div className="h-px w-8 bg-orange-500/50" />
           </div>
           <h2 className="text-4xl font-extrabold uppercase leading-tight text-neutral-200 font-display md:text-5xl">
             {/* Added fallback to sig.title if shortName is missing */}
-            {sig.shortName || sig.title} telemetry <span className="text-red-600 stranger-glow">recorded</span>
+            {sig.shortName || sig.title} telemetry <span className="bg-gradient-to-r from-orange-500 to-yellow-400 bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(249,115,22,0.4)]">recorded</span>
           </h2>
         </motion.div>
 
-        <div ref={ref} className="grid grid-cols-2 gap-10 md:grid-cols-4 md:divide-x md:divide-red-950/40 md:gap-0">
+        {/* Changed divider lines to white/10 */}
+        <div ref={ref} className="grid grid-cols-2 gap-10 md:grid-cols-4 md:divide-x md:divide-white/10 md:gap-0">
           {stats.map((stat, i) => (
             <StatItem key={`${sig.id}-${stat.label}`} stat={stat} index={i} inView={inView} />
           ))}
@@ -90,9 +92,10 @@ function StatItem({ stat, index, inView }) {
       transition={{ duration: 0.8, delay: index * 0.15, ease: [0.25, 0.1, 0.25, 1] }}
     >
       <span
-        className="mb-3 text-6xl leading-none text-red-500 font-retro stranger-glow tabular-nums md:text-7xl"
+        className="mb-3 text-6xl leading-none font-retro tabular-nums md:text-7xl drop-shadow-[0_0_20px_rgba(249,115,22,0.4)]"
         style={{
-          background: 'linear-gradient(90deg, #ff1a1a 0%, #7f1d1d 100%)',
+          // Changed number gradient to Orange/Amber
+          background: 'linear-gradient(90deg, #f97316 0%, #facc15 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
@@ -100,7 +103,7 @@ function StatItem({ stat, index, inView }) {
       >
         {count}{stat.suffix}
       </span>
-      <p className="mb-2 text-xs font-bold uppercase tracking-[0.15em] text-red-500/80 font-retro">
+      <p className="mb-2 text-xs font-bold uppercase tracking-[0.15em] text-orange-500 font-retro">
         {stat.label}
       </p>
       <p className="max-w-[180px] text-xs leading-relaxed text-neutral-400 font-body">

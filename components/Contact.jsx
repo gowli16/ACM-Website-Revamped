@@ -41,24 +41,26 @@ export default function Contact({ sig }) {
   }, [])
 
   return (
-    <section id="contact" className="overflow-hidden bg-bg pb-8 pt-16 md:pb-12 md:pt-20">
+    // Relative z-10 allows the global 3D space background to show through
+    <section id="contact" className="relative z-10 overflow-hidden pb-8 pt-16 md:pb-12 md:pt-20">
       <div className="relative mb-16 md:mb-20">
-        <div className="relative mx-6 h-[60vh] overflow-hidden rounded-2xl md:mx-10 lg:mx-16">
+        <div className="relative mx-6 h-[60vh] overflow-hidden rounded-2xl md:mx-10 lg:mx-16 border border-white/10">
           <video
             ref={videoRef}
             autoPlay
             muted
             loop
             playsInline
-            className="absolute left-1/2 top-1/2 min-h-full min-w-full -translate-x-1/2 -translate-y-1/2 object-cover opacity-50"
+            className="absolute left-1/2 top-1/2 min-h-full min-w-full -translate-x-1/2 -translate-y-1/2 object-cover opacity-30"
             style={{ transform: 'translate(-50%, -50%) scaleY(-1)' }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#020204]/90 via-red-950/20 to-[#020204]/90" />
+          {/* Changed gradient overlay to deep space/Orange mix */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#020204]/90 via-orange-950/20 to-[#020204]/90" />
 
           <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 overflow-hidden py-4">
             <div ref={marqueeRef} className="flex whitespace-nowrap" style={{ width: 'max-content' }}>
               {Array(20).fill(`ACM AMRITAPURI - ${sig.marquee}`).map((text, i) => (
-                <span key={i} className="pr-8 text-3xl font-black uppercase tracking-widest text-red-900/20 font-display md:text-5xl lg:text-6xl">
+                <span key={i} className="pr-8 text-3xl font-black uppercase tracking-widest text-orange-950/30 font-display md:text-5xl lg:text-6xl">
                   {text}
                 </span>
               ))}
@@ -66,10 +68,12 @@ export default function Contact({ sig }) {
           </div>
 
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center">
-            <p className="mb-4 text-xs font-bold uppercase tracking-[0.3em] text-red-500/80 font-retro">
+            {/* Eyebrow text to Plasma Orange */}
+            <p className="mb-4 text-xs font-bold uppercase tracking-[0.3em] text-orange-500 font-retro">
               Ready to join?
             </p>
-            <h2 className="mb-8 text-4xl font-black uppercase leading-tight text-neutral-100 font-display stranger-glow md:text-6xl lg:text-7xl">
+            {/* Main title remains glowing white for high contrast */}
+            <h2 className="mb-8 text-4xl font-black uppercase leading-tight text-neutral-100 font-display drop-shadow-[0_0_20px_rgba(255,255,255,0.3)] md:text-6xl lg:text-7xl">
               Join ACM Amritapuri
             </h2>
             <p className="mb-7 max-w-xl text-sm leading-relaxed text-neutral-300 font-body md:text-base">
@@ -81,10 +85,10 @@ export default function Contact({ sig }) {
       </div>
 
       <div className="mx-auto max-w-[1200px] px-6 md:px-10 lg:px-16">
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-red-950/40 pt-6 sm:flex-row">
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row">
           <div className="flex flex-wrap items-center justify-center gap-4">
             {socials.map((social) => (
-              <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" className="text-xs font-bold uppercase tracking-[0.15em] text-red-500/80 transition-colors duration-200 hover:text-red-400 font-retro">
+              <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" className="text-xs font-bold uppercase tracking-[0.15em] text-orange-500/80 transition-colors duration-200 hover:text-orange-300 font-retro">
                 {social.label}
               </a>
             ))}
@@ -92,8 +96,8 @@ export default function Contact({ sig }) {
 
           <div className="flex items-center gap-2">
             <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-red-600" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-orange-500 shadow-[0_0_8px_#f97316]" />
             </span>
             <span className="text-xs font-bold uppercase tracking-wider text-neutral-400 font-retro">Recruitment Active - New Members Welcome</span>
           </div>
@@ -114,13 +118,13 @@ function EmailButton({ email }) {
       href={`mailto:${email}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="relative inline-flex cursor-pointer items-center gap-2 overflow-visible rounded-full border border-red-950/60 px-8 py-4 text-xs font-bold uppercase tracking-widest text-red-500 transition-all duration-300 hover:border-transparent font-retro"
+      className="relative inline-flex cursor-pointer items-center gap-2 overflow-visible rounded-full border border-white/10 bg-white/[0.02] backdrop-blur-md px-8 py-4 text-xs font-bold uppercase tracking-widest text-orange-400 transition-all duration-300 hover:border-transparent font-retro"
     >
       {hovered && (
-        <span className="pointer-events-none absolute rounded-full" style={{ inset: '-2px', background: 'linear-gradient(90deg, #ff1a1a 0%, #7f1d1d 100%)', zIndex: -1 }} />
+        <span className="pointer-events-none absolute rounded-full" style={{ inset: '-2px', background: 'linear-gradient(90deg, #f97316 0%, #eab308 100%)', zIndex: -1 }} />
       )}
-      <span className="relative z-10">{email}</span>
-      <span className="relative z-10 text-xs text-red-600">-&gt;</span>
+      <span className="relative z-10 transition-colors group-hover:text-white">{email}</span>
+      <span className="relative z-10 text-xs text-orange-500 transition-colors group-hover:text-white">-&gt;</span>
     </a>
   )
 }

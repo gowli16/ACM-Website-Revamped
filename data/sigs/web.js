@@ -1,19 +1,20 @@
-const Sreejith = '/acm/assets/webMembers/sreejith.jpeg'
-const SaiAnand = '/acm/assets/webMembers/anand.png'
-const Anirudh = '/acm/assets/webMembers/anirudh.png'
-const Meera = '/acm/assets/webMembers/meera.jpeg'
-const Koushik = '/acm/assets/webMembers/koushik.jpeg'
-const Mival = '/acm/assets/webMembers/mivel.png'
-const Gowri = '/acm/assets/webMembers/gowri.jpeg'
-const Yazeen = '/acm/assets/webMembers/yazeen.jpeg'
+// FIXED: Removed '/acm' from all these paths so they point directly to the public/assets folder
+const Sreejith = '/assets/webMembers/sreejith.jpeg'
+const SaiAnand = '/assets/webMembers/anand.png'
+const Anirudh = '/assets/webMembers/anirudh.png'
+const Meera = '/assets/webMembers/meera.jpeg'
+const Koushik = '/assets/webMembers/koushik.jpeg'
+const Mival = '/assets/webMembers/mivel.png'
+const Gowri = '/assets/webMembers/gowri.jpeg'
+const Yazeen = '/assets/webMembers/yazeen.jpeg'
 
-const JobRecommendationApp = '/acm/assets/webProject/job reccomendation app.jpeg'
-const LogbookWebsite = '/acm/assets/webProject/Logbook Website.png'
-const EcoTrack = '/acm/assets/webProject/EcoTrack app.jpeg'
-const RecruitmentWebsite = '/acm/assets/webProject/Recruitment-Website.jpeg'
-const SmartPumpingSystem = '/acm/assets/webProject/SAPS.jpeg'
-const LearningManagementSystem = '/acm/assets/webProject/LMS.jpeg'
-const DecentralizedNFTMarketplace = '/acm/assets/webProject/NFT.jpeg'
+const JobRecommendationApp = '/assets/webProject/job reccomendation app.jpeg'
+const LogbookWebsite = '/assets/webProject/Logbook Website.png'
+const EcoTrack = '/assets/webProject/EcoTrack app.jpeg'
+const RecruitmentWebsite = '/assets/webProject/Recruitment-Website.jpeg'
+const SmartPumpingSystem = '/assets/webProject/SAPS.jpeg'
+const LearningManagementSystem = '/assets/webProject/LMS.jpeg'
+const DecentralizedNFTMarketplace = '/assets/webProject/NFT.jpeg'
 
 export const web = {
   id: 'web',
@@ -133,31 +134,31 @@ export const web = {
       'Amrita Create',
       'Flutter Developer',
       'Johan Rajesh',
-      '/acm/assets/companyLogos/amrita_create_logo.jpg',
+      '/assets/companyLogos/amrita_create_logo.jpg', // FIXED PATH
     ],
     [
       'Amrita Create',
       'Flutter Developer',
       'Anantha Krishnan',
-      '/acm/assets/companyLogos/amrita_create_logo.jpg',
+      '/assets/companyLogos/amrita_create_logo.jpg', // FIXED PATH
     ],
     [
       'ISRO-VSSC',
       'Software Engineer Intern',
       'Jenica',
-      '/acm/assets/companyLogos/Isro-vssc.jpg',
+      '/assets/companyLogos/Isro-vssc.jpg', // FIXED PATH
     ],
     [
       'Infineon',
       'System Engineer Intern',
       'Aleena Sebastian',
-      '/acm/assets/companyLogos/infineon.webp',
+      '/assets/companyLogos/infineon.webp', // FIXED PATH
     ],
     [
       'Sky max value technology solutions',
       'Flutter Intern',
       'Anantha Krishnan',
-      '/acm/assets/companyLogos/Skymax.jpeg',
+      '/assets/companyLogos/Skymax.jpeg', // FIXED PATH
     ],
   ],
 

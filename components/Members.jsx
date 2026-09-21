@@ -1,246 +1,268 @@
-import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useEffect, useRef } from 'react'
 
-const FALLBACK_PEOPLE = [
-  ['Arjun Mehta', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80&auto=format&fit=crop', 'Core', 'ML Foundations', 'Paladin'],
-  ['Priya Nair', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80&auto=format&fit=crop', 'Core', 'Deep Learning', 'Mage'],
-  ['Karan Iyer', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80&auto=format&fit=crop', 'Core', 'Applied AI', 'Ranger'],
-  ['Sneha Rajan', 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&q=80&auto=format&fit=crop', 'Research Sprints'],
-  ['Dev Pillai', 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=80&auto=format&fit=crop', 'ML Foundations'],
-  ['Meera Raj', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&q=80&auto=format&fit=crop', 'Deep Learning'],
-  ['Aditya Menon', 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&q=80&auto=format&fit=crop', 'Applied AI'],
-  ['Asha Varma', 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=300&q=80&auto=format&fit=crop', 'Research Sprints'],
-  ['Rohan Das', 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=300&q=80&auto=format&fit=crop', 'ML Foundations'],
-  ['Kavitha Sree', 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&q=80&auto=format&fit=crop', 'Deep Learning'],
-  ['Nikhil Kumar', 'https://images.unsplash.com/photo-1463453091185-61582044d556?w=300&q=80&auto=format&fit=crop', 'Applied AI'],
-]
+export default function Web3DBackground({ sig }) {
+  const canvasRef = useRef(null)
+  const sigId = sig?.id || 'web'
+  const isCyber = sigId === 'cyber'
 
-const FALLBACK_CLASSES = ['Paladin', 'Mage', 'Ranger']
-const CORE_ROLE = 'core'
-const INITIAL_MEMBER_LIMIT = 10
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
 
-export default function Members({ sig }) {
-  const [showAllMembers, setShowAllMembers] = useState(false)
+    let animationFrameId
+    let width = (canvas.width = window.innerWidth)
+    let height = (canvas.height = window.innerHeight)
 
-  const people = sig?.members ?? FALLBACK_PEOPLE
-  const classes = sig?.classes ?? FALLBACK_CLASSES
-  const domainRoles = (sig?.domains ?? []).map(([title]) => title)
-  const isCyber = sig?.id === 'cyber'
+    const handleResize = () => {
+      if (!canvas) return
+      width = canvas.width = window.innerWidth
+      height = canvas.height = window.innerHeight
+    }
+    window.addEventListener('resize', handleResize)
 
-  if (sig?.showMembers === false) return null
+    // Mouse tracking for 3D parallax tilt
+    const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 }
+    const handleMouseMove = (e) => {
+      mouse.targetX = (e.clientX / width - 0.5) * 0.8
+      mouse.targetY = (e.clientY / height - 0.5) * 0.8
+    }
+    window.addEventListener('mousemove', handleMouseMove)
 
-  const leadRoles = ['SIG Lead', 'Mentor', 'Ops Head']
+    // Setup for Cyber 3D data streams & bokeh
+    let streamLines = []
+    let bokehParticles = []
+    let fingerprintOffset = 0
 
-  const leadTuples = people.filter(([, , role]) => (role ?? '').toLowerCase() === CORE_ROLE)
-  const memberTuples = people.filter(([, , role]) => (role ?? '').toLowerCase() !== CORE_ROLE)
+    if (isCyber) {
+      // Initialize data trace lines coming down
+      for (let i = 0; i < 40; i++) {
+        streamLines.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          length: Math.random() * 120 + 60,
+          speed: Math.random() * 2 + 1,
+          opacity: Math.random() * 0.5 + 0.1,
+        })
+      }
 
-  const leads = leadTuples.map(([name, image, role, domain, dndClass], i) => ({
-    name,
-    image,
-    role: role ?? leadRoles[i % leadRoles.length],
-    domain: domain ?? domainRoles[i % (domainRoles.length || 1)] ?? sig.name,
-    dndClass: dndClass ?? classes[i % (classes.length || 1)],
-  }))
+      // Initialize floating bokeh background particles
+      for (let i = 0; i < 50; i++) {
+        bokehParticles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          radius: Math.random() * 3 + 1,
+          speedY: (Math.random() - 0.5) * 0.4,
+          opacity: Math.random() * 0.4 + 0.05,
+        })
+      }
+    }
 
-  const allMembers = memberTuples.map(([name, image, role], i) => ({
-    name,
-    image,
-    role: role ?? domainRoles[i % (domainRoles.length || 1)],
-  }))
+    // Non-cyber configurations (Neural Matrix)
+    let primaryColor = '#f97316'
+    let secondaryColor = '#eab308'
+    let nodeSpeed = 0.5
 
-  const hasOverflow = allMembers.length > INITIAL_MEMBER_LIMIT
-  const members = showAllMembers ? allMembers : allMembers.slice(0, INITIAL_MEMBER_LIMIT)
-  const hiddenCount = allMembers.length - INITIAL_MEMBER_LIMIT
+    if (sigId === 'glitch') {
+      primaryColor = '#a855f7'
+      secondaryColor = '#ec4899'
+      nodeSpeed = 0.8
+    } else if (sigId === 'ai') {
+      primaryColor = '#3b82f6'
+      secondaryColor = '#8b5cf6'
+      nodeSpeed = 0.4
+    }
+
+    const pointsCount = 70
+    const points = []
+    for (let i = 0; i < pointsCount; i++) {
+      points.push({
+        x: (Math.random() - 0.5) * window.innerWidth * 1.3,
+        y: (Math.random() - 0.5) * window.innerHeight * 1.3,
+        z: (Math.random() - 0.5) * 800,
+        vx: (Math.random() - 0.5) * nodeSpeed,
+        vy: (Math.random() - 0.5) * nodeSpeed,
+        vz: (Math.random() - 0.5) * nodeSpeed,
+        color: i % 2 === 0 ? primaryColor : secondaryColor,
+      })
+    }
+
+    let angleX = 0
+    let angleY = 0
+
+    const render = () => {
+      ctx.clearRect(0, 0, width, height)
+
+      mouse.x += (mouse.targetX - mouse.x) * 0.05
+      mouse.y += (mouse.targetY - mouse.y) * 0.05
+
+      if (isCyber) {
+        // --- CYBER SECURITY: 3D ISOMETRIC TILTED FINGERPRINT & DATA STREAMS ---
+
+        // 1. Draw floating bokeh particles
+        bokehParticles.forEach((p) => {
+          p.y -= p.speedY
+          if (p.y < 0) p.y = height
+          if (p.y > height) p.y = 0
+
+          ctx.beginPath()
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2)
+          ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`
+          ctx.shadowBlur = 8
+          ctx.shadowColor = 'rgba(255, 255, 255, 0.5)'
+          ctx.fill()
+          ctx.shadowBlur = 0
+        })
+
+        // 2. Draw vertical data / circuit trace streams
+        streamLines.forEach((s) => {
+          s.y += s.speed
+          if (s.y > height + s.length) s.y = -s.length
+
+          ctx.beginPath()
+          ctx.moveTo(s.x, s.y)
+          ctx.lineTo(s.x, s.y + s.length)
+          const grad = ctx.createLinearGradient(s.x, s.y, s.x, s.y + s.length)
+          grad.addColorStop(0, 'transparent')
+          grad.addColorStop(0.5, `rgba(255, 255, 255, ${s.opacity})`)
+          grad.addColorStop(1, 'transparent')
+          ctx.strokeStyle = grad
+          ctx.lineWidth = 1.2
+          ctx.stroke()
+        })
+
+        // 3. Draw Tilted 3D Isometric Particle Fingerprint Matrix in Center
+        ctx.save()
+        const centerX = width * 0.5 + mouse.x * 30
+        const centerY = height * 0.5 + mouse.y * 30
+        
+        ctx.translate(centerX, centerY)
+        // Apply 3D perspective tilt (isometric rotation matrix effect)
+        ctx.transform(1, 0.25, -0.15, 0.85, 0, 0)
+
+        fingerprintOffset += 0.005
+
+        const rings = 16
+        const maxRadiusX = 170
+        const maxRadiusY = 110
+
+        for (let r = 1; r <= rings; r++) {
+          const rx = (r / rings) * maxRadiusX
+          const ry = (r / rings) * maxRadiusY
+          const particleCount = r * 14
+
+          for (let i = 0; i < particleCount; i++) {
+            const theta = (i / particleCount) * Math.PI * 2 + fingerprintOffset * (r % 2 === 0 ? 1 : -1)
+            // Add subtle organic fingerprint wave irregularity
+            const wave = Math.sin(theta * 6) * 3
+            const px = Math.cos(theta) * (rx + wave)
+            const py = Math.sin(theta) * (ry + wave)
+
+            // Alternating brightness for white/grey realistic micro-particles
+            const isWhite = (i + r) % 3 === 0
+            ctx.beginPath()
+            ctx.arc(px, py, isWhite ? 1.8 : 1.2, 0, Math.PI * 2)
+            ctx.fillStyle = isWhite ? 'rgba(255, 255, 255, 0.9)' : 'rgba(150, 150, 150, 0.5)'
+            ctx.shadowBlur = isWhite ? 10 : 4
+            ctx.shadowColor = '#ffffff'
+            ctx.fill()
+            ctx.shadowBlur = 0
+          }
+        }
+
+        ctx.restore()
+
+      } else {
+        // --- OTHER SIGS: 3D NEURAL MATRIX NETWORK ---
+        angleX = 0.0015 + mouse.y
+        angleY = 0.002 + mouse.x
+
+        const cx = width / 2
+        const cy = height / 2
+        const fov = 600
+
+        const projected = points.map((p) => {
+          p.x += p.vx
+          p.y += p.vy
+          p.z += p.vz
+
+          const limitX = width * 0.9
+          const limitY = height * 0.9
+          if (p.x < -limitX || p.x > limitX) p.vx *= -1
+          if (p.y < -limitY || p.y > limitY) p.vy *= -1
+          if (p.z < -400 || p.z > 400) p.vz *= -1
+
+          let x1 = p.x * Math.cos(angleY) - p.z * Math.sin(angleY)
+          let z1 = p.z * Math.cos(angleY) + p.x * Math.sin(angleY)
+          let y1 = p.y
+
+          let y2 = y1 * Math.cos(angleX) - z1 * Math.sin(angleX)
+          let z2 = z1 * Math.cos(angleX) + y1 * Math.sin(angleX)
+          let x2 = x1
+
+          const scale = fov / (fov + z2 + 400)
+          return {
+            x: cx + x2 * scale,
+            y: cy + y2 * scale,
+            z: z2,
+            scale,
+            color: p.color,
+          }
+        })
+
+        for (let i = 0; i < projected.length; i++) {
+          for (let j = i + 1; j < projected.length; j++) {
+            const p1 = projected[i]
+            const p2 = projected[j]
+            const dx = p1.x - p2.x
+            const dy = p1.y - p2.y
+            const dist = Math.sqrt(dx * dx + dy * dy)
+
+            if (dist < 180) {
+              ctx.beginPath()
+              ctx.moveTo(p1.x, p1.y)
+              ctx.lineTo(p2.x, p2.y)
+              const alpha = (1 - dist / 180) * 0.25 * Math.min(p1.scale, p2.scale)
+              ctx.strokeStyle = primaryColor
+              ctx.lineWidth = 0.7
+              ctx.globalAlpha = Math.max(0, alpha)
+              ctx.stroke()
+              ctx.globalAlpha = 1.0
+            }
+          }
+        }
+
+        projected.forEach((p) => {
+          if (p.scale <= 0) return
+
+          ctx.beginPath()
+          ctx.arc(p.x, p.y, Math.max(1, 3 * p.scale), 0, Math.PI * 2)
+          ctx.fillStyle = p.color
+          ctx.globalAlpha = Math.min(1, Math.max(0.15, p.scale * 0.75))
+          ctx.shadowBlur = 10
+          ctx.shadowColor = p.color
+          ctx.fill()
+          ctx.shadowBlur = 0
+          ctx.globalAlpha = 1.0
+        })
+      }
+
+      animationFrameId = requestAnimationFrame(render)
+    }
+
+    render()
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      window.removeEventListener('mousemove', handleMouseMove)
+      cancelAnimationFrame(animationFrameId)
+    }
+  }, [isCyber, sigId])
 
   return (
-    <section id="members" className="bg-bg py-16 md:py-24">
-      <div className="mx-auto max-w-[1200px] px-6 md:px-10 lg:px-16">
-        <motion.div
-          className="mb-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
-        >
-          <div>
-            <div className="mb-4 flex items-center gap-3">
-              <div className="h-px w-8 bg-red-900/50" />
-              <span className="text-xs font-bold uppercase tracking-[0.3em] text-red-500 font-retro">
-                {isCyber ? 'NETWORK CELL' : 'THE PARTY'}
-              </span>
-            </div>
-            
-            {/* Fixed Title to CYBER Party */}
-            <h2 className="text-4xl font-extrabold uppercase leading-tight text-neutral-200 font-display md:text-5xl">
-              Meet the <span className="text-red-600 stranger-glow">
-                {isCyber ? 'CYBER party' : `${sig.shortName} party`}
-              </span>
-            </h2>
-            
-            <p className="mt-3 max-w-md text-sm leading-relaxed text-neutral-400 font-body">
-              {isCyber 
-                ? 'Our core defensive cluster. Team leads, CTF researchers, and threat analysts driving the signal.'
-                : 'Seniors, mentors, and fellow first-years who turn scary topics into weekend builds and contest nights.'}
-            </p>
-          </div>
-
-          <div className="inline-flex items-center gap-3 rounded-full border border-red-950/60 bg-[#090002]/45 px-5 py-3">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
-            </span>
-            <span className="text-sm font-bold tracking-wider text-neutral-400 font-retro">
-              <span className="font-bold text-red-500">{allMembers.length + leads.length}</span> ACTIVE AGENTS
-            </span>
-          </div>
-        </motion.div>
-
-        {leads.length > 0 && (
-          <div
-            className="mb-8 grid gap-5"
-            style={{ gridTemplateColumns: `repeat(auto-fit, minmax(${leads.length <= 2 ? 280 : 220}px, 1fr))` }}
-          >
-            {leads.map((lead, i) => (
-              <LeadCard key={lead.name} member={lead} index={i} />
-            ))}
-          </div>
-        )}
-
-        {members.length > 0 && (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-            {members.map((member, i) => (
-              <MemberCard key={member.name} member={member} index={i} />
-            ))}
-          </div>
-        )}
-
-        {hasOverflow && (
-          <div className="mt-6 flex justify-center">
-            <button
-              onClick={() => setShowAllMembers((v) => !v)}
-              className="rounded-full border border-red-950/60 bg-[#090002]/45 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-red-500 transition-colors duration-200 hover:border-red-700/50 hover:text-red-400 font-retro"
-            >
-              {showAllMembers ? 'Show less' : `Show ${hiddenCount} more agents`}
-            </button>
-          </div>
-        )}
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
-          className="mt-8 flex flex-col items-center justify-between gap-4 rounded-2xl border border-red-950/40 bg-[#090002]/40 p-6 text-center sm:flex-row sm:text-left md:p-8"
-        >
-          <div>
-            <h3 className="text-xl font-extrabold uppercase text-neutral-200 font-display md:text-2xl">
-              Want to join the <span className="text-red-600 stranger-glow">party</span>?
-            </h3>
-            <p className="mt-1 text-sm text-neutral-400 font-body">Applications for the new batch are open.</p>
-          </div>
-          <JoinButton />
-        </motion.div>
-      </div>
-    </section>
-  )
-}
-
-function JoinButton() {
-  return (
-    <button
-      onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-      className="relative inline-flex flex-shrink-0 items-center gap-2 rounded-full bg-red-600 px-6 py-3 text-xs font-bold uppercase tracking-wider text-neutral-100 shadow-md shadow-red-950/30 transition-transform duration-300 hover:scale-105 font-retro"
-    >
-      Apply to join <span className="text-[10px]">-&gt;</span>
-    </button>
-  )
-}
-
-function LeadCard({ member, index }) {
-  const [hovered, setHovered] = useState(false)
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.7, delay: index * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="group relative mx-auto h-52 w-52 cursor-pointer overflow-hidden rounded-2xl border border-red-950/40 bg-[#090002]/40 transition-all duration-300 hover:border-red-700/50"
-    >
-      <motion.img
-        src={member.image}
-        alt={member.name}
-        className="absolute inset-0 h-full w-full object-cover object-top"
-        animate={{ scale: hovered ? 1.06 : 1 }}
-        transition={{ duration: 0.5 }}
-      />
-
-      <div className="absolute left-3 top-3">
-        <span className="rounded-full bg-red-600 px-2.5 py-1 text-[10px] font-bold uppercase text-white font-retro">
-          {member.role}
-        </span>
-      </div>
-
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#090002] via-[#090002]/40 to-transparent" />
-
-      <div className="absolute inset-x-0 bottom-0 p-5">
-        <h3 className="text-base font-semibold text-neutral-100 font-body drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
-          {member.name}
-        </h3>
-
-        <motion.div
-          initial={false}
-          animate={{ height: hovered ? 'auto' : 0, opacity: hovered ? 1 : 0 }}
-          transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className="overflow-hidden"
-        >
-          <p className="mb-3 mt-1 text-xs text-neutral-300 font-body">{member.domain}</p>
-          <div className="flex gap-2">
-            <SocialBtn href="#" icon="GH" />
-            <SocialBtn href="#" icon="in" />
-          </div>
-        </motion.div>
-      </div>
-    </motion.div>
-  )
-}
-
-function MemberCard({ member, index }) {
-  const [hovered, setHovered] = useState(false)
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.6, delay: index * 0.05, ease: [0.25, 0.1, 0.25, 1] }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="group flex cursor-pointer flex-col items-center rounded-2xl border border-red-950/40 bg-[#090002]/30 p-4 text-center transition-all duration-300 hover:border-red-900/35 hover:bg-[#090002]"
-    >
-      <div className="relative mb-3 h-16 w-16 overflow-hidden rounded-full ring-2 ring-red-950 transition-all duration-300 group-hover:ring-red-600">
-        <motion.img 
-          src={member.image} 
-          alt={member.name} 
-          className="h-full w-full object-cover object-top opacity-80" 
-          animate={{ scale: hovered ? 1.1 : 1 }} 
-          transition={{ duration: 0.4 }} 
-        />
-      </div>
-      <p className="text-sm font-medium leading-tight text-neutral-200 font-body">{member.name}</p>
-      <p className="mt-0.5 text-[11px] font-bold uppercase tracking-wider text-red-500/80 font-retro">{member.role}</p>
-    </motion.div>
-  )
-}
-
-function SocialBtn({ href, icon }) {
-  return (
-    <a 
-      href={href} 
-      aria-label={icon === 'GH' ? 'GitHub profile' : 'LinkedIn profile'} 
-      className="flex h-7 w-7 items-center justify-center rounded-full border border-red-950/60 bg-red-950/20 text-[10px] font-bold text-red-500 transition-all duration-200 hover:border-red-600/40 hover:text-white font-retro"
-    >
-      {icon}
-    </a>
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#020204]">
+      <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full pointer-events-none" />
+    </div>
   )
 }

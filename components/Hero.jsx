@@ -3,19 +3,9 @@ import gsap from 'gsap'
 
 const BASE = import.meta.env.BASE_URL;
 
-const BG_MAP = {
-  default: `${BASE}assets/hero.png`,
-  web: `${BASE}assets/webBg.png`,
-  ai: `${BASE}assets/aiBg.png`,
-  glitch: `${BASE}assets/glitchBg.png`,
-  cyber: `${BASE}assets/cyberBg.png`,
-}
-
 export default function Hero({ sig }) {
   const [wordIndex, setWordIndex] = useState(0)
   const words = sig.words || []
-
-  const bgImage = sig.bgImage || BG_MAP[sig.bgKey || sig.id] || BG_MAP.default
 
   useEffect(() => {
     setWordIndex(0)
@@ -44,45 +34,22 @@ export default function Hero({ sig }) {
 
   return (
     <section id="home" className="relative flex min-h-screen w-full items-center justify-center overflow-hidden py-28 md:py-32">
-      <div className="absolute inset-0 overflow-hidden">
-        <style>{`
-          @keyframes cinematic-breath {
-            0%, 100% { transform: translate(-50%, -50%) scale(1.02); }
-            50% { transform: translate(-50%, -50%) scale(1.05); }
-          }
-          @keyframes flash-sky {
-            0%, 93%, 95%, 97%, 100% { opacity: 0.48; }
-            94%, 96% { opacity: 0.78; filter: brightness(1.2) contrast(1.1); }
-          }
-          .animate-breath { animation: cinematic-breath 16s ease-in-out infinite; }
-          .animate-sky-flash { animation: flash-sky 8s infinite; }
-        `}</style>
-
-        <img
-          key={sig.id}
-          src={bgImage}
-          alt=""
-          className="hero-bg-img absolute left-1/2 top-1/2 min-h-full min-w-full -translate-x-1/2 -translate-y-1/2 object-cover opacity-50 transition-all duration-700 animate-breath animate-sky-flash"
-        />
-
-        <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-red-950/10 to-[#020204]/95" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(229,9,20,0.23),transparent_36%),radial-gradient(circle_at_50%_80%,rgba(0,0,0,0.1),#020204_100%)]" />
-      </div>
-
+      
+      {/* 3D background sits entirely behind this section now, so we keep the center clear */}
       <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-6 text-center">
         <img
           src={`${BASE}assets/acm-amritapuri-logo.png`}
           alt="ACM Amritapuri"
-          className="blur-in mb-6 h-12 w-auto object-contain drop-shadow-[0_0_16px_rgba(229,9,20,0.35)] md:h-14"
+          className="blur-in mb-6 h-12 w-auto object-contain drop-shadow-[0_0_20px_rgba(249,115,22,0.5)] md:h-14"
         />
 
-        <p className="blur-in mb-8 text-xs font-bold uppercase tracking-[0.42em] text-red-500 font-retro animate-pulse">
+        <p className="blur-in mb-8 text-xs font-bold uppercase tracking-[0.42em] text-orange-500 font-retro animate-pulse drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]">
           {sig.heroEyebrow || 'ACM AMRITAPURI - S1 SIG RECRUITMENT'}
         </p>
 
         {sig.heroStory ? (
           <>
-            <h1 className="name-reveal mb-6 text-4xl font-black uppercase leading-[0.98] text-red-600 font-display stranger-title animate-flicker md:text-6xl lg:text-7xl">
+            <h1 className="name-reveal mb-6 text-4xl font-black uppercase leading-[0.98] text-neutral-100 font-display stranger-title animate-flicker md:text-6xl lg:text-7xl">
               {sig.heroStory.title}
             </h1>
 
@@ -93,7 +60,7 @@ export default function Hero({ sig }) {
                 </p>
               ))}
               {sig.heroStory.closing && (
-                <p className="mt-5 text-2xl font-bold uppercase tracking-wider text-red-500 font-retro stranger-glow md:text-4xl">
+                <p className="mt-5 text-2xl font-bold uppercase tracking-wider text-amber-400 font-retro stranger-glow md:text-4xl drop-shadow-[0_0_15px_rgba(251,191,36,0.6)]">
                   {sig.heroStory.closing}
                 </p>
               )}
@@ -101,18 +68,18 @@ export default function Hero({ sig }) {
           </>
         ) : (
           <>
-            <h1 className="name-reveal mb-6 text-5xl font-black uppercase leading-[0.95] text-red-600 font-display stranger-title animate-flicker md:text-7xl lg:text-8xl">
+            <h1 className="name-reveal mb-6 text-5xl font-black uppercase leading-[0.95] text-neutral-100 font-display stranger-title animate-flicker md:text-7xl lg:text-8xl">
               {sig.heroTitle || 'Fueling Curiosity'}
             </h1>
 
             <p className="blur-in mb-4 max-w-2xl text-lg text-neutral-300 font-body md:text-xl">
-              Igniting ideas through <span className="text-red-500 stranger-glow">{sig.name}</span>.
+              Igniting ideas through <span className="text-amber-400 stranger-glow drop-shadow-[0_0_10px_rgba(251,191,36,0.8)]">{sig.name}</span>.
               {words.length > 0 && (
                 <>
                   {' '}Where{' '}
                   <span
                     key={wordIndex}
-                    className="inline-block text-xl font-bold tracking-wider text-red-500 font-retro stranger-glow animate-role-fade-in md:text-2xl"
+                    className="inline-block text-xl font-black tracking-widest text-amber-400 font-retro stranger-glow animate-role-fade-in md:text-2xl bg-gradient-to-r from-orange-500 to-yellow-400 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(249,115,22,0.5)]"
                   >
                     {words[wordIndex]}
                   </span>
@@ -144,9 +111,9 @@ export default function Hero({ sig }) {
       </div>
 
       <div className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-3">
-        <span className="text-xs font-bold tracking-[0.2em] text-red-600 font-retro">SCROLL</span>
-        <div className="relative h-10 w-px overflow-hidden bg-red-950/60">
-          <div className="absolute inset-x-0 h-full bg-red-600 animate-scroll-down" style={{ boxShadow: '0 0 6px #ff1a1a' }} />
+        <span className="text-[10px] font-black tracking-[0.3em] text-orange-500 font-retro drop-shadow-[0_0_8px_rgba(249,115,22,0.8)]">SCROLL</span>
+        <div className="relative h-12 w-px overflow-hidden bg-white/10">
+          <div className="absolute inset-x-0 h-full bg-orange-500 animate-scroll-down" style={{ boxShadow: '0 0 15px #f97316' }} />
         </div>
       </div>
     </section>
@@ -160,20 +127,20 @@ function HeroButton({ children, primary, onClick }) {
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className={`relative overflow-visible rounded-full px-7 py-3.5 text-xs font-bold uppercase tracking-wider font-retro cursor-pointer md:text-sm ${
+      className={`relative overflow-visible rounded-full px-8 py-4 text-xs font-black uppercase tracking-[0.15em] font-retro cursor-pointer md:text-sm ${
         primary
-          ? 'border-2 border-red-600 bg-red-600 text-neutral-100 shadow-lg shadow-red-900/30 hover:bg-red-700'
-          : 'border-2 border-red-950/60 bg-[#020204]/80 text-red-500'
+          ? 'border border-orange-500 bg-orange-950/40 text-orange-50 backdrop-blur-xl shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:bg-orange-900/60'
+          : 'border border-white/10 bg-white/5 text-neutral-300 backdrop-blur-md hover:border-orange-500/50 hover:text-white hover:bg-white/10'
       }`}
       style={{
         transform: hovered ? 'scale(1.05)' : 'scale(1)',
-        transition: 'transform 0.3s ease, background 0.3s ease',
+        transition: 'transform 0.3s ease, background 0.3s ease, border 0.3s ease',
       }}
     >
-      {hovered && (
+      {hovered && primary && (
         <span
-          className="pointer-events-none absolute rounded-full"
-          style={{ inset: '-2px', background: 'linear-gradient(90deg, #ff1a1a 0%, #ea580c 100%)', zIndex: -1 }}
+          className="pointer-events-none absolute rounded-full opacity-80"
+          style={{ inset: '-1px', background: 'linear-gradient(90deg, #ea580c 0%, #eab308 100%)', zIndex: -1, filter: 'blur(2px)' }}
         />
       )}
       <span className="relative z-10">{children}</span>

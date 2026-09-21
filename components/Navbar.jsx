@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 
+const BASE = import.meta.env.BASE_URL || '/';
 
 const navLinks = [
   { label: 'About', id: 'home' },
@@ -39,22 +40,25 @@ export default function Navbar({ activeSection, sigId }) {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
     >
-      <div className={`flex max-w-full items-center overflow-x-auto rounded-full border border-red-950/40 bg-surface/80 px-2 py-2 backdrop-blur-md transition-shadow duration-300 ${scrolled ? 'shadow-md shadow-red-950/10' : ''}`}>
+      {/* Scroll shadow updated to a warm orange glow */}
+      <div className={`flex max-w-full items-center overflow-x-auto rounded-full border border-white/10 bg-white/[0.02] px-2 py-2 backdrop-blur-xl transition-shadow duration-300 ${scrolled ? 'shadow-[0_4px_20px_rgba(249,115,22,0.15)]' : ''}`}>
         <motion.button
           className="relative flex h-9 flex-shrink-0 cursor-pointer items-center gap-2 rounded-full pl-1 pr-3"
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 1.05 }}
           transition={{ type: 'spring', stiffness: 400, damping: 25 }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
-          <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-red-900/50]">
-            <img src="/acm/assets/acm-amritapuri-mark.png" alt="" className="h-6 w-6 object-contain" />
+          {/* Logo container updated with an orange tinted border and glow */}
+          <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-orange-500/40 bg-orange-500/10 shadow-[0_0_10px_rgba(249,115,22,0.2)]">
+            <img src={`${BASE}assets/acm-amritapuri-mark.png`} alt="" className="h-6 w-6 object-contain brightness-200" />
           </div>
-          <span className="hidden text-[11px] font-bold uppercase tracking-[0.16em] text-red-400 font-retro stranger-glow sm:inline">
+          {/* Brand text uses the Orange-to-Amber gradient */}
+          <span className="hidden text-[11px] font-bold uppercase tracking-[0.16em] font-retro sm:inline bg-gradient-to-r from-orange-500 to-yellow-400 bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(249,115,22,0.6)]">
             ACM Amritapuri
           </span>
         </motion.button>
 
-        <div className="mx-1 hidden h-5 w-px flex-shrink-0 bg-red-950/60 sm:block" />
+        <div className="mx-1.5 hidden h-5 w-px flex-shrink-0 bg-white/10 sm:block" />
 
         {currentNavLinks.map(({ label, id }) => {
           const isActive = activeSection === id
@@ -62,10 +66,12 @@ export default function Navbar({ activeSection, sigId }) {
             <button
               key={label}
               onClick={() => handleNavClick(id)}
-              className={`whitespace-nowrap rounded-full px-3 py-1.5 text-xs transition-all duration-200 cursor-pointer font-body sm:px-4 sm:py-2 sm:text-sm ${
+              className={`whitespace-nowrap rounded-full px-3 py-1.5 text-xs transition-all duration-300 cursor-pointer font-body sm:px-4 sm:py-2 sm:text-sm ${
                 isActive
-                  ? 'border border-red-900/20 bg-red-950/30 text-red-500'
-                  : 'text-muted hover:bg-red-950/20 hover:text-red-500'
+                  // Active state: Glowing orange/amber glassmorphism
+                  ? 'border border-orange-500/50 bg-gradient-to-r from-orange-500/20 to-yellow-500/10 text-orange-200 shadow-[0_0_15px_rgba(249,115,22,0.25)]'
+                  // Inactive state: Neutral text that hovers to bright orange
+                  : 'border border-transparent text-neutral-400 hover:bg-orange-500/10 hover:text-orange-400 hover:border-orange-500/30'
               }`}
             >
               {label}
