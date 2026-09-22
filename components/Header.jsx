@@ -61,9 +61,6 @@ export default function Header(){
               {link.label}
             </Link>
           )}
-          <Link href="https://aseam.acm.org/join" target="_blank" className="nav-cta">
-            Join <span>↗</span>
-          </Link>
         </nav>
       </div>
     </header>

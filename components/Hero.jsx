@@ -113,7 +113,7 @@ export default function Hero({ sig }) {
       <div className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-3">
         <span className="text-[10px] font-black tracking-[0.3em] text-orange-500 font-retro drop-shadow-[0_0_8px_rgba(249,115,22,0.8)]">SCROLL</span>
         <div className="relative h-12 w-px overflow-hidden bg-white/10">
-          <div className="absolute inset-x-0 h-full bg-orange-500 animate-scroll-down" style={{ boxShadow: '0 0 15px #f97316' }} />
+          <div className="absolute inset-x-0 h-full bg-orange-500 animate-scroll-down" style={{ boxShadow: '0 0 15px #0b042a' }} />
         </div>
       </div>
     </section>

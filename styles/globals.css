@@ -42,7 +42,6 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:var(--font-display),sans-serif;lett
 @media(max-width:580px){.year-switcher{grid-template-columns:1fr}.core-page .people-grid{gap:14px}.faculty-clean-page .people-grid .person-card{flex-basis:100%}.core-page .people-grid>*{flex-basis:100%}.core-page .people-hero{padding-block:32px}}
 .alumni-destinations{display:grid;grid-template-columns:.82fr 1.18fr;align-items:center;gap:70px;margin-bottom:90px;padding:38px;background:rgba(15,7,27,.82);border:1px solid rgba(225,159,255,.17);box-shadow:0 30px 90px rgba(0,0,0,.28)}.alumni-destinations-copy{padding:20px}.alumni-destinations-copy h2{margin:24px 0 20px;font-size:clamp(35px,4vw,52px);line-height:1.04}.alumni-destinations-copy h2 span{color:var(--cyan)}.alumni-destinations-copy>p:not(.section-kicker){color:#9686a5;font-size:13px;line-height:1.75}.alumni-destinations-copy>b{display:block;margin-top:30px;color:#685776;font-size:8px;letter-spacing:.15em}.alumni-company-wall{position:relative;min-height:340px;display:grid;place-items:center;overflow:hidden;background:#020817;border:1px solid rgba(255,79,163,.18)}.alumni-company-wall:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(90,50,150,.18),transparent 62%);pointer-events:none}.alumni-company-wall img{position:relative;width:min(100%,590px);height:auto;image-rendering:auto}.alumni-company-wall:after{content:"COMPANY NETWORK / VERIFIED ALUMNI OUTCOMES";position:absolute;right:14px;bottom:10px;color:#4b415e;font:700 7px var(--font-body);letter-spacing:.13em}@media(max-width:900px){.alumni-destinations{grid-template-columns:1fr;gap:25px}.alumni-company-wall{min-height:300px}}@media(max-width:580px){.alumni-destinations{width:100%;margin-bottom:60px;padding:16px}.alumni-destinations-copy{padding:15px 8px}.alumni-company-wall{min-height:220px}.alumni-company-wall:after{display:none}}
 .events-archive{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.event-archive-card{position:relative;min-height:570px;padding:38px;display:flex;flex-direction:column;background:rgba(16,8,29,.9);border:1px solid rgba(225,159,255,.15);overflow:hidden;transition:.3s}.event-archive-card:before{content:"";position:absolute;width:230px;height:230px;right:-120px;top:-120px;border-radius:50%;border:1px solid rgba(255,79,163,.13);box-shadow:0 0 70px rgba(116,70,220,.08)}.event-archive-card:hover{transform:translateY(-5px);border-color:rgba(255,79,163,.45);background:#190c2a}.event-archive-card.featured{grid-column:1/-1;min-height:520px;display:grid;grid-template-columns:1.1fr .9fr;column-gap:80px;background:linear-gradient(120deg,rgba(93,41,153,.3),rgba(16,8,29,.92) 58%)}.event-archive-card.featured .event-card-head,.event-archive-card.featured .event-card-title{grid-column:1}.event-archive-card.featured>p{grid-column:1}.event-archive-card.featured>dl{grid-column:2;grid-row:2/4;align-self:center}.event-archive-card.featured>ul{grid-column:1}.event-archive-card.featured>a{grid-column:2;grid-row:4;align-self:end}.event-card-head{display:flex;justify-content:space-between;color:var(--cyan)}.event-card-head span{font-size:8px;letter-spacing:.15em}.event-card-head svg{font-size:29px}.event-card-title{margin-top:58px}.event-card-title small{color:#776687;font-size:8px;text-transform:uppercase;letter-spacing:.15em}.event-card-title h2{margin:10px 0 0;font-size:clamp(38px,4vw,58px)}.event-archive-card>p{max-width:610px;color:#9584a5;font-size:13px;line-height:1.75;margin:22px 0 28px}.event-archive-card dl{display:grid;gap:1px;margin:0 0 27px;background:rgba(225,159,255,.12)}.event-archive-card dl>div{display:grid;grid-template-columns:75px 1fr;gap:15px;padding:12px;background:#160a26}.event-archive-card dt{color:#665574;font-size:8px;text-transform:uppercase;letter-spacing:.1em}.event-archive-card dd{margin:0;color:#c4b5ce;font-size:10px}.event-archive-card ul{display:flex;flex-wrap:wrap;gap:6px;padding:0;margin:0 0 26px;list-style:none}.event-archive-card li{padding:7px 9px;border:1px solid rgba(225,159,255,.15);color:#806f8e;font-size:7px;text-transform:uppercase;letter-spacing:.1em}.event-archive-card>a{width:max-content;margin-top:auto;display:flex;align-items:center;gap:10px;color:var(--cyan);font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;border-bottom:1px solid rgba(255,79,163,.45);padding-bottom:5px}.event-placeholder{min-height:330px;grid-column:1/-1;justify-content:center;border-style:dashed;background:rgba(255,79,163,.025)}.event-placeholder>span{color:var(--cyan);font-size:8px;letter-spacing:.14em}.event-placeholder h2{max-width:600px;margin:20px 0 8px;font-size:40px}.event-placeholder>p{margin:0}.site-header nav{gap:14px}.site-header nav>a:not(.nav-cta){font-size:9px}@media(max-width:900px){.events-archive{grid-template-columns:1fr}.event-archive-card.featured{grid-column:auto;display:flex;min-height:620px}.event-archive-card.featured>dl,.event-archive-card.featured>ul,.event-archive-card.featured>a{grid-column:auto;grid-row:auto}.event-placeholder{grid-column:auto}}@media(max-width:580px){.event-archive-card{min-height:560px;padding:27px}.event-card-title{margin-top:45px}.event-placeholder{min-height:320px}.event-placeholder h2{font-size:31px}}
-
 /* =========================================================
    PEOPLE REVEAL
    ========================================================= */
@@ -50,21 +49,28 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:var(--font-display),sans-serif;lett
 .people-reveal {
   position: relative;
   width: 100%;
-  padding-bottom: 100px;
+  padding-bottom: 90px;
 }
+
+
+/* =========================================================
+   PEOPLE REVEAL HEADER
+   ========================================================= */
 
 .people-reveal-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 40px;
-  margin-bottom: 55px;
+  margin-bottom: 35px;
 }
 
 .people-reveal-header h2 {
   margin: 18px 0 0;
+
   font-size: clamp(40px, 5vw, 72px);
   line-height: 0.92;
+
   letter-spacing: -0.06em;
 }
 
@@ -73,22 +79,28 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:var(--font-display),sans-serif;lett
   -webkit-text-stroke: 1px var(--cyan);
 }
 
-/* =========================
+
+/* =========================================================
    PROGRESS
-   ========================= */
+   ========================================================= */
 
 .people-reveal-progress {
   display: flex;
   align-items: center;
+
   gap: 14px;
+
   width: 240px;
   flex-shrink: 0;
+
   padding-bottom: 7px;
 }
 
 .people-reveal-progress > span {
   color: #806d90;
+
   font: 700 9px var(--font-body);
+
   letter-spacing: 0.12em;
 }
 
@@ -98,21 +110,31 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:var(--font-display),sans-serif;lett
 
 .progress-line {
   position: relative;
+
   flex: 1;
+
   height: 1px;
+
   overflow: hidden;
+
   background: rgba(225, 159, 255, 0.18);
 }
 
 .progress-fill {
   position: absolute;
+
   left: 0;
   top: 0;
   bottom: 0;
+
   width: 0;
+
   background: var(--cyan);
-  box-shadow: 0 0 12px var(--cyan);
+
+  box-shadow:
+    0 0 12px var(--cyan);
 }
+
 
 /* =========================================================
    ACTIVE CARD STAGE
@@ -120,93 +142,180 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:var(--font-display),sans-serif;lett
 
 .people-reveal-stage {
   position: relative;
+
   width: 100%;
-  min-height: 700px;
+
+  /*
+   * Enough vertical space for the card,
+   * background typography and orbital rings.
+   */
+  min-height: 680px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
-  /* Important: names and cards must be allowed to extend
-     beyond the stage without being cropped. */
+  /*
+   * IMPORTANT
+   * The card slides outside the stage during
+   * the Framer Motion animation.
+   */
   overflow: visible;
 }
 
-/* =========================
-   LARGE BACKGROUND NAME
-   ========================= */
+
+/* =========================================================
+   BACKGROUND NAME
+   ========================================================= */
 
 .people-background-name {
   position: absolute;
-  inset: 0;
 
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
+  inset: 0;
 
   width: 100%;
   height: 100%;
 
   pointer-events: none;
+
   z-index: 2;
 
   overflow: visible;
 }
 
-.people-first-name,
-.people-last-name {
-  position: relative;
 
-  min-width: 0;
+/* =========================================================
+   BACKGROUND FIRST NAME
+   ========================================================= */
+
+.people-first-name {
+  position: absolute;
+
+  right: calc(50% + 230px);
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  max-width: calc(50% - 250px);
+
+  text-align: right;
+
+  white-space: nowrap;
 
   font-family: var(--font-heading);
-  font-size: clamp(72px, 9vw, 155px);
-  font-weight: 900;
-  line-height: 0.8;
-  letter-spacing: -0.075em;
+
+  font-size: clamp(70px, 10vw, 140px);
+
+  font-weight: 800;
+
+  line-height: 0.82;
+
+  letter-spacing: -0.065em;
+
   text-transform: uppercase;
 
   color: rgba(133, 113, 156, 0.25);
 
-  white-space: nowrap;
-  user-select: none;
+  text-shadow:
+    0 0 40px rgba(255, 79, 163, 0.04);
 
-  text-shadow: 0 0 40px rgba(255, 79, 163, 0.04);
+  user-select: none;
 
   overflow: visible;
 }
 
-/* First name stays on the LEFT side */
-.people-first-name {
-  grid-column: 1;
 
-  width: 100%;
-  padding-right: 25px;
-
-  text-align: right;
-}
-
-/* Last name stays on the RIGHT side */
 .people-last-name {
-  grid-column: 2;
+  position: absolute;
 
-  width: 100%;
-  padding-left: 25px;
+  left: calc(50% + 230px);
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  max-width: calc(50% - 250px);
 
   text-align: left;
+
+  white-space: nowrap;
+
+  font-family: var(--font-heading);
+
+  font-size: clamp(70px, 10vw, 140px);
+
+  font-weight: 900;
+
+  line-height: 0.82;
+
+  letter-spacing: -0.065em;
+
+  text-transform: uppercase;
+
+  color: rgba(133, 113, 156, 0.25);
+
+  text-shadow:
+    0 0 40px rgba(255, 79, 163, 0.04);
+
+  user-select: none;
+
+  overflow: visible;
 }
 
-/* =========================
+/* =========================================================
+   ORBITAL RINGS
+   ========================================================= */
+
+.people-orbit {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  border: 1px solid rgba(255, 79, 163, 0.13);
+
+  border-radius: 50%;
+
+  transform: translate(-50%, -50%);
+
+  pointer-events: none;
+
+  z-index: 1;
+}
+
+.people-reveal-stage .orbit-one {
+  width: 520px;
+  height: 520px;
+}
+
+.people-reveal-stage .orbit-two {
+  width: 720px;
+  height: 720px;
+}
+
+.people-reveal-stage .orbit-three {
+  width: 920px;
+  height: 920px;
+}
+
+
+/* =========================================================
    ACTIVE CARD
-   ========================= */
+   ========================================================= */
 
 .people-reveal-active {
   position: relative;
+
   z-index: 10;
 
   width: min(390px, 82vw);
 
+  margin-inline: 40px;
+
   cursor: pointer;
+
   user-select: none;
 }
 
@@ -217,7 +326,8 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:var(--font-display),sans-serif;lett
 .people-reveal-card .person-card {
   width: 100%;
 
-  border-color: rgba(255, 79, 163, 0.5);
+  border-color:
+    rgba(255, 79, 163, 0.5);
 
   box-shadow:
     0 30px 80px rgba(0, 0, 0, 0.55),
@@ -239,35 +349,45 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:var(--font-display),sans-serif;lett
     0 0 80px rgba(255, 79, 163, 0.14);
 }
 
-/* The old text prompt is no longer needed.
-   The card itself is the interaction. */
+
+/* =========================================================
+   REMOVE OLD CLICK TO PROCEED UI
+   ========================================================= */
+
 .people-reveal-hint {
   display: none !important;
 }
 
-/* =========================
+
+/* =========================================================
    NAVIGATION
-   ========================= */
+   ========================================================= */
 
 .people-navigation {
   position: absolute;
+
   top: 50%;
+
   z-index: 20;
 
-  width: 54px;
-  height: 54px;
-
-  border: 1px solid rgba(255, 79, 163, 0.6);
-  border-radius: 50%;
-
-  background: rgba(10, 5, 20, 0.55);
-  color: var(--cyan);
-
-  font-size: 22px;
+  width: 52px;
+  height: 52px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
+
+  border: 1px solid rgba(255, 79, 163, 0.55);
+
+  border-radius: 50%;
+
+  background:
+    rgba(10, 5, 20, 0.65);
+
+  color: var(--cyan);
+
+  font-size: 21px;
 
   cursor: pointer;
 
@@ -276,25 +396,30 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:var(--font-display),sans-serif;lett
   transition:
     background 0.25s ease,
     color 0.25s ease,
-    transform 0.25s ease,
-    border-color 0.25s ease;
+    border-color 0.25s ease,
+    transform 0.25s ease;
 }
 
 .people-navigation:hover {
   background: var(--cyan);
+
   color: #08040d;
+
   border-color: var(--cyan);
 
-  transform: translateY(-50%) scale(1.08);
+  transform:
+    translateY(-50%)
+    scale(1.08);
 }
 
 .people-navigation-left {
-  left: 5%;
+  left: 2vw;
 }
 
 .people-navigation-right {
-  right: 5%;
+  right: 2vw;
 }
+
 
 /* =========================================================
    FINAL GRID
@@ -302,8 +427,12 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:var(--font-display),sans-serif;lett
 
 .people-final-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
   gap: 22px;
+
   width: 100%;
 }
 
@@ -315,156 +444,50 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:var(--font-display),sans-serif;lett
     filter 0.3s ease;
 }
 
+.people-final-card .person-card {
+  width: 100%;
+}
+
 .people-final-card:hover {
   transform: translateY(-6px);
 }
 
-/* =========================================================
-   TABLET
-   ========================================================= */
-
-@media (max-width: 1100px) {
-  .people-first-name,
-  .people-last-name {
-    font-size: clamp(64px, 9vw, 125px);
-  }
-
-  .people-first-name {
-    padding-right: 18px;
-  }
-
-  .people-last-name {
-    padding-left: 18px;
-  }
-
-  .people-final-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .orbit-two {
-    width: 620px;
-    height: 620px;
-  }
-
-  .orbit-three {
-    width: 780px;
-    height: 780px;
-  }
-}
 
 /* =========================================================
-   MOBILE
+   HERO TEXT
    ========================================================= */
 
-@media (max-width: 900px) {
-  .people-reveal-header {
-    align-items: flex-start;
-    flex-direction: column;
-  }
+/*
+ * This fixes:
+ *
+ * EXPERIENCE
+ * BEHIND
+ * THE EXPERIMENT.
+ *
+ * instead of:
+ *
+ * EXPERIENCE BEHIND THE
+ */
 
-  .people-reveal-progress {
-    width: min(100%, 300px);
-  }
+.people-hero h1 span {
+  display: block;
 
-  .people-reveal-stage {
-    min-height: 620px;
-  }
+  width: max-content;
 
-  .people-final-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .people-navigation-left {
-    left: 2%;
-  }
-
-  .people-navigation-right {
-    right: 2%;
-  }
+  max-width: 100%;
 }
 
-@media (max-width: 700px) {
-  .people-reveal-stage {
-    min-height: 610px;
-  }
+.people-hero h1 .outlined {
+  color: transparent;
 
-  .people-first-name,
-  .people-last-name {
-    font-size: 72px;
-  }
-
-  .people-first-name {
-    padding-right: 12px;
-  }
-
-  .people-last-name {
-    padding-left: 12px;
-  }
-
-  .people-navigation {
-    width: 44px;
-    height: 44px;
-    font-size: 18px;
-  }
-
-  .orbit-one {
-    width: 430px;
-    height: 430px;
-  }
-
-  .orbit-two {
-    width: 520px;
-    height: 520px;
-  }
-
-  .orbit-three {
-    display: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .people-first-name,
-  .people-last-name {
-    font-size: 52px;
-  }
-
-  .people-first-name {
-    padding-right: 8px;
-  }
-
-  .people-last-name {
-    padding-left: 8px;
-  }
-
-  .people-navigation {
-    display: none;
-  }
-
-  .people-final-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* =========================================================
-   REDUCED MOTION
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  .people-reveal-active,
-  .people-reveal-card .person-card,
-  .people-final-card {
-    transition: none !important;
-  }
+  -webkit-text-stroke:
+    1.3px var(--cyan);
 }
 
 
 /* =========================================================
-   PEOPLE HERO
+   HERO LAYOUT
    ========================================================= */
-
-.people-clean-page {
-  padding-bottom: 140px !important;
-}
 
 .people-hero {
   min-height: 470px;
@@ -474,10 +497,12 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:var(--font-display),sans-serif;lett
   display: grid;
 
   /*
-   * Give the heading most of the space,
-   * but keep enough room for the description.
+   * Previously this was 1fr .42fr.
+   * That made the description absurdly narrow.
    */
-  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  grid-template-columns:
+    minmax(0, 1.35fr)
+    minmax(280px, 0.65fr);
 
   column-gap: 70px;
 
@@ -486,36 +511,24 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:var(--font-display),sans-serif;lett
 
 .people-hero > .section-kicker {
   grid-column: 1 / -1;
+
   margin-bottom: 25px;
 }
 
 .people-hero h1 {
   margin: 0;
 
-  font: 600 clamp(58px, 7vw, 102px) / 0.88 var(--font-display);
+  font:
+    600
+    clamp(58px, 7vw, 102px)
+    / 0.88
+    var(--font-display);
 
   letter-spacing: -0.065em;
 
   text-transform: uppercase;
 
   min-width: 0;
-}
-
-/*
- * THIS IS IMPORTANT.
- * Each sentence/line gets its own row.
- */
-.people-hero h1 span {
-  display: block;
-
-  width: max-content;
-  max-width: 100%;
-}
-
-.people-hero h1 .outlined {
-  color: transparent;
-
-  -webkit-text-stroke: 1.3px var(--cyan);
 }
 
 .people-hero > div {
@@ -525,7 +538,9 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:var(--font-display),sans-serif;lett
 
   padding-left: 25px;
 
-  border-left: 1px solid rgba(255, 79, 163, 0.5);
+  border-left:
+    1px solid
+    rgba(255, 79, 163, 0.5);
 }
 
 .people-hero > div p {
@@ -548,4 +563,1012 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:var(--font-display),sans-serif;lett
   font-size: 8px;
 
   letter-spacing: 0.16em;
+}
+
+
+/* =========================================================
+   CORE PAGE
+   ========================================================= */
+
+.core-page .people-hero {
+  min-height: 470px;
+
+  padding-top: 115px;
+
+  align-content: center;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .people-first-name,
+  .people-last-name {
+    font-size: clamp(
+      80px,
+      10vw,
+      170px
+    );
+  }
+
+  .people-first-name {
+    right: calc(50% + 210px);
+
+    max-width:
+      calc(50% - 225px);
+  }
+
+  .people-last-name {
+    left: calc(50% + 210px);
+
+    max-width:
+      calc(50% - 225px);
+  }
+
+  .people-reveal-stage .orbit-two {
+    width: 620px;
+    height: 620px;
+  }
+
+  .people-reveal-stage .orbit-three {
+    width: 780px;
+    height: 780px;
+  }
+
+  .people-final-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+}
+
+
+/* =========================================================
+   900px
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .people-hero {
+    min-height: 0;
+
+    padding-top: 100px;
+
+    grid-template-columns: 1fr;
+
+    row-gap: 40px;
+  }
+
+  .people-hero > .section-kicker {
+    margin-bottom: 0;
+  }
+
+  .people-hero > div {
+    max-width: 560px;
+  }
+
+  .people-hero h1 span {
+    width: auto;
+  }
+
+  .people-reveal-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 25px;
+  }
+
+  .people-reveal-progress {
+    width: min(100%, 300px);
+  }
+
+  .people-reveal-stage {
+    min-height: 640px;
+  }
+
+  /*
+   * Bring names closer on tablet,
+   * but keep the card clear.
+   */
+  .people-first-name {
+    right: calc(50% + 175px);
+
+    max-width:
+      calc(50% - 185px);
+  }
+
+  .people-last-name {
+    left: calc(50% + 175px);
+
+    max-width:
+      calc(50% - 185px);
+  }
+
+  .people-first-name,
+  .people-last-name {
+    font-size: clamp(
+      52px,
+      7vw,
+      95px
+    );
+  }
+
+  .people-navigation-left {
+    left: 1vw;
+  }
+
+  .people-navigation-right {
+    right: 1vw;
+  }
+
+  .people-final-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+/* =========================================================
+   700px
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .people-reveal-stage {
+    min-height: 610px;
+  }
+
+  /*
+   * At this width the two sides become
+   * much closer to the card.
+   */
+
+  .people-first-name {
+    right: calc(50% + 135px);
+
+    max-width:
+      calc(50% - 140px);
+  }
+
+  .people-last-name {
+    left: calc(50% + 135px);
+
+    max-width:
+      calc(50% - 140px);
+  }
+
+  .people-first-name,
+  .people-last-name {
+    font-size: clamp(
+      45px,
+      7vw,
+      72px
+    );
+  }
+
+  .people-navigation {
+    width: 44px;
+    height: 44px;
+
+    font-size: 18px;
+  }
+
+  .people-navigation-left {
+    left: 1%;
+  }
+
+  .people-navigation-right {
+    right: 1%;
+  }
+
+  .people-reveal-stage .orbit-one {
+    width: 430px;
+    height: 430px;
+  }
+
+  .people-reveal-stage .orbit-two {
+    width: 520px;
+    height: 520px;
+  }
+
+  .people-reveal-stage .orbit-three {
+    display: none;
+  }
+
+  .people-final-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+  }
+}
+
+
+/* =========================================================
+   580px
+   ========================================================= */
+
+@media (max-width: 580px) {
+
+  .people-clean-page {
+    padding-bottom: 80px !important;
+  }
+
+  .people-hero {
+    min-height: 0;
+
+    padding-top: 80px;
+
+    row-gap: 32px;
+  }
+
+  .people-hero h1 {
+    font-size: 48px;
+
+    line-height: 0.9;
+  }
+
+  .people-hero > div {
+    padding-left: 18px;
+  }
+
+  .people-hero > div p {
+    font-size: 14px;
+
+    line-height: 1.7;
+  }
+
+  .people-reveal {
+    padding-bottom: 60px;
+  }
+
+  .people-reveal-header {
+    margin-bottom: 25px;
+  }
+
+  .people-reveal-header h2 {
+    font-size: 42px;
+  }
+
+  .people-reveal-stage {
+    min-height: 560px;
+  }
+
+  .people-reveal-active {
+    width: min(330px, 82vw);
+
+    margin-inline: 25px;
+  }
+
+  /*
+   * On small screens the giant names sit
+   * closer to the edges of the card.
+   */
+
+  .people-first-name {
+    right: calc(50% + 115px);
+
+    max-width:
+      calc(50% - 120px);
+  }
+
+  .people-last-name {
+    left: calc(50% + 115px);
+
+    max-width:
+      calc(50% - 120px);
+  }
+
+  .people-first-name,
+  .people-last-name {
+    font-size: clamp(
+      50px,
+      10vw,
+      80px
+    );
+
+    letter-spacing: -0.055em;
+  }
+
+  .people-navigation {
+    display: none;
+  }
+
+  .people-final-grid {
+    grid-template-columns: 1fr;
+
+    gap: 18px;
+  }
+}
+
+
+/* =========================================================
+   480px
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+  .people-hero h1 {
+    font-size: 43px;
+  }
+
+  .people-reveal-stage {
+    min-height: 520px;
+  }
+
+  /*
+   * Long names remain readable without
+   * smashing into the card.
+   */
+
+  .people-first-name {
+    right: calc(50% + 100px);
+
+    max-width:
+      calc(50% - 105px);
+  }
+
+  .people-last-name {
+    left: calc(50% + 100px);
+
+    max-width:
+      calc(50% - 105px);
+  }
+
+  .people-first-name,
+  .people-last-name {
+    font-size: 50px;
+
+    letter-spacing: -0.045em;
+  }
+
+  .people-reveal-active {
+    width: min(310px, 82vw);
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .people-reveal-active,
+  .people-reveal-card .person-card,
+  .people-final-card {
+    transition: none !important;
+  }
+}
+
+/* =========================================================
+   FINAL NAVY + WHITE / YELLOW THEME
+   Text: white or #D6C507
+   Background: deep navy blue
+   ========================================================= */
+
+:root {
+  --ink: #071A2B;
+  --panel: #0B2033;
+  --panel2: #102D43;
+  --paper: #FFFFFF;
+  --white: #FFFFFF;
+  --blue: #0B2033;
+  --cyan: #D6C507;
+  --violet: #D6C507;
+  --muted: #FFFFFF;
+  --line: rgba(214, 197, 7, 0.25);
+  --yellow: #D6C507;
+  --ochre: #D6C507;
+}
+
+/* Main page background */
+html,
+body {
+  background: #071A2B !important;
+  color: #FFFFFF !important;
+}
+
+body {
+  background-color: #071A2B !important;
+}
+
+/* Make the main page and common sections navy */
+main,
+section,
+header,
+footer,
+article,
+.page,
+.page-shell,
+.site,
+.site-main,
+.hero,
+.hero-section,
+.about,
+.projects,
+.events,
+.achievements,
+.contact,
+.join,
+.people,
+.faculty,
+.core,
+.alumni {
+  background-color: #071A2B !important;
+  color: #FFFFFF !important;
+}
+
+/* Default text is white */
+body,
+body p,
+body span,
+body div,
+body li,
+body label,
+body small,
+body strong,
+body em,
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  color: #FFFFFF;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #FFFFFF !important;
+}
+
+/* Links */
+a {
+  color: #FFFFFF;
+}
+
+a:hover {
+  color: #D6C507 !important;
+}
+
+/* Navigation */
+.site-header,
+header {
+  background: #071A2B !important;
+  border-color: rgba(214, 197, 7, 0.2) !important;
+}
+
+.site-header a,
+.site-header button,
+.site-header nav a,
+.site-header nav button {
+  color: #FFFFFF !important;
+}
+
+.site-header a:hover,
+.site-header button:hover,
+.site-header nav a:hover,
+.site-header nav button:hover {
+  color: #D6C507 !important;
+}
+
+.site-header .active,
+.site-header .is-active,
+.site-header [aria-current="page"] {
+  color: #D6C507 !important;
+}
+
+/* Hero */
+.hero *,
+.hero-section * {
+  color: #FFFFFF;
+}
+
+.hero .eyebrow,
+.hero .label,
+.hero .kicker,
+.hero .accent,
+.hero .highlight {
+  color: #D6C507 !important;
+}
+
+/* Hero gradient text: yellow only */
+.hero .gradient-text,
+.hero .hero-title span,
+.hero h1 span {
+  color: #D6C507 !important;
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: #D6C507 !important;
+  -webkit-text-stroke: 1.5px #D6C507 !important;
+  filter: none !important;
+}
+/* Remove blue/purple/cyan gradients from text */
+.bg-gradient-to-r,
+.bg-gradient-to-l,
+.bg-gradient-to-t,
+.bg-gradient-to-b {
+  background-image: none !important;
+}
+
+.text-transparent {
+  color: #D6C507 !important;
+  -webkit-text-fill-color: #D6C507 !important;
+}
+
+/* Common accent classes */
+.text-cyan-400,
+.text-cyan-300,
+.text-blue-400,
+.text-blue-300,
+.text-blue-500,
+.text-purple-400,
+.text-purple-500,
+.text-violet-400,
+.text-pink-400,
+.text-orange-400,
+.text-yellow-400 {
+  color: #D6C507 !important;
+}
+
+/* Tailwind white/neutral text stays white */
+.text-white,
+.text-neutral-50,
+.text-neutral-100,
+.text-neutral-200,
+.text-gray-50,
+.text-gray-100 {
+  color: #FFFFFF !important;
+}
+
+/* Muted text should still be white, per requested palette */
+.text-neutral-300,
+.text-neutral-400,
+.text-neutral-500,
+.text-gray-300,
+.text-gray-400,
+.text-gray-500 {
+  color: #FFFFFF !important;
+  opacity: 0.85;
+}
+
+/* Buttons */
+button {
+  color: #FFFFFF;
+}
+
+button:hover {
+  color: #D6C507 !important;
+}
+
+.btn,
+.button,
+.cta,
+.cta-button {
+  color: #FFFFFF !important;
+  background: #102D43 !important;
+  border-color: #D6C507 !important;
+}
+
+.btn:hover,
+.button:hover,
+.cta:hover,
+.cta-button:hover {
+  color: #071A2B !important;
+  background: #D6C507 !important;
+}
+
+/* Cards and panels */
+.card,
+.panel,
+.program-card,
+.achievement-card,
+.event-card,
+.person-card,
+.faculty-card,
+.core-card,
+.project-card {
+  background: #0B2033 !important;
+  color: #FFFFFF !important;
+  border-color: rgba(214, 197, 7, 0.22) !important;
+}
+
+.card *,
+.panel *,
+.program-card *,
+.achievement-card *,
+.event-card *,
+.person-card *,
+.faculty-card *,
+.core-card *,
+.project-card * {
+  color: #FFFFFF;
+}
+
+/* Accent labels inside cards */
+.card .accent,
+.panel .accent,
+.card .label,
+.panel .label,
+.card .eyebrow,
+.panel .eyebrow {
+  color: #D6C507 !important;
+}
+
+/* Inputs */
+input,
+textarea,
+select {
+  background: #0B2033 !important;
+  color: #FFFFFF !important;
+  border-color: rgba(214, 197, 7, 0.3) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #FFFFFF !important;
+  opacity: 0.65;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #D6C507 !important;
+  outline-color: #D6C507 !important;
+}
+
+/* Footer */
+footer,
+footer * {
+  background-color: transparent;
+  color: #FFFFFF !important;
+}
+
+footer a:hover {
+  color: #D6C507 !important;
+}
+
+/* Borders */
+.border,
+.border-white\/10,
+.border-white\/20 {
+  border-color: rgba(214, 197, 7, 0.22) !important;
+}
+
+/* Remove old neon atmospheric colors */
+.tech-backdrop,
+.tech-aurora,
+.tech-grid,
+.tech-grain,
+.tech-vignette {
+  background-color: #071A2B !important;
+  background-image: none !important;
+}
+
+/* Selection */
+::selection {
+  background: #D6C507;
+  color: #071A2B;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar-track {
+  background: #071A2B;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D6C507;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FFFFFF;
+}
+
+.people-hero h1 span,
+.people-hero h1 .outlined {
+  color: #D6C507 !important;
+  background: #D6C507 !important;
+  background-image: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: #D6C507 !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+/* Remove yellow background from archive/heading text */
+.archive-hero h1 span,
+.archive-hero h1 .highlight,
+.archive-hero h1 .accent,
+.archive-hero h1 .outlined {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+
+  color: #D6C507 !important;
+  -webkit-text-fill-color: #D6C507 !important;
+}
+
+
+/* ===== ALUMNI HERO TEXT FIX ===== */
+
+.people-hero h1 span {
+  display: block !important;
+  width: max-content !important;
+  max-width: 100% !important;
+
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+
+  color: #D6C507 !important;
+  -webkit-text-fill-color: #D6C507 !important;
+  -webkit-text-stroke: 0 !important;
+
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+.people-hero h1 {
+  color: #FFFFFF !important;
+}
+
+.people-hero h1 span {
+  color: #D6C507 !important;
+}
+
+
+.site-header {
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+/* Alumni archive cards and controls */
+.alumni-year-switcher {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 8px;
+  margin-bottom: 28px;
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 16px;
+  background: #071A2B;
+}
+
+.alumni-year-switcher button {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 5px 12px;
+  align-items: center;
+  min-height: 64px;
+  padding: 12px 16px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: #FFFFFF;
+  background: transparent;
+  text-align: left;
+  transition: border-color .25s, background-color .25s, color .25s;
+}
+
+.alumni-year-switcher button:hover,
+.alumni-year-switcher button.active {
+  border-color: #D6C507;
+  color: #D6C507;
+  background: rgba(214, 197, 7, .08);
+}
+
+.alumni-year-switcher button.active {
+  box-shadow: 0 0 18px rgba(214, 197, 7, .08);
+}
+
+.alumni-year-switcher small {
+  grid-column: 1 / -1;
+  color: rgba(255, 255, 255, .54);
+  font-size: 8px;
+  letter-spacing: .14em;
+}
+
+.alumni-year-switcher strong {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.alumni-year-switcher button span {
+  color: rgba(255, 255, 255, .52);
+  font-size: 10px;
+  letter-spacing: .1em;
+}
+
+.alumni-year-switcher button.active small,
+.alumni-year-switcher button.active span {
+  color: rgba(214, 197, 7, .72);
+}
+
+.alumni-members {
+  position: relative;
+}
+
+.alumni-slider-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  color: rgba(255, 255, 255, .52);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .15em;
+}
+
+.alumni-slider-meta span:last-child {
+  color: #D6C507;
+}
+
+.alumni-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  min-height: 430px;
+}
+
+.alumni-card {
+  border: 1px solid rgba(255, 255, 255, .12) !important;
+  border-radius: 22px;
+  background: #0B2033 !important;
+  overflow: hidden;
+  transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease;
+}
+
+.alumni-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(214, 197, 7, .72) !important;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, .18);
+}
+
+.alumni-card .person-image {
+  aspect-ratio: 4 / 4.7;
+  background: #071A2B;
+}
+
+.alumni-card .person-image:after {
+  background: linear-gradient(180deg, transparent 64%, rgba(7, 26, 43, .28));
+}
+
+.alumni-card .person-image img {
+  filter: saturate(.82) contrast(1.03);
+  transition: transform .45s ease;
+}
+
+.alumni-card:hover .person-image img {
+  transform: scale(1.04);
+}
+
+.alumni-card .person-image > span {
+  display: none;
+}
+
+.alumni-card .person-info {
+  min-height: 172px;
+  padding: 20px;
+  background: #0B2033;
+}
+
+.alumni-card .person-info > small {
+  color: #D6C507 !important;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.alumni-card .person-info h3 {
+  margin: 9px 0 0;
+  color: #FFFFFF !important;
+  font-size: 21px;
+  line-height: 1.1;
+}
+
+.alumni-card .person-socials {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, .12);
+}
+
+.alumni-card .person-socials a {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 50%;
+  color: #FFFFFF !important;
+  transition: border-color .25s, color .25s, background-color .25s;
+}
+
+.alumni-card .person-socials a:hover {
+  border-color: #D6C507;
+  color: #071A2B !important;
+  background: #D6C507;
+}
+
+.alumni-card .person-socials > span {
+  color: rgba(255, 255, 255, .45) !important;
+  font-size: 8px;
+  letter-spacing: .1em;
+}
+
+.alumni-card .person-arrow {
+  width: 30px;
+  height: 30px;
+  margin-left: auto;
+  padding: 7px;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 50%;
+  color: #FFFFFF;
+  transition: color .25s, border-color .25s, transform .25s;
+}
+
+.alumni-card:hover .person-arrow {
+  border-color: #D6C507;
+  color: #D6C507;
+  transform: translate(2px, -2px);
+}
+
+.alumni-slider-controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.alumni-slider-controls button {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 50%;
+  color: #FFFFFF;
+  background: transparent;
+  transition: border-color .25s, color .25s, background-color .25s;
+}
+
+.alumni-slider-controls button:hover:not(:disabled) {
+  border-color: #D6C507;
+  color: #071A2B;
+  background: #D6C507;
+}
+
+.alumni-slider-controls button:disabled {
+  cursor: not-allowed;
+  opacity: .3;
+}
+
+@media (max-width: 900px) {
+  .alumni-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 580px) {
+  .alumni-year-switcher {
+    grid-template-columns: 1fr;
+  }
+
+  .alumni-grid {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .alumni-card .person-image {
+    aspect-ratio: 4 / 4.5;
+  }
 }

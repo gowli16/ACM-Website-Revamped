@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useEffect } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
+import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import PersonCard from "../../components/PersonCard";
 
 const alumni = {
@@ -49,6 +51,29 @@ const alumni = {
 export default function Alumni() {
   const years = Object.keys(alumni);
   const [year, setYear] = useState(years[0]);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(4);
+  const members = alumni[year];
+  const totalPages = Math.max(1, Math.ceil(members.length / pageSize));
+  const visibleMembers = members.slice(page * pageSize, (page + 1) * pageSize);
+
+  useEffect(() => {
+    const updatePageSize = () => {
+      setPageSize(window.innerWidth <= 580 ? 1 : window.innerWidth <= 900 ? 2 : 4);
+    };
+    updatePageSize();
+    window.addEventListener("resize", updatePageSize);
+    return () => window.removeEventListener("resize", updatePageSize);
+  }, []);
+
+  useEffect(() => {
+    setPage(0);
+  }, [year, pageSize]);
+
+  const goToPage = (nextPage) => {
+    setPage(Math.min(Math.max(nextPage, 0), totalPages - 1));
+  };
+
   return <div className="subpage people-clean-page">
     <section className="people-hero section-shell">
       <p className="section-kicker">[ Chapter archive / alumni ]</p>
@@ -66,11 +91,21 @@ export default function Alumni() {
         <Image src="/alumni-companies.png" alt="Companies where ACM Amritapuri alumni work" width={443} height={231} sizes="(max-width: 900px) 100vw, 520px" priority />
       </div>
     </section>
-    <div className="year-switcher section-shell" role="tablist" aria-label="Alumni year">
-      {years.map(y => <button role="tab" aria-selected={year === y} className={year === y ? "active" : ""} onClick={() => setYear(y)} key={y}><small>COHORT</small>{y}<span>{String(alumni[y].length).padStart(2, "0")}</span></button>)}
+    <div className="year-switcher alumni-year-switcher section-shell" role="tablist" aria-label="Alumni year">
+      {years.map(y => <button role="tab" aria-selected={year === y} className={year === y ? "active" : ""} onClick={() => setYear(y)} key={y}><small>COHORT</small><strong>{y}</strong><span>{String(alumni[y].length).padStart(2, "0")}</span></button>)}
     </div>
-    <AnimatePresence mode="wait"><motion.section key={year} className="people-grid section-shell" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}>
-      {alumni[year].map((person, i) => <PersonCard person={person} index={i} key={person.name}/>)}
-    </motion.section></AnimatePresence>
+    <div className="alumni-members section-shell">
+      <div className="alumni-slider-meta">
+        <span>MEMBERS / {String(members.length).padStart(2, "0")}</span>
+        <span aria-live="polite">{String(page + 1).padStart(2, "0")} / {String(totalPages).padStart(2, "0")}</span>
+      </div>
+      <AnimatePresence mode="wait"><motion.section key={`${year}-${page}-${pageSize}`} className="people-grid alumni-grid" initial={{ opacity: 0, x: 18 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -18 }} transition={{ duration: 0.45 }}>
+        {visibleMembers.map((person, i) => <PersonCard person={person} index={page * pageSize + i} key={person.name}/>)}
+      </motion.section></AnimatePresence>
+      <div className="alumni-slider-controls">
+        <button type="button" aria-label="Previous alumni members" disabled={page === 0} onClick={() => goToPage(page - 1)}><FiArrowLeft /></button>
+        <button type="button" aria-label="Next alumni members" disabled={page === totalPages - 1} onClick={() => goToPage(page + 1)}><FiArrowRight /></button>
+      </div>
+    </div>
   </div>;
 }
