@@ -22,28 +22,28 @@ export default function About() {
       <style dangerouslySetInnerHTML={{__html: `
         .about-page .section-kicker,
         .about-page .subpage-intro b { 
-          color: #22d3ee !important; /* cyan-400 */
+          color: #D6C507 !important;
         }
         .about-page h1 span {
-          background: linear-gradient(to right, #22d3ee, #3b82f6, #a855f7) !important;
-          -webkit-background-clip: text !important;
-          -webkit-text-fill-color: transparent !important;
+          color: #D6C507 !important;
+          background: none !important;
+          -webkit-text-fill-color: #D6C507 !important;
         }
         .about-page .photo-code {
-          color: #22d3ee !important;
+          color: #D6C507 !important;
         }
         .about-page .about-metrics strong {
-          background: linear-gradient(to right, #22d3ee, #3b82f6) !important;
-          -webkit-background-clip: text !important;
-          -webkit-text-fill-color: transparent !important;
+          background: none !important;
+          color: #D6C507 !important;
+          -webkit-text-fill-color: #D6C507 !important;
         }
         .about-page .console-tabs button.active {
-          color: #22d3ee !important;
-          border-left-color: #22d3ee !important;
-          border-bottom-color: #22d3ee !important;
+          color: #D6C507 !important;
+          border-left-color: #D6C507 !important;
+          border-bottom-color: #D6C507 !important;
         }
         .about-page .console-panel i { 
-          color: #a855f7 !important; /* purple-500 */
+          color: #D6C507 !important;
         }
       `}} />
 

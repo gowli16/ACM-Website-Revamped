@@ -182,15 +182,15 @@ const Students = () => {
             height: '10px',
           },
           '&::-webkit-scrollbar-track': {
-            background: '#4a4aa2',
+            background: '#071A2B',
           },
           '&::-webkit-scrollbar-thumb': {
-            background: '#393970',
+            background: '#D6C507',
             borderRadius: '20px',
-            border: '3px solid #1a1a2e',
+            border: '3px solid #071A2B',
           },
           '&::-webkit-scrollbar-thumb:hover': {
-            background: '#80fffb',
+            background: '#FFFFFF',
           },
         }}
       >

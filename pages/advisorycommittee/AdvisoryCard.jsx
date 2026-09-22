@@ -8,7 +8,7 @@ const AdvisoryCard = (props) => {
 
   return (
     <div
-        className={`relative flex flex-col items-center bg-[#393970] rounded-lg overflow-hidden shadow-lg shadow-[#393970] hover:shadow-[#80fffb] hover:bg-[#80fffb] p-[8px] glowing-border transition-all duration-300 transform ${hover ? 'scale-105' : 'scale-100'}`}
+        className={`relative flex flex-col items-center bg-[#0B2033] rounded-lg overflow-hidden shadow-lg shadow-black/20 hover:shadow-[#D6C507]/20 hover:bg-[#D6C507] p-[8px] glowing-border transition-all duration-300 transform ${hover ? 'scale-105' : 'scale-100'}`}
       style={{ width: width, height: height }}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}

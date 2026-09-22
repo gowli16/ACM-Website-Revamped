@@ -35,16 +35,16 @@ export default function Web3DBackground({ sig }) {
     let nodeSpeed = 0.5
 
     if (sigId === 'cyber') {
-      primaryColor = '#10b981' // Emerald
-      secondaryColor = '#06b6d4' // Cyan
+      primaryColor = '#D6C507'
+      secondaryColor = '#FFFFFF'
       nodeSpeed = 0.6
     } else if (sigId === 'glitch') {
-      primaryColor = '#a855f7' // Purple
-      secondaryColor = '#ec4899' // Pink
+      primaryColor = '#D6C507'
+      secondaryColor = '#FFFFFF'
       nodeSpeed = 0.8
     } else if (sigId === 'ai') {
-      primaryColor = '#3b82f6' // Blue
-      secondaryColor = '#8b5cf6' // Violet
+      primaryColor = '#D6C507'
+      secondaryColor = '#FFFFFF'
       nodeSpeed = 0.4
     }
 

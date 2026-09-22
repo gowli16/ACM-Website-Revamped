@@ -18,24 +18,24 @@ export default function Header(){
       */}
       <style dangerouslySetInnerHTML={{__html: `
         .site-header nav a:hover {
-          color: #22d3ee !important; /* cyan-400 */
+          color: #D6C507 !important;
         }
         .site-header nav a.active {
-          color: #22d3ee !important;
+          color: #D6C507 !important;
         }
         .site-header nav a.active::after {
-          background-color: #22d3ee !important;
+          background-color: #D6C507 !important;
         }
         .site-header .nav-cta {
-          background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%) !important;
+          background: #D6C507 !important;
           color: #ffffff !important;
           border: none !important;
-          box-shadow: 0 0 15px rgba(34, 211, 238, 0.2) !important;
+          box-shadow: 0 0 15px rgba(214, 197, 7, 0.2) !important;
           transition: all 0.3s ease !important;
         }
         .site-header .nav-cta:hover {
-          background: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%) !important;
-          box-shadow: 0 0 20px rgba(168, 85, 247, 0.4) !important;
+          background: #FFFFFF !important;
+          box-shadow: 0 0 20px rgba(214, 197, 7, 0.24) !important;
         }
       `}} />
 

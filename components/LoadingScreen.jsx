@@ -129,13 +129,13 @@ export default function LoadingScreen({ onComplete }) {
       <div 
         className="absolute inset-0 pointer-events-none z-0 animate-storm-flash opacity-25"
         style={{
-          background: 'radial-gradient(circle at 50% 40%, rgba(34, 211, 238, 0.35) 0%, rgba(59, 130, 246, 0.15) 60%, rgba(2, 2, 4, 1) 100%)'
+          background: 'radial-gradient(circle at 50% 40%, rgba(214, 197, 7, 0.24) 0%, rgba(214, 197, 7, 0.08) 60%, rgba(7, 26, 43, 1) 100%)'
         }}
       />
 
       {/* ── Lightning Strike ── */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        <svg viewBox="0 0 200 400" className="absolute top-8 left-[38%] w-1/4 h-2/3 text-[#fffaff] fill-none stroke-current opacity-0 animate-lightning pointer-events-none" style={{ filter: 'drop-shadow(0 0 15px #22d3ee) drop-shadow(0 0 25px #3b82f6)' }}>
+        <svg viewBox="0 0 200 400" className="absolute top-8 left-[38%] w-1/4 h-2/3 text-[#fffaff] fill-none stroke-current opacity-0 animate-lightning pointer-events-none" style={{ filter: 'drop-shadow(0 0 15px #D6C507) drop-shadow(0 0 25px rgba(214, 197, 7, 0.45))' }}>
           <path d="M 50,0 L 70,80 L 40,140 L 90,200 L 30,290 L 70,400" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" />
           <path d="M 70,80 L 95,120 L 110,160" strokeWidth="2.5" strokeLinecap="round" />
           <path d="M 40,140 L 15,180 L 5,210" strokeWidth="2.5" strokeLinecap="round" />
@@ -151,7 +151,7 @@ export default function LoadingScreen({ onComplete }) {
           transform: `scale(${0.92 + (count / 100) * 0.14})`
         }}
       >
-        <svg viewBox="0 0 1000 600" className="w-full max-w-5xl h-full text-[#050b14] fill-current" style={{ filter: 'drop-shadow(0 0 15px rgba(34, 211, 238, 0.2))' }}>
+        <svg viewBox="0 0 1000 600" className="w-full max-w-5xl h-full text-[#050b14] fill-current" style={{ filter: 'drop-shadow(0 0 15px rgba(214, 197, 7, 0.16))' }}>
           {/* Main Body Spike Head */}
           <path d="M 480,380 C 480,380 500,260 500,260 C 500,260 520,380 520,380 Z" className="flayer-body" />
           
@@ -178,7 +178,7 @@ export default function LoadingScreen({ onComplete }) {
           <path d="M 0,100 L 0,60 Q 150,55 300,68 Q 450,75 600,60 Q 750,55 900,68 L 1000,60 L 1000,100 Z" />
           {/* Small towers/antennas silhouettes like the photo */}
           <rect x="440" y="25" width="6" height="40" fill="#000000" />
-          <circle cx="443" cy="22" r="3.5" fill="#000000" stroke="#22d3ee" strokeWidth="1" className="animate-pulse" />
+          <circle cx="443" cy="22" r="3.5" fill="#000000" stroke="#D6C507" strokeWidth="1" className="animate-pulse" />
           
           <path d="M 280,68 L 285,42 M 285,42 L 278,45" stroke="#000000" strokeWidth="2" />
           <path d="M 720,68 L 722,46 L 726,48" stroke="#000000" strokeWidth="2" />
@@ -187,7 +187,7 @@ export default function LoadingScreen({ onComplete }) {
 
       {/* ── Snapping Demogorgon (Pulsing silhouette in bottom-right corner) ── */}
       <div className="absolute bottom-28 right-10 md:right-16 z-20 pointer-events-none select-none opacity-[0.08]">
-        <svg viewBox="0 0 100 100" className="w-24 h-24 text-[#a855f7] fill-current animate-petal" style={{ filter: 'drop-shadow(0 0 8px rgba(168, 85, 247, 0.4))' }}>
+        <svg viewBox="0 0 100 100" className="w-24 h-24 text-[#D6C507] fill-current animate-petal" style={{ filter: 'drop-shadow(0 0 8px rgba(214, 197, 7, 0.35))' }}>
           {/* Neck / base */}
           <path d="M 42,80 Q 30,95 20,100 L 80,100 Q 70,95 58,80 Z" />
           {/* Inner core mouth cavity */}
@@ -273,7 +273,7 @@ export default function LoadingScreen({ onComplete }) {
             style={{
               scaleX: count / 100,
               transformOrigin: 'left',
-              boxShadow: '0 0 15px rgba(34, 211, 238, 0.5)',
+              boxShadow: '0 0 15px rgba(214, 197, 7, 0.35)',
             }}
           />
         </div>

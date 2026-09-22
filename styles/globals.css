@@ -1333,6 +1333,100 @@ footer a:hover {
   box-shadow: none !important;
 }
 
+/* Final palette cleanup for legacy light-blue accents and purple rules */
+.site-header nav > a:not(.nav-cta) {
+  color: #FFFFFF !important;
+}
+
+.site-header nav > a.active,
+.site-header nav > a:hover {
+  color: #D6C507 !important;
+}
+
+.site-header nav > a.active::after,
+.site-header nav > a:hover::after {
+  background: #D6C507 !important;
+  box-shadow: 0 0 10px rgba(214, 197, 7, .28) !important;
+}
+
+.site-header .header-inner {
+  transform: translateY(36px);
+}
+
+.subpage-intro,
+.people-hero > div {
+  border-left-color: #FFFFFF !important;
+}
+
+.about-photo,
+.sig-console,
+.bridge-console,
+.console-tabs,
+.goal-grid,
+.sig-page-grid,
+.achievement-page-list,
+.achievement-submit,
+.project-deck,
+.testimonial-deck,
+.contact-terminal,
+.program-grid,
+.events-archive,
+.event-archive-card,
+.people-navigation,
+.year-switcher,
+.alumni-destinations,
+.alumni-company-wall {
+  border-color: rgba(255, 255, 255, .22) !important;
+}
+
+.console-tabs button,
+.console-panel span,
+.event-archive-card li,
+.event-archive-card > a,
+.person-socials,
+.year-switcher button,
+.alumni-year-switcher button {
+  border-color: rgba(255, 255, 255, .18) !important;
+}
+
+.highlight-list,
+.highlight-list article,
+.signal-line span {
+  border-color: rgba(255, 255, 255, .22) !important;
+}
+
+.about-page .subpage-hero {
+  grid-template-columns: 1fr;
+  align-content: center;
+  row-gap: 32px;
+}
+
+.about-page .subpage-hero > div:last-child {
+  grid-column: 1;
+  justify-self: start;
+  width: min(100%, 720px);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.about-page .subpage-hero > div:first-child,
+.about-page .subpage-hero > div:last-child {
+  transform: translateY(-56px);
+}
+
+.faculty-clean-page .people-hero h1 span {
+  background: transparent !important;
+  background-image: none !important;
+  color: #D6C507 !important;
+  -webkit-text-fill-color: #D6C507 !important;
+}
+
+.faculty-clean-page .people-hero h1 span.outlined {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1.3px #D6C507 !important;
+}
+
 /* Alumni archive cards and controls */
 .alumni-year-switcher {
   display: grid;

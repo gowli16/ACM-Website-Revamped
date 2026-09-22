@@ -20,7 +20,7 @@ const theme = extendTheme({
         transition: "background-color 0.3s ease, width 0.3s ease",
       },
       "::-webkit-scrollbar-thumb:hover": {
-        backgroundColor: "#80fffb",
+        backgroundColor: "#D6C507",
         width: "12px",
       },
       "::-webkit-scrollbar-corner": {

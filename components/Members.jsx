@@ -65,12 +65,12 @@ export default function Web3DBackground({ sig }) {
     let nodeSpeed = 0.5
 
     if (sigId === 'glitch') {
-      primaryColor = '#a855f7'
-      secondaryColor = '#ec4899'
+      primaryColor = '#D6C507'
+      secondaryColor = '#FFFFFF'
       nodeSpeed = 0.8
     } else if (sigId === 'ai') {
-      primaryColor = '#3b82f6'
-      secondaryColor = '#8b5cf6'
+      primaryColor = '#D6C507'
+      secondaryColor = '#FFFFFF'
       nodeSpeed = 0.4
     }
 
