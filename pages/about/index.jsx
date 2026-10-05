@@ -97,6 +97,9 @@ export default function About() {
           ))}
         </div>
         
+
+
+        
         <AnimatePresence mode="wait">
           <motion.div key={active} className="console-panel" initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-20}}>
             <p className="section-kicker tracking-widest">[ Active frequency ]</p>
