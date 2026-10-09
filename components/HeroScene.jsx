@@ -41,7 +41,6 @@ export default function HeroScene() {
         <motion.div className="mini-node node-code" animate={{ scale: [1, 1.12, 1] }} transition={{ duration: 3, repeat: Infinity }}><FiCode /></motion.div>
         <motion.div className="mini-node node-zap" animate={{ scale: [1.1, 1, 1.1] }} transition={{ duration: 2.6, repeat: Infinity }}><FiZap /></motion.div>
       </motion.div>
-      <div className="scene-caption"><span>INTERACTIVE SYSTEM</span><span>MOVE YOUR CURSOR</span></div>
     </div>
   );
 }

@@ -1,283 +1,219 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const words = ['CONNECTING SIGNAL...', 'ACM AMRITAPURI', 'FUELING CURIOSITY', 'IGNITING IDEAS', 'SIG RECRUITMENT']
+const TARGET_TEXT = "acm amritapuri"
 
 export default function LoadingScreen({ onComplete }) {
-  const [count, setCount] = useState(0)
-  const [wordIndex, setWordIndex] = useState(0)
-  const startTime = useRef(null)
-  const rafId = useRef(null)
-  const duration = 2800
+  const [text, setText] = useState('')
+  const [isTyping, setIsTyping] = useState(true)
+  const [step, setStep] = useState('SEARCHING') 
 
+  // Phase 1: Typewriter effect
   useEffect(() => {
-    const animate = (timestamp) => {
-      if (!startTime.current) startTime.current = timestamp
-      const elapsed = timestamp - startTime.current
-      const progress = Math.min(elapsed / duration, 1)
-      const eased = progress < 0.5
-        ? 2 * progress * progress
-        : 1 - Math.pow(-2 * progress + 2, 2) / 2
-      setCount(Math.round(eased * 100))
-      if (progress < 1) {
-        rafId.current = requestAnimationFrame(animate)
+    if (step !== 'SEARCHING') return;
+    
+    let timeout;
+    if (isTyping) {
+      if (text.length < TARGET_TEXT.length) {
+        const typingSpeed = Math.random() * 40 + 60;
+        timeout = setTimeout(() => {
+          setText(TARGET_TEXT.slice(0, text.length + 1))
+        }, typingSpeed)
       } else {
-        setTimeout(() => onComplete(), 400)
+        setIsTyping(false)
       }
+    } else {
+      timeout = setTimeout(() => setStep('DRAWING'), 2000)
     }
-    rafId.current = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(rafId.current)
-  }, [onComplete])
+    return () => clearTimeout(timeout)
+  }, [text, isTyping, step])
 
+  // Phase 2 & 3: Drawing -> Text Mask Zoom
   useEffect(() => {
-    const interval = setInterval(() => {
-      setWordIndex(i => (i + 1) % words.length)
-    }, 700)
-    return () => clearInterval(interval)
-  }, [])
+    if (step === 'DRAWING') {
+      const timeout = setTimeout(() => {
+        setStep('ZOOMING') 
+      }, 3500); 
+      return () => clearTimeout(timeout);
+    }
+    
+    if (step === 'ZOOMING') {
+      const timeout = setTimeout(() => {
+        if (onComplete) onComplete(); 
+      }, 1200); 
+      return () => clearTimeout(timeout);
+    }
+  }, [step, onComplete])
 
   return (
-    <motion.div
-      className="fixed h-screen inset-0 z-[9999] bg-[#020204] flex flex-col overflow-hidden vhs-noise"
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-    >
-      {/* Custom styles for animations matching the user's stormy red Mind Flayer picture */}
-      <style>{`
-        @keyframes petal-snap {
-          0%, 100% { transform: scale(0.8) rotate(0deg); }
-          45% { transform: scale(1.15) rotate(4deg); }
-          50% { transform: scale(0.65) rotate(-2deg); }
-          60% { transform: scale(1) rotate(1deg); }
-        }
-        .animate-petal {
-          transform-origin: 50px 50px;
-          animation: petal-snap 3.5s infinite ease-in-out;
-        }
-
-        /* Lightning Strike */
-        @keyframes lightning-strike {
-          0%, 86%, 89%, 91%, 93%, 100% {
-            opacity: 0;
-          }
-          87%, 90%, 92% {
-            opacity: 0.9;
-          }
-        }
-        .animate-lightning {
-          animation: lightning-strike 7s infinite;
-        }
-
-        /* Ambient Storm Flash */
-        @keyframes storm-flash {
-          0%, 86%, 89%, 91%, 93%, 100% {
-            opacity: 0.25;
-          }
-          87%, 90%, 92% {
-            opacity: 0.85;
-          }
-        }
-        .animate-storm-flash {
-          animation: storm-flash 7s infinite alternate;
-        }
-
-        /* Mind Flayer Walk Cycles */
-        .left-outer-leg {
-          transform-origin: 470px 380px;
-          animation: walk-left-1 6s ease-in-out infinite alternate;
-        }
-        .left-inner-leg {
-          transform-origin: 475px 390px;
-          animation: walk-left-2 4.5s ease-in-out infinite alternate;
-        }
-        .right-outer-leg {
-          transform-origin: 530px 380px;
-          animation: walk-right-1 6s ease-in-out infinite alternate;
-        }
-        .right-inner-leg {
-          transform-origin: 525px 390px;
-          animation: walk-right-2 4.5s ease-in-out infinite alternate;
-        }
-        .flayer-body {
-          transform-origin: 500px 380px;
-          animation: body-breathe 5s ease-in-out infinite alternate;
-        }
-
-        @keyframes walk-left-1 {
-          0% { transform: rotate(0deg) scaleY(1); }
-          100% { transform: rotate(-5deg) scaleY(0.97) translateY(-3px); }
-        }
-        @keyframes walk-left-2 {
-          0% { transform: rotate(0deg) scale(1); }
-          100% { transform: rotate(5deg) scale(1.03) translateY(4px); }
-        }
-        @keyframes walk-right-1 {
-          0% { transform: rotate(0deg) scaleY(1); }
-          100% { transform: rotate(5deg) scaleY(0.97) translateY(-3px); }
-        }
-        @keyframes walk-right-2 {
-          0% { transform: rotate(0deg) scale(1); }
-          100% { transform: rotate(-5deg) scale(1.03) translateY(4px); }
-        }
-        @keyframes body-breathe {
-          0% { transform: translateY(0) scaleY(1); }
-          100% { transform: translateY(-7px) scaleY(1.04); }
-        }
-      `}</style>
-
-      {/* ── Cyber Aurora Sky Backdrop ── */}
-      <div 
-        className="absolute inset-0 pointer-events-none z-0 animate-storm-flash opacity-25"
-        style={{
-          background: 'radial-gradient(circle at 50% 40%, rgba(214, 197, 7, 0.24) 0%, rgba(214, 197, 7, 0.08) 60%, rgba(7, 26, 43, 1) 100%)'
-        }}
-      />
-
-      {/* ── Lightning Strike ── */}
-      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        <svg viewBox="0 0 200 400" className="absolute top-8 left-[38%] w-1/4 h-2/3 text-[#fffaff] fill-none stroke-current opacity-0 animate-lightning pointer-events-none" style={{ filter: 'drop-shadow(0 0 15px #D6C507) drop-shadow(0 0 25px rgba(214, 197, 7, 0.45))' }}>
-          <path d="M 50,0 L 70,80 L 40,140 L 90,200 L 30,290 L 70,400" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M 70,80 L 95,120 L 110,160" strokeWidth="2.5" strokeLinecap="round" />
-          <path d="M 40,140 L 15,180 L 5,210" strokeWidth="2.5" strokeLinecap="round" />
-          <path d="M 90,200 L 120,240 L 140,280" strokeWidth="2.5" strokeLinecap="round" />
-        </svg>
-      </div>
-
-      {/* ── Animated Mind Flayer Walking/Breathing in Storm ── */}
-      <div 
-        className="absolute inset-x-0 bottom-12 top-0 flex items-center justify-center pointer-events-none z-0 transition-all duration-300"
-        style={{
-          opacity: (count / 100) * 0.15,
-          transform: `scale(${0.92 + (count / 100) * 0.14})`
-        }}
-      >
-        <svg viewBox="0 0 1000 600" className="w-full max-w-5xl h-full text-[#050b14] fill-current" style={{ filter: 'drop-shadow(0 0 15px rgba(214, 197, 7, 0.16))' }}>
-          {/* Main Body Spike Head */}
-          <path d="M 480,380 C 480,380 500,260 500,260 C 500,260 520,380 520,380 Z" className="flayer-body" />
-          
-          {/* Left Outer Leg */}
-          <path d="M 470,380 C 400,320 250,280 150,300 C 50,320 0,400 0,400 C 0,400 40,360 120,340 C 220,320 380,340 470,380 Z" className="left-outer-leg" />
-          
-          {/* Left Inner Leg */}
-          <path d="M 475,390 C 400,360 300,380 250,450 C 230,480 220,530 220,530 C 220,530 240,490 280,450 C 350,390 420,400 475,390 Z" className="left-inner-leg" />
-          
-          {/* Right Outer Leg */}
-          <path d="M 530,380 C 600,320 750,280 850,300 C 950,320 1000,400 1000,400 C 1000,400 960,360 880,340 C 780,320 620,340 530,380 Z" className="right-outer-leg" />
-          
-          {/* Right Inner Leg */}
-          <path d="M 525,390 C 600,360 700,380 750,450 C 770,480 780,530 780,530 C 780,530 760,490 720,450 C 650,390 580,400 525,390 Z" className="right-inner-leg" />
-          
-          {/* Central Body Trunk */}
-          <path d="M 470,380 L 530,380 L 530,600 L 470,600 Z" className="flayer-body" />
-        </svg>
-      </div>
-
-      {/* ── Horizonal Horizon Silhouette (Matching the picture) ── */}
-      <div className="absolute bottom-0 inset-x-0 h-28 bg-[#020204]/90 z-10 border-t border-white/5 pointer-events-none select-none">
-        <svg viewBox="0 0 1000 100" preserveAspectRatio="none" className="w-full h-full text-[#020204] fill-current absolute bottom-0">
-          <path d="M 0,100 L 0,60 Q 150,55 300,68 Q 450,75 600,60 Q 750,55 900,68 L 1000,60 L 1000,100 Z" />
-          {/* Small towers/antennas silhouettes like the photo */}
-          <rect x="440" y="25" width="6" height="40" fill="#000000" />
-          <circle cx="443" cy="22" r="3.5" fill="#000000" stroke="#D6C507" strokeWidth="1" className="animate-pulse" />
-          
-          <path d="M 280,68 L 285,42 M 285,42 L 278,45" stroke="#000000" strokeWidth="2" />
-          <path d="M 720,68 L 722,46 L 726,48" stroke="#000000" strokeWidth="2" />
-        </svg>
-      </div>
-
-      {/* ── Snapping Demogorgon (Pulsing silhouette in bottom-right corner) ── */}
-      <div className="absolute bottom-28 right-10 md:right-16 z-20 pointer-events-none select-none opacity-[0.08]">
-        <svg viewBox="0 0 100 100" className="w-24 h-24 text-[#D6C507] fill-current animate-petal" style={{ filter: 'drop-shadow(0 0 8px rgba(214, 197, 7, 0.35))' }}>
-          {/* Neck / base */}
-          <path d="M 42,80 Q 30,95 20,100 L 80,100 Q 70,95 58,80 Z" />
-          {/* Inner core mouth cavity */}
-          <circle cx="50" cy="50" r="10" />
-          {/* 5 Petal flaps with small teeth silhouettes */}
-          {/* Top Petal */}
-          <path d="M 50,42 C 43,15 57,15 50,42 Z" />
-          {/* Top Right Petal */}
-          <path d="M 57,47 C 82,30 85,45 57,47 Z" />
-          {/* Bottom Right Petal */}
-          <path d="M 55,56 C 75,76 60,86 55,56 Z" />
-          {/* Bottom Left Petal */}
-          <path d="M 45,56 C 25,86 15,76 45,56 Z" />
-          {/* Top Left Petal */}
-          <path d="M 43,47 C 15,45 18,30 43,47 Z" />
-        </svg>
-      </div>
-
-      {/* Top-left — Club identity */}
+    <div className="fixed h-screen inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden pointer-events-none">
+      
+      {/* =========================================
+          THE TEXT MASK ZOOM EFFECT (OPTIMIZED)
+      ========================================= */}
       <motion.div
-        className="absolute top-8 left-8 md:top-10 md:left-10 flex items-center gap-3 z-10"
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className="absolute inset-0 flex items-center justify-center w-full pointer-events-none"
+        initial={{ scale: 1, opacity: 1 }}
+        animate={step === 'ZOOMING' ? { scale: 60, opacity: 0 } : { scale: 1, opacity: 1 }}
+        transition={{ 
+          scale: { duration: 1.2, ease: [0.7, 0, 0.2, 1] },
+          opacity: { duration: 0.4, delay: 0.6 } // Fades out midway to completely kill the lag!
+        }}
+        style={{ 
+          transformOrigin: "36% 50%",
+          willChange: "transform, opacity" // FORCES GPU HARDWARE ACCELERATION
+        }} 
       >
-        <img src="/acm/assets/acm-amritapuri-logo.png" alt="ACM Amritapuri" className="h-10 w-auto object-contain" />
-        <div className="flex flex-col gap-1">
-          <span className="text-xs text-cyan-400 font-retro tracking-[0.3em] font-bold">
-            ACM AMRITAPURI
-          </span>
-          <span className="text-[10px] text-blue-300 uppercase tracking-[0.2em] font-retro">
-            S1 Induction - SIG Recruitment
-          </span>
-        </div>
+        <svg viewBox="0 0 500 200" className="w-full max-w-4xl px-6 overflow-visible drop-shadow-[0_0_20px_rgba(0,155,222,0.4)]">
+          <defs>
+            <mask id="acm-mask">
+              {/* Drastically reduced rect size to stop CPU overload */}
+              <rect x="-1000" y="-1000" width="3000" height="3000" fill="white" />
+              <g
+                stroke="black"
+                strokeWidth={step === 'ZOOMING' ? "50" : "0"}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+              >
+                <path d="M 60,160 L 110,40 L 160,160 M 85,100 L 135,100" />
+                <path d="M 280,60 L 250,40 L 210,40 L 180,60 L 180,140 L 210,160 L 250,160 L 280,140" />
+                <path d="M 320,160 L 320,40 L 380,100 L 440,40 L 440,160" />
+              </g>
+            </mask>
+          </defs>
+
+          {/* Solid black background with holes punched out */}
+          <rect x="-1000" y="-1000" width="3000" height="3000" fill="#020204" mask="url(#acm-mask)" />
+
+          {(step === 'DRAWING' || step === 'ZOOMING') && (
+            <>
+              {/* RESTORED 3D LAYER (Dark Blue Shadow) */}
+              <g stroke="#1B5CA2" strokeWidth="18" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0.5" transform="translate(10, 10)">
+                <motion.path
+                  d="M 60,160 L 110,40 L 160,160 M 85,100 L 135,100"
+                  initial={{ pathLength: 0, opacity: 1 }}
+                  animate={{ pathLength: 1, opacity: step === 'ZOOMING' ? 0 : 1 }}
+                  transition={{ pathLength: { duration: 1, ease: "easeInOut" }, opacity: { duration: 0.3 } }}
+                />
+                <motion.path
+                  d="M 280,60 L 250,40 L 210,40 L 180,60 L 180,140 L 210,160 L 250,160 L 280,140"
+                  initial={{ pathLength: 0, opacity: 1 }}
+                  animate={{ pathLength: 1, opacity: step === 'ZOOMING' ? 0 : 1 }}
+                  transition={{ pathLength: { duration: 1, ease: "easeInOut", delay: 0.3 }, opacity: { duration: 0.3 } }}
+                />
+                <motion.path
+                  d="M 320,160 L 320,40 L 380,100 L 440,40 L 440,160"
+                  initial={{ pathLength: 0, opacity: 1 }}
+                  animate={{ pathLength: 1, opacity: step === 'ZOOMING' ? 0 : 1 }}
+                  transition={{ pathLength: { duration: 1, ease: "easeInOut", delay: 0.6 }, opacity: { duration: 0.3 } }}
+                />
+              </g>
+
+              {/* Main Laser Tracing Layer (Light Blue) */}
+              <g stroke="#009BDE" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" fill="none">
+                <motion.path
+                  d="M 60,160 L 110,40 L 160,160 M 85,100 L 135,100"
+                  initial={{ pathLength: 0, opacity: 1 }}
+                  animate={{ pathLength: 1, opacity: step === 'ZOOMING' ? 0 : 1 }}
+                  transition={{ pathLength: { duration: 1.2, ease: "easeInOut", delay: 0.2 }, opacity: { duration: 0.3 } }}
+                />
+                <motion.path
+                  d="M 280,60 L 250,40 L 210,40 L 180,60 L 180,140 L 210,160 L 250,160 L 280,140"
+                  initial={{ pathLength: 0, opacity: 1 }}
+                  animate={{ pathLength: 1, opacity: step === 'ZOOMING' ? 0 : 1 }}
+                  transition={{ pathLength: { duration: 1.2, ease: "easeInOut", delay: 0.7 }, opacity: { duration: 0.3 } }}
+                />
+                <motion.path
+                  d="M 320,160 L 320,40 L 380,100 L 440,40 L 440,160"
+                  initial={{ pathLength: 0, opacity: 1 }}
+                  animate={{ pathLength: 1, opacity: step === 'ZOOMING' ? 0 : 1 }}
+                  transition={{ pathLength: { duration: 1.2, ease: "easeInOut", delay: 1.2 }, opacity: { duration: 0.3 } }}
+                />
+              </g>
+            </>
+          )}
+        </svg>
       </motion.div>
 
-      {/* Top-right — tagline */}
-      <motion.div
-        className="absolute top-8 right-8 md:top-10 md:right-10 z-10"
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut', delay: 0.15 }}
-      >
-        <span className="text-[15px] text-cyan-400/70 uppercase tracking-[0.25em] font-retro">
-          fueling curiosity - igniting ideas
-        </span>
-      </motion.div>
-
-      {/* Center — cycling word */}
-      <div className="flex-1 flex flex-col items-center justify-center gap-3 z-10">
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={wordIndex}
-            className="text-3xl md:text-5xl lg:text-6xl font-display font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 select-none uppercase tracking-wider text-center px-4"
-            initial={{ y: 20, opacity: 0, scale: 0.95 }}
-            animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: -20, opacity: 0, scale: 1.05 }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
+      {/* =========================================
+          PHASE 1: SEARCH BAR
+      ========================================= */}
+      <AnimatePresence>
+        {step === 'SEARCHING' && (
+          <motion.div 
+            key="search-bar"
+            className="w-full max-w-2xl px-6 relative"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20, filter: 'blur(10px)' }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            {words[wordIndex]}
-          </motion.span>
-        </AnimatePresence>
-        <span className="text-xs text-blue-400 uppercase tracking-[0.3em] font-retro font-bold mt-2 opacity-80">
-          RECRUITMENT PORTAL
-        </span>
-      </div>
+            <motion.div 
+              className={`relative flex items-center w-full bg-[#121218] border rounded-full px-6 py-4 shadow-2xl transition-all duration-500 ${
+                !isTyping ? 'border-[#009BDE]/50 shadow-[0_0_30px_rgba(0,155,222,0.2)]' : 'border-white/10'
+              }`}
+              animate={!isTyping ? { scale: 0.98 } : { scale: 1 }}
+            >
+              <div className="mr-4 text-neutral-400 flex-shrink-0 transition-colors duration-300">
+                <svg className="h-6 w-6" fill="none" stroke={!isTyping ? "#009BDE" : "currentColor"} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
 
-      {/* Bottom — counter + progress bar */}
-      <div className="px-8 md:px-10 pb-8 md:pb-10 z-10">
-        <div className="flex items-end justify-between mb-2">
-          <span className="text-xs text-cyan-400/70 uppercase tracking-[0.25em] font-retro self-end mb-2 font-bold">
-            OPENING ACM PORTAL
-          </span>
-          <span className="text-7xl md:text-9xl font-retro text-transparent bg-clip-text bg-gradient-to-br from-cyan-300 to-blue-500 tabular-nums leading-none">
-            {String(count).padStart(3, '0')}%
-          </span>
-        </div>
+              <div className="flex-1 overflow-hidden flex items-center h-8">
+                <span className="text-white text-xl md:text-2xl font-medium tracking-wide whitespace-nowrap">
+                  {text}
+                </span>
+                <motion.span 
+                  className="ml-1 w-[2px] h-6 md:h-8 bg-[#009BDE] inline-block"
+                  animate={{ opacity: [1, 0] }}
+                  transition={{ duration: 0.8, repeat: !isTyping ? 0 : Infinity, ease: "linear" }}
+                  style={{ opacity: !isTyping ? 0 : 1 }}
+                />
+              </div>
+            </motion.div>
 
-        {/* Progress bar */}
-        <div className="h-[4px] bg-[#0a0a14] rounded-full overflow-hidden border border-white/10">
-          <motion.div
-            className="h-full bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full"
-            style={{
-              scaleX: count / 100,
-              transformOrigin: 'left',
-              boxShadow: '0 0 15px rgba(214, 197, 7, 0.35)',
-            }}
-          />
-        </div>
-      </div>
-    </motion.div>
+            {/* 3 DOTS LOADING TRANSITION */}
+            <AnimatePresence>
+              {!isTyping && (
+                <motion.div 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute left-0 right-0 mt-8 flex justify-center items-center gap-3"
+                >
+                  {[0, 1, 2].map((index) => (
+                    <motion.div
+                      key={index}
+                      className="w-3 h-3 bg-[#009BDE] rounded-full"
+                      animate={{ y: [0, -12, 0], opacity: [0.5, 1, 0.5] }}
+                      transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut", delay: index * 0.15 }}
+                      style={{ boxShadow: '0 0 12px rgba(0,155,222,0.6)' }}
+                    />
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* TEXT LABEL (Fades out when zooming) */}
+      <AnimatePresence>
+        {(step === 'DRAWING' || step === 'ZOOMING') && (
+          <motion.div 
+            className="absolute bottom-16 left-0 right-0 text-center"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: step === 'ZOOMING' ? 0 : 1, y: 0 }}
+            transition={{ duration: 0.8, delay: step === 'ZOOMING' ? 0 : 2.5 }}
+          >
+            <span className="text-[#009BDE] font-retro text-sm tracking-[0.4em] uppercase">
+              Student Chapter Initialization
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   )
 }
