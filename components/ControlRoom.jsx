@@ -1,85 +1,34 @@
-const stations = [
-  { id: "ai", label: "AI / MODEL SYSTEMS" },
-  { id: "web", label: "WEB / PRODUCT SYSTEMS" },
-  { id: "cyber", label: "CYBER / DEFENSE SYSTEMS" },
-  { id: "glitch", label: "GLITCH / GAME SYSTEMS" },
+const stars = [
+  [4, 8, 1, 0.48], [9, 18, 1, 0.52], [16, 31, 1, 0.38],
+  [23, 12, 2, 0.42], [29, 43, 1, 0.5], [35, 23, 1, 0.45],
+  [41, 52, 2, 0.38], [47, 16, 1, 0.55], [53, 36, 1, 0.42],
+  [59, 8, 1, 0.5], [64, 47, 2, 0.4], [70, 26, 1, 0.48],
+  [76, 58, 1, 0.44], [82, 15, 2, 0.4], [88, 38, 1, 0.52],
+  [95, 22, 1, 0.43], [7, 66, 2, 0.38], [14, 81, 1, 0.5],
+  [20, 57, 1, 0.42], [27, 91, 1, 0.45], [34, 72, 2, 0.4],
+  [40, 87, 1, 0.48], [47, 63, 1, 0.4], [55, 78, 2, 0.43],
+  [61, 59, 1, 0.5], [68, 92, 1, 0.38], [74, 69, 2, 0.42],
+  [81, 84, 1, 0.48], [87, 61, 1, 0.4], [94, 77, 2, 0.44],
+  [12, 39, 1, 0.38], [25, 70, 1, 0.52], [38, 5, 1, 0.4],
+  [51, 94, 1, 0.46], [66, 19, 1, 0.4], [79, 48, 1, 0.5],
+  [91, 95, 1, 0.4],
 ];
 
-export default function ControlRoom({ mission, roomRef, progressRef }) {
+export default function ControlRoom() {
   return (
-    <div className="sigc-room-scene" aria-hidden="true">
-      <div className="sigc-room-stars" />
-      <div className="sigc-room-wall" ref={roomRef}>
-        <div className="sigc-room-window">
-          <div className="sigc-room-window-grid" />
-          <div className="sigc-room-horizon" />
-          <span className="sigc-room-window-label">AMRITAPURI / OBSERVATION BAY</span>
-        </div>
-
-        <div className="sigc-side-console sigc-side-console-left">
-          <span className="sigc-room-label">SYSTEMS / 04</span>
-          <div className="sigc-console-readouts">
-            <i /><i /><i /><i />
-          </div>
-          <div className="sigc-room-lights"><i /><i /><i /></div>
-        </div>
-
-        <div className="sigc-side-console sigc-side-console-right">
-          <span className="sigc-room-label">ACTIVE CHANNEL</span>
-          <strong>{mission.station}</strong>
-          <span className="sigc-room-caption">{mission.signal}</span>
-          <div className="sigc-room-readout">
-            <i /><i /><i /><i /><i /><i /><i />
-          </div>
-        </div>
-
-        <div className="sigc-workstation">
-          <div className="sigc-monitor sigc-monitor-main">
-            <div className="sigc-monitor-topline">
-              <span>ACM AMRITAPURI / MISSION DISPLAY</span>
-              <span>CH 0{mission.index + 1}</span>
-            </div>
-            <div className="sigc-monitor-view">
-              <div className="sigc-monitor-grid" />
-              <div className={`sigc-monitor-signal sigc-monitor-signal-${mission.id}`}>
-                {mission.id === "ai" && <><i /><i /><i /><i /><i /><i /><i /><span>MODEL GRAPH</span></>}
-                {mission.id === "web" && <><span>PRODUCT / BUILD STATUS</span><i /><i /><i /><i /></>}
-                {mission.id === "cyber" && <><b>SECURE</b><i /><i /><i /><i /></>}
-                {mission.id === "glitch" && <><span>PLAYER 01 / READY</span><i /></>}
-              </div>
-            </div>
-            <div className="sigc-monitor-status"><i /> SIGNAL NOMINAL <span>{mission.station}</span></div>
-          </div>
-
-          <div className="sigc-monitor sigc-monitor-telemetry">
-            <div className="sigc-monitor-topline"><span>TELEMETRY</span><span>LIVE</span></div>
-            <div className="sigc-telemetry-bars">
-              <i /><i /><i /><i /><i /><i /><i /><i />
-            </div>
-            <div className="sigc-telemetry-readout">PACKETS / 048.2</div>
-          </div>
-
-          <div className="sigc-desk">
-            <div className="sigc-desk-edge" />
-            <div className="sigc-keyboard">
-              {Array.from({ length: 3 }, (_, row) => (
-                <div key={row}>{Array.from({ length: 10 }, (_, key) => <i key={key} />)}</div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="sigc-room-foot">
-          <span>ACM / CONTROL ROOM</span>
-          <span className="sigc-room-progress"><i ref={progressRef} /></span>
-          <span>MISSION {String(mission.index + 1).padStart(2, "0")} / 04</span>
-        </div>
-      </div>
-      <div className="sigc-station-signal">
-        {stations.map((station) => (
-          <span className={station.id === mission.id ? "is-active" : ""} key={station.id}>
-            {station.label}
-          </span>
+    <div className="sigc-space-background" aria-hidden="true">
+      <div className="sigc-starfield">
+        {stars.map(([left, top, size, opacity], index) => (
+          <span
+            key={index}
+            style={{
+              left: `${left}%`,
+              top: `${top}%`,
+              width: `${size}px`,
+              height: `${size}px`,
+              opacity,
+            }}
+          />
         ))}
       </div>
     </div>

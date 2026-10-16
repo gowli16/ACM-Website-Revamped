@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import ControlRoom from "../../components/ControlRoom";
 import Navbar from "../../components/Navbar";
+import SigArchiveGallery from "../../components/SigArchiveGallery";
 import { ai } from "../../data/sigs/ai";
 import { web } from "../../data/sigs/web";
 import { cyber } from "../../data/sigs/cyber";
@@ -315,12 +316,8 @@ function MissionContent({ mission }) {
 
 export default function RecruitmentPage() {
   const [activeSigId, setActiveSigId] = useState("ai");
-  const roomRef = useRef(null);
-  const progressRef = useRef(null);
   const pendingMissionRef = useRef(null);
   const pendingMissionTimeoutRef = useRef(null);
-  const activeSig = missions.find((mission) => mission.id === activeSigId) || missions[0];
-
   const selectMission = useCallback((id) => {
     const mission = missions.find((item) => item.id === id);
     if (!mission) return;
@@ -333,7 +330,7 @@ export default function RecruitmentPage() {
     }, 2500);
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     document.getElementById(`sigc-mission-${id}`)?.scrollIntoView({
-      behavior: reducedMotion ? "auto" : "smooth",
+      behavior: reducedMotion ? "instant" : "smooth",
       block: "start",
     });
   }, []);
@@ -375,42 +372,11 @@ export default function RecruitmentPage() {
     };
   }, []);
 
-  useEffect(() => {
-    let frame = null;
-    const updateScene = () => {
-      if (frame !== null) return;
-
-      frame = window.requestAnimationFrame(() => {
-        frame = null;
-        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = scrollable > 0 ? Math.min(1, Math.max(0, window.scrollY / scrollable)) : 0;
-        const room = roomRef.current;
-        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-        if (room) {
-          room.style.setProperty("--sigc-camera-x", reducedMotion ? "0px" : `${(progress - 0.5) * 10}px`);
-          room.style.setProperty("--sigc-camera-y", reducedMotion ? "0px" : `${(progress - 0.5) * -8}px`);
-          room.style.setProperty("--sigc-depth", reducedMotion ? "0px" : `${progress * 14}px`);
-        }
-        if (progressRef.current) progressRef.current.style.width = `${progress * 100}%`;
-      });
-    };
-
-    window.addEventListener("scroll", updateScene, { passive: true });
-    window.addEventListener("resize", updateScene);
-    updateScene();
-    return () => {
-      window.removeEventListener("scroll", updateScene);
-      window.removeEventListener("resize", updateScene);
-      if (frame !== null) window.cancelAnimationFrame(frame);
-    };
-  }, []);
-
   const enterOperations = () => selectMission("ai");
 
   return (
     <div className="sigc-page">
-      <ControlRoom mission={activeSig} roomRef={roomRef} progressRef={progressRef} />
+      <ControlRoom />
       <Navbar
         sigMissionNavigation
         activeSigId={activeSigId}
@@ -420,20 +386,18 @@ export default function RecruitmentPage() {
       <div className="sigc-page-content">
         <section className="sigc-intro" id="sigc-intro" aria-labelledby="sigc-intro-title">
           <div className="sigc-intro-copy">
-            <p className="sigc-eyebrow">ACM AMRITAPURI <span> / </span> SPECIAL INTEREST GROUPS</p>
+            <p className="sigc-eyebrow">ACM AMRITAPURI <span>/</span> SPECIAL INTEREST GROUPS</p>
             <h1 id="sigc-intro-title">Ideas become<br /><span>systems.</span></h1>
             <p className="sigc-intro-summary">
               Four student communities. One shared workspace for learning, research, and building technology together.
             </p>
             <button className="sigc-enter-button" onClick={enterOperations} type="button">
-              Enter operations <span aria-hidden="true">↘</span>
+              Enter operations <span aria-hidden="true">↓</span>
             </button>
           </div>
-          <div className="sigc-intro-readout" aria-hidden="true">
-            <span>FIELD GUIDE / 04</span>
-            <span>AI — WEB — CYBER — GLITCH</span>
-          </div>
         </section>
+
+        <SigArchiveGallery />
 
         <div className="sigc-sequence-heading">
           <p className="sigc-eyebrow">MISSION SEQUENCE</p>

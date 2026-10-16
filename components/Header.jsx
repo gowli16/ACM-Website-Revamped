@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 const links = [
   { label: "About", href: "/about" },
-  { label: "SIGs", href: "/sigs" },
+  { label: "SIGs", href: "/sigs/ai" },
   { label: "Events", href: "/events" },
   { label: "Achievements", href: "/achievements" },
   { label: "Core", href: "/core" },
@@ -54,7 +54,9 @@ export default function Header() {
           {links.map(link => (
             <Link 
               className={`px-4 py-2.5 rounded-full text-base md:text-lg font-medium transition-all outline-none focus:outline-none focus:ring-0 active:outline-none ${
-                router.pathname === link.href 
+                (link.href === "/sigs/ai"
+                  ? router.pathname === "/sigs/[sig]"
+                  : router.pathname === link.href)
                   ? 'bg-white/15 text-white font-semibold' 
                   : 'text-white/80 hover:text-white hover:bg-white/10'
               }`}

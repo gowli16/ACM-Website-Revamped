@@ -1,6 +1,5 @@
 
 import { useEffect, useState } from "react";
-import "./SIGPage.css";
 
 const missions = [
   {

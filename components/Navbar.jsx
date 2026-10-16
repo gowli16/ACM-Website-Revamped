@@ -10,6 +10,51 @@ const navLinks = [
   { label: 'Events', id: 'events' },
 ]
 
+const sigLinks = [
+  { label: 'AI', id: 'ai', icon: 'network' },
+  { label: 'Web', id: 'web', icon: 'web' },
+  { label: 'Cyber', id: 'cyber', icon: 'shield' },
+  { label: 'Glitch', id: 'glitch', icon: 'game' },
+]
+
+function SigIcon({ name }) {
+  if (name === 'network') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="5" r="2" />
+        <circle cx="6" cy="17" r="2" />
+        <circle cx="18" cy="17" r="2" />
+        <path d="m11 7-4 8m6-8 4 8M8 17h8" />
+      </svg>
+    )
+  }
+
+  if (name === 'web') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="4" y="4" width="16" height="16" rx="1" />
+        <path d="M4 9h16M9 9v11m6-11v11" />
+      </svg>
+    )
+  }
+
+  if (name === 'shield') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 3 19 6v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3Z" />
+        <path d="m9 12 2 2 4-4" />
+      </svg>
+    )
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M7 8h10a4 4 0 0 1 3.7 2.5l1 2.5a2 2 0 0 1-3 2.4L16 13H8l-2.7 2.4a2 2 0 0 1-3-2.4l1-2.5A4 4 0 0 1 7 8Z" />
+      <path d="M7 10v4m-2-2h4m7-1h.01M18 13h.01" />
+    </svg>
+  )
+}
+
 export default function Navbar({
   activeSection,
   sigId,
@@ -20,12 +65,14 @@ export default function Navbar({
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
+    if (sigMissionNavigation) return undefined
+
     const onScroll = () => setScrolled(window.scrollY > 100)
 
     window.addEventListener('scroll', onScroll, { passive: true })
 
     return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  }, [sigMissionNavigation])
 
   const handleNavClick = (id) => {
     if (id === 'home') {
@@ -57,13 +104,33 @@ export default function Navbar({
   }
 
   const navigationLinks = sigMissionNavigation
-    ? [
-        { label: 'AI', id: 'ai' },
-        { label: 'Web', id: 'web' },
-        { label: 'Cyber', id: 'cyber' },
-        { label: 'Glitch', id: 'glitch' },
-      ]
+    ? sigLinks
     : currentNavLinks
+
+  if (sigMissionNavigation) {
+    return (
+      <nav
+        className="sigc-mission-nav"
+        aria-label="SIG navigation"
+      >
+        <div className="sigc-nav-list">
+          {navigationLinks.map(({ label, id, icon }) => (
+            <button
+              className="sigc-nav-item"
+              type="button"
+              key={id}
+              aria-label={`${label} SIG`}
+              aria-current={activeSigId === id ? 'location' : undefined}
+              onClick={() => onSigSelect(id)}
+            >
+              <span className="sigc-nav-icon"><SigIcon name={icon} /></span>
+              <span className="sigc-nav-label" aria-hidden="true">{label}</span>
+            </button>
+          ))}
+        </div>
+      </nav>
+    )
+  }
 
   return (
     <motion.div
