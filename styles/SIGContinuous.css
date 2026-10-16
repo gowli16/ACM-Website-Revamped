@@ -49,26 +49,24 @@
 
 .sigc-mission-nav {
   position: fixed;
-  z-index: 50;
+  z-index: 60;
   top: 50%;
-  right: 18px;
+  right: 16px;
   display: flex;
-  width: 72px;
+  width: 66px;
   flex-direction: column;
   align-items: stretch;
   gap: 7px;
-  padding: 9px;
-  border-radius: 30px;
+  padding: 7px;
+  border: 1px solid rgba(98, 212, 232, 0.34);
+  border-radius: 24px;
+  background: #061827;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.28);
   transform: translateY(-50%);
 }
 
 .sigc-mission-nav::before {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  border-radius: 30px;
-  background: var(--sigc-paper);
-  content: "";
+  display: none;
 }
 
 .sigc-nav-item {
@@ -78,7 +76,7 @@
   min-width: 0;
   grid-template-columns: 50px;
   align-items: center;
-  color: var(--sigc-background);
+  color: var(--sigc-paper);
 }
 
 .sigc-nav-list {
@@ -101,7 +99,7 @@
   width: 50px;
   height: 50px;
   place-items: center;
-  color: var(--sigc-background);
+  color: #B9D0DC;
 }
 
 .sigc-nav-icon svg {
@@ -115,7 +113,7 @@
 }
 
 .sigc-nav-item[aria-current="location"] .sigc-nav-icon {
-  color: #16798A;
+  color: var(--sigc-cyan);
 }
 
 .sigc-nav-label {
