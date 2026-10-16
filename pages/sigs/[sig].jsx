@@ -377,15 +377,15 @@ export default function RecruitmentPage() {
   const enterOperations = () => selectMission("ai");
 
   return (
-    <div className="sigc-page">
-      <ControlRoom />
+    <>
       <Navbar
         sigMissionNavigation
         activeSigId={activeSigId}
         onSigSelect={selectMission}
       />
-
-      <div className="sigc-page-content">
+      <div className="sigc-page">
+        <ControlRoom />
+        <div className="sigc-page-content">
         <section className="sigc-intro" id="sigc-intro" aria-labelledby="sigc-intro-title">
           <div className="sigc-intro-copy">
             <p className="sigc-eyebrow">ACM AMRITAPURI <span>/</span> SPECIAL INTEREST GROUPS</p>
@@ -421,7 +421,8 @@ export default function RecruitmentPage() {
           <span>ACM AMRITAPURI</span>
           <span>LEARN / BUILD / SHARE</span>
         </footer>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
