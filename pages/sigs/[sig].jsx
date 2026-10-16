@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import ControlRoom from "../../components/ControlRoom";
 import Navbar from "../../components/Navbar";
 import SigArchiveGallery from "../../components/SigArchiveGallery";
+import SigSpaceExploration from "../../components/SigSpaceExploration";
 import { ai } from "../../data/sigs/ai";
 import { web } from "../../data/sigs/web";
 import { cyber } from "../../data/sigs/cyber";
@@ -316,6 +317,7 @@ function MissionContent({ mission }) {
 
 export default function RecruitmentPage() {
   const [activeSigId, setActiveSigId] = useState("ai");
+  const galleryRef = useRef(null);
   const pendingMissionRef = useRef(null);
   const pendingMissionTimeoutRef = useRef(null);
   const selectMission = useCallback((id) => {
@@ -397,7 +399,14 @@ export default function RecruitmentPage() {
           </div>
         </section>
 
-        <SigArchiveGallery />
+        <div ref={galleryRef}>
+          <SigArchiveGallery />
+        </div>
+
+        <SigSpaceExploration
+          galleryRef={galleryRef}
+          onPlanetChange={setActiveSigId}
+        />
 
         <div className="sigc-sequence-heading">
           <p className="sigc-eyebrow">MISSION SEQUENCE</p>
