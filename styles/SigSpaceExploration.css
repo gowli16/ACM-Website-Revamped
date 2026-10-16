@@ -69,7 +69,7 @@
 
 .sig-space__stage {
   position: absolute;
-  inset: 14% 0 12%;
+  inset: 8% 0 28%;
   overflow: hidden;
   transition: opacity 180ms steps(2, end);
 }
@@ -100,7 +100,7 @@
 .sig-space__planet-wrap {
   position: relative;
   display: grid;
-  width: min(62vw, 390px);
+  width: min(42vw, 340px);
   aspect-ratio: 1.12;
   place-items: center;
 }
@@ -182,14 +182,17 @@
 .sig-space__terrain {
   position: absolute;
   z-index: 2;
-  right: 4%;
-  bottom: 3%;
-  left: 4%;
+  right: auto;
+  bottom: -34px;
+  left: 50%;
+  width: min(430px, calc(100vw - 48px));
   color: #7eafc5;
   font-size: clamp(8px, 1vw, 10px);
   letter-spacing: 0.1em;
+  line-height: 1.5;
   text-align: center;
   text-transform: uppercase;
+  transform: translateX(-50%);
 }
 
 .sig-space__rocket {
@@ -209,9 +212,9 @@
 .sig-space__planet-rocket {
   position: absolute;
   z-index: 3;
-  bottom: 16%;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 23%;
+  left: calc(50% + clamp(72px, 10vw, 125px));
+  transform: translateX(-50%) rotate(24deg);
 }
 
 .sig-space--traveling .sig-space__planet-rocket {
@@ -324,8 +327,13 @@
 
 .sig-space__planet-label {
   position: absolute;
-  bottom: clamp(100px, 15vh, 150px);
-  left: clamp(24px, 9vw, 130px);
+  z-index: 5;
+  bottom: clamp(104px, 13vh, 140px);
+  left: clamp(32px, 6vw, 100px);
+  max-width: min(520px, calc(100% - 64px));
+  padding: 15px 20px;
+  border-left: 2px solid #75dff4;
+  background: rgba(3, 11, 23, 0.88);
   text-align: left;
 }
 
@@ -341,9 +349,10 @@
   margin: 8px 0 4px;
   color: #e4faff;
   font-family: "Courier New", Consolas, monospace;
-  font-size: clamp(19px, 3vw, 30px);
+  font-size: clamp(22px, 3vw, 34px);
   font-weight: 700;
   letter-spacing: 0.02em;
+  line-height: 1.15;
 }
 
 .sig-space__planet-label p {
@@ -472,8 +481,12 @@
     min-height: 400px;
   }
 
+  .sig-space__stage {
+    inset: 10% 0 30%;
+  }
+
   .sig-space__planet-wrap {
-    width: min(72vw, 300px);
+    width: min(68vw, 310px);
   }
 
   .sig-space__hud {
@@ -506,13 +519,25 @@
     inset: 18% 0 15%;
   }
 
+  .sig-space__stage {
+    inset: 14% 0 31%;
+  }
+
   .sig-space__planet-wrap {
     width: min(78vw, 265px);
   }
 
   .sig-space__terrain {
-    bottom: -3%;
+    bottom: -28px;
+    width: calc(100vw - 40px);
     font-size: 7px;
+  }
+
+  .sig-space__planet-rocket {
+    bottom: 22%;
+    left: calc(50% + 76px);
+    width: 28px;
+    height: 40px;
   }
 
   .sig-space__hud {
