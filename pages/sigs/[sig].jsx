@@ -1,151 +1,427 @@
-import { motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import Navbar from '../../components/Navbar'
-import Hero from '../../components/Hero'
-import TataBreach from '../../components/Tatabreach'
-import Domains from '../../components/Domains'
-import Works from '../../components/Works'
-import CyberWorks from '../../components/CyberWorks'
-import Explorations from '../../components/Explorations'
-import Members from '../../components/Members'
-import Events from '../../components/Events'
-import Stats from '../../components/Stats'
-import Achievements from '../../components/Achievements'
-import InternshipsAndPapers from '../../components/papersandinternship'
-import WhyJoin from '../../components/WhyJoin'
-import Manifesto from '../../components/Manifesto'
-import Spores from '../../components/Spores'
-import StrangerWidgets from '../../components/StrangerWidgets'
-import PsychicSequence from '../../components/PsychicSequence'
-import CinematicExperience from '../../components/CinematicExperience'
-import Web3DBackground from '../../components/Web3DBackground'
+import { useCallback, useEffect, useRef, useState } from "react";
+import ControlRoom from "../../components/ControlRoom";
+import Navbar from "../../components/Navbar";
+import SigArchiveGallery from "../../components/SigArchiveGallery";
+import SigSpaceExploration from "../../components/SigSpaceExploration";
+import { ai } from "../../data/sigs/ai";
+import { web } from "../../data/sigs/web";
+import { cyber } from "../../data/sigs/cyber";
+import { glitch } from "../../data/sigs/glitch";
 
-
-
-const sectionIds = ['home', 'what-we-do', 'works', 'achievements', 'members', 'events', 'stats', 'why-join']
-const sigs = [
-  {
-    id: "ai",
-    code: "AI / 01",
-    title: "Artificial Intelligence",
-    text: "Machine learning, applied research, intelligent products, and experiments that turn ambitious ideas into working systems.",
-    focus: ["ML foundations", "Applied AI", "Research"]
-  },
-  {
-    id: "cyber",
-    code: "CYBER / 02",
-    title: "Cybersecurity",
-    text: "Offensive and defensive security learned through CTFs, security labs, workshops, and shared investigation.",
-    focus: ["CTFs", "Web security", "Forensics"]
-  },
-  {
-    id: "web",
-    code: "DEV / 03",
-    title: "Web & App",
-    text: "Product-minded design and development for useful experiences on the web, mobile devices, and campus.",
-    focus: ["Frontend", "Backend", "Mobile"]
-  },
-  {
-    id: "glitch",
-    code: "GAME / 04",
-    title: "Glitch",
-    text: "Game design, creative coding, visual systems, and interactive worlds explored through collaborative jams.",
-    focus: ["Unity", "Design", "Creative code"]
-  }
+const missions = [
+  { id: "ai", index: 0, label: "AI", title: "Artificial Intelligence", station: "AI / 01", signal: ai.signal, data: ai },
+  { id: "web", index: 1, label: "Web", title: "Web & App", station: "WEB / 02", signal: web.signal, data: web },
+  { id: "cyber", index: 2, label: "Cyber", title: "Cybersecurity", station: "CYBER / 03", signal: cyber.signal, data: cyber },
+  { id: "glitch", index: 3, label: "Glitch", title: "Glitch Gaming", station: "GLITCH / 04", signal: glitch.signal, data: glitch },
 ];
 
+const contactLinks = [
+  { label: "GitHub", href: "https://github.com/ACM-Amrita-Amritapuri" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/acm-student-chapter-amrita-amritapuri/" },
+  { label: "Instagram", href: "https://www.instagram.com/acm.amrita/" },
+  { label: "Facebook", href: "https://www.facebook.com/acm.amrita" },
+];
 
-export default function RecruitmentPage() {
-  const router = useRouter() 
-  const { sig: sigId } = router.query 
+function SectionHeading({ eyebrow, title, description }) {
+  return (
+    <header className="sigc-section-heading">
+      {eyebrow && <p className="sigc-eyebrow">{eyebrow}</p>}
+      <h3>{title}</h3>
+      {description && <p className="sigc-section-description">{description}</p>}
+    </header>
+  );
+}
 
-  const [activeSig, setActiveSig] = useState(() => sigs.find((s) => s.id === sigId) || null)
-  const [activeSection, setActiveSection] = useState('home')
-  const [isTelekinesisActive, setIsTelekinesisActive] = useState(false)
-  const [shouldShake, setShouldShake] = useState(false)
-  const [isUpsideDown, setIsUpsideDown] = useState(false)
-  const [isPsychicSequenceActive, setIsPsychicSequenceActive] = useState(false)
+function isMediaReference(value) {
+  return typeof value === "string" &&
+    (/^['"]?\$\{BASE\}/.test(value) ||
+      /\/assets\//i.test(value) ||
+      /\.(?:avif|gif|jpe?g|png|svg|webp)(?:[?#].*)?$/i.test(value));
+}
 
-  useEffect(() => {
-    if (sigId) {
-      setActiveSig(sigs.find((s) => s.id === sigId) || null)
-      setActiveSection('home')
-      setTimeout(() => {
-        window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
-        document.documentElement.scrollTo({ top: 0, left: 0, behavior: 'instant' })
-      }, 50) 
-    }
-  }, [sigId])
-
-  const toggleTelekinesis = () => {
-    setIsTelekinesisActive(!isTelekinesisActive)
-    setShouldShake(true)
-    setTimeout(() => setShouldShake(false), 600)
-  }
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY
-      const detectionY = scrollY + window.innerHeight * 0.4
-      let current = 'home'
-      for (const id of sectionIds) {
-        const el = document.getElementById(id)
-        if (!el) continue
-        const sectionTop = el.getBoundingClientRect().top + scrollY
-        if (sectionTop <= detectionY) current = id
-      }
-      setActiveSection(current)
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+function RecordCards({ records, type }) {
+  if (!Array.isArray(records) || records.length === 0) return null;
 
   return (
-    <>
-      <div className={`min-h-screen w-full bg-[#020204] transition-transform ease-in-out origin-center ${isUpsideDown ? 'rotate-180 upside-down-active' : ''}`} style={{ transitionDuration: '1600ms' }}>
-        
-        {/* Pass activeSig so Web3DBackground switches between Cyber Fingerprint & Neural Matrix */}
-        <div className="fixed inset-0 z-0 pointer-events-none">
-          <Web3DBackground sig={activeSig} />
-        </div>
+    <div className={`sigc-record-grid sigc-record-grid-${type}`}>
+      {records.map((record, index) => {
+        const values = Array.isArray(record)
+          ? record
+          : [record.title, record.description, record.tags];
+        const title = values[0];
+        const description = type === "events" ? values[4] : values[1];
+        const metadata = type === "members"
+          ? values.slice(2)
+          : type === "events"
+            ? values.slice(1, 3)
+            : type === "papers"
+              ? values.slice(1)
+              : type === "internships"
+                ? values.slice(1, 3)
+                : values[2];
+        const tags = Array.isArray(metadata) && type !== "members" &&
+          type !== "events" && type !== "papers" && type !== "internships"
+          ? metadata
+          : [];
+        const details = Array.isArray(metadata) && tags.length === 0
+          ? metadata.filter((value) => typeof value === "string" && !isMediaReference(value))
+          : [];
+        const detailText = typeof metadata === "string" ? metadata : null;
+        const visibleDescription =
+          typeof description === "string" && !isMediaReference(description)
+            ? description
+            : null;
 
-        <button onClick={() => router.back()} className="fixed top-16 left-6 z-[9000] px-5 py-2.5 rounded-full bg-black/60 hover:bg-black/80 text-white font-retro text-xs uppercase tracking-widest cursor-pointer border border-white/20 hover:border-cyan-500 backdrop-blur-sm transition-colors">
-          ‹ Back
-        </button>
+        return (
+          <article className="sigc-record" key={`${type}-${index}`}>
+            {title && <h4>{title}</h4>}
+            {visibleDescription && <p>{visibleDescription}</p>}
+            {detailText && <p className="sigc-record-detail">{detailText}</p>}
+            {details.length > 0 && (
+              <p className="sigc-record-detail">{details.join(" / ")}</p>
+            )}
+            {tags.length > 0 && (
+              <ul className="sigc-tags">
+                {tags.filter((tag) => typeof tag === "string").map((tag) => (
+                  <li key={tag}>{tag}</li>
+                ))}
+              </ul>
+            )}
+          </article>
+        );
+      })}
+    </div>
+  );
+}
 
-        <div className="relative z-50">
-          <Navbar activeSection={activeSection} sigId={activeSig?.id} />
-          <Spores />
-          <StrangerWidgets isTelekinesisActive={isTelekinesisActive} onToggleTelekinesis={toggleTelekinesis} isUpsideDown={isUpsideDown} onTogglePortal={() => setIsPsychicSequenceActive(true)} />
-        </div>
+function StructuredData({ value }) {
+  if (value == null || value === "") return null;
 
-        {activeSig ? (
-          <main className={`relative z-10 transition-transform duration-500 ${shouldShake ? 'animate-shake' : ''} ${isTelekinesisActive ? 'telekinesis-active' : ''}`}>
-            <motion.div key={sigId} initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 }} className="pt-36 sm:pt-40 md:pt-48">
-              <Hero sig={activeSig} />
-            </motion.div>
+  if (Array.isArray(value)) {
+    const entries = value.filter((entry) => entry != null && entry !== "");
+    if (entries.length === 0) return null;
 
-            <TataBreach sig={activeSig} />
-            <Domains sig={activeSig} />
-            <CinematicExperience />
-            <WhyJoin sig={activeSig} />
-            {activeSig.id === 'cyber' ? <CyberWorks sig={activeSig} /> : <Works sig={activeSig} />}
-            <Explorations sig={activeSig} />
-            {activeSig.internships?.length > 0 && <InternshipsAndPapers sig={activeSig} />}
-            {activeSig.events?.length > 0 && <Events sig={activeSig} />}
-            <Achievements sig={activeSig} />
-            <Manifesto sig={activeSig} />
-            <Members sig={activeSig} />
-            <Stats sig={activeSig} />
-          </main>
-        ) : (
-          <main className="relative z-10 min-h-screen flex flex-col items-center justify-center gap-6 text-center px-6">
-            <p className="text-white/70 font-retro uppercase tracking-widest text-sm">No SIG selected.</p>
-          </main>
-        )}
+    return (
+      <ul className="sigc-structured-list">
+        {entries.map((entry, index) => (
+          <li key={`entry-${index}`}>
+            {Array.isArray(entry)
+              ? entry.filter((part) => !isMediaReference(part)).join(" — ")
+              : typeof entry === "object"
+                ? <StructuredData value={entry} />
+                : String(entry)}
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
+  if (typeof value === "object") {
+    const entries = Object.entries(value).filter(([, entry]) => {
+      if (entry == null || entry === "") return false;
+      return !Array.isArray(entry) || entry.length > 0;
+    });
+    if (entries.length === 0) return null;
+
+    return (
+      <div className="sigc-structured-grid">
+        {entries.map(([key, entry]) => (
+          <div className="sigc-structured-item" key={key}>
+            <h4>{key.replace(/([A-Z])/g, " $1").replace(/^\w/, (char) => char.toUpperCase())}</h4>
+            <StructuredData value={entry} />
+          </div>
+        ))}
       </div>
-    </>
-  )
+    );
+  }
+
+  return <p>{String(value)}</p>;
+}
+
+function StorySection({ mission }) {
+  const story = mission.data.breachStory;
+  if (!story) return null;
+
+  return (
+    <section className="sigc-content-section" id={`${mission.id}-briefing`}>
+      <SectionHeading
+        eyebrow={story.eyebrow || "FIELD BRIEFING"}
+        title={story.title}
+      />
+      {Array.isArray(story.questions) && story.questions.length > 0 && (
+        <ul className="sigc-briefing-list">
+          {story.questions.map((question, index) => <li key={index}>{question}</li>)}
+        </ul>
+      )}
+      {Array.isArray(story.paragraphs) && story.paragraphs.length > 0 && (
+        <div className="sigc-briefing-copy">
+          {story.paragraphs.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+        </div>
+      )}
+      {Array.isArray(story.stats) && story.stats.length > 0 && (
+        <RecordCards records={story.stats} type="briefing" />
+      )}
+    </section>
+  );
+}
+
+function MissionContent({ mission }) {
+  const { data } = mission;
+  const overview = data.heroStory;
+  const achievements = data.achievements || data.metrics;
+
+  return (
+    <section
+      className="sigc-mission"
+      id={`sigc-mission-${mission.id}`}
+      data-sigc-mission={mission.id}
+      aria-labelledby={`${mission.id}-title`}
+    >
+      <span className="sigc-mission-marker" data-sigc-marker={mission.id} />
+      <div className="sigc-mission-inner">
+        <header className="sigc-mission-header">
+          <p className="sigc-eyebrow">{mission.station} <span>{data.heroEyebrow || mission.signal}</span></p>
+          <h2 id={`${mission.id}-title`}>{mission.title}</h2>
+          {overview?.title && <p className="sigc-overview-title">{overview.title}</p>}
+          <p className="sigc-mission-tagline">{data.tagline}</p>
+          {overview?.lines?.map((line, index) => <p className="sigc-overview-copy" key={index}>{line}</p>)}
+          {overview?.closing && <p className="sigc-overview-closing">{overview.closing}</p>}
+          {data.description && <p className="sigc-overview-copy">{data.description}</p>}
+        </header>
+
+        <StorySection mission={mission} />
+
+        {Array.isArray(data.domains) && data.domains.length > 0 && (
+          <section className="sigc-content-section" id={`${mission.id}-domains`}>
+            <SectionHeading
+              eyebrow="AREAS OF PRACTICE"
+              title={[data.domainsHeadingPlain, data.domainsHeadingHighlight].filter(Boolean).join(" ") || "Domains"}
+              description={data.domainsDescription}
+            />
+            <RecordCards records={data.domains} type="domains" />
+          </section>
+        )}
+
+        {Array.isArray(data.projects) && data.projects.filter(Boolean).length > 0 && (
+          <section className="sigc-content-section" id={`${mission.id}-projects`}>
+            <SectionHeading
+              eyebrow={data.worksEyebrow || "BUILDS & RESEARCH"}
+              title={[data.worksHeadingPlain, data.worksHeadingHighlight].filter(Boolean).join(" ") || "Projects"}
+              description={data.worksDescription}
+            />
+            <RecordCards records={data.projects.filter(Boolean)} type="projects" />
+          </section>
+        )}
+
+        {Array.isArray(data.explorations) && data.explorations.filter(Boolean).length > 0 && (
+          <section className="sigc-content-section" id={`${mission.id}-explorations`}>
+            <SectionHeading
+              eyebrow={data.explorationsEyebrow || "LAB NOTES"}
+              title={[data.explorationsHeadingPlain, data.explorationsHeadingHighlight].filter(Boolean).join(" ") || "Explorations"}
+              description={data.explorationsDescription}
+            />
+            <RecordCards records={data.explorations.filter(Boolean)} type="explorations" />
+          </section>
+        )}
+
+        {Array.isArray(data.events) && data.events.length > 0 && (
+          <section className="sigc-content-section" id={`${mission.id}-events`}>
+            <SectionHeading
+              eyebrow="GATHERINGS & WORKSHOPS"
+              title={[data.eventsHeadingPlain, data.eventsHeadingHighlight].filter(Boolean).join(" ") || "Events"}
+              description={data.eventsDescription}
+            />
+            <RecordCards records={data.events} type="events" />
+          </section>
+        )}
+
+        {achievements && (
+          <section className="sigc-content-section" id={`${mission.id}-achievements`}>
+            <SectionHeading
+              eyebrow={achievements.eyebrow || "FIELD RECORD"}
+              title={[achievements.headingPlain, achievements.headingHighlight].filter(Boolean).join(" ") || "Achievements"}
+              description={achievements.description}
+            />
+            <StructuredData value={achievements} />
+          </section>
+        )}
+
+        {((data.internships?.length || 0) > 0 || (data.papers?.length || 0) > 0) && (
+          <section className="sigc-content-section" id={`${mission.id}-experience`}>
+            <SectionHeading eyebrow="CAREER & RESEARCH" title="Internships & papers" />
+            {data.internships?.length > 0 && (
+              <>
+                <h4 className="sigc-subheading">Internships</h4>
+                <RecordCards records={data.internships} type="internships" />
+              </>
+            )}
+            {data.papers?.length > 0 && (
+              <>
+                <h4 className="sigc-subheading">Papers & publications</h4>
+                <RecordCards records={data.papers} type="papers" />
+              </>
+            )}
+          </section>
+        )}
+
+        {Array.isArray(data.benefits) && data.benefits.length > 0 && (
+          <section className="sigc-content-section" id={`${mission.id}-why-join`}>
+            <SectionHeading
+              eyebrow={data.whyJoinHeading || "WHY JOIN"}
+              title={data.whyJoinTitle || "Build with us"}
+              description={data.whyJoinDescription}
+            />
+            <RecordCards records={data.benefits} type="benefits" />
+          </section>
+        )}
+
+        {data.manifesto && (
+          <section className="sigc-content-section" id={`${mission.id}-manifesto`}>
+            <SectionHeading
+              eyebrow={data.manifesto.eyebrow}
+              title={[data.manifesto.headingPlain, data.manifesto.headingHighlight].filter(Boolean).join(" ") || "Our philosophy"}
+            />
+            <StructuredData value={data.manifesto} />
+          </section>
+        )}
+
+        {Array.isArray(data.members) && data.members.length > 0 && (
+          <section className="sigc-content-section" id={`${mission.id}-members`}>
+            <SectionHeading eyebrow="THE PEOPLE" title="Meet the members" />
+            {Array.isArray(data.classes) && data.classes.length > 0 && (
+              <ul className="sigc-tags sigc-member-classes">
+                {data.classes.map((role) => <li key={role}>{role}</li>)}
+              </ul>
+            )}
+            <RecordCards records={data.members} type="members" />
+          </section>
+        )}
+
+        <section className="sigc-contact" id={`${mission.id}-contact`}>
+          <div>
+            <p className="sigc-eyebrow">NEXT TRANSMISSION</p>
+            <h3>Build with {mission.label}.</h3>
+            <p>Get in touch with ACM Amritapuri to learn more about this SIG.</p>
+            {data.email && <a className="sigc-email" href={`mailto:${data.email}`}>{data.email}</a>}
+          </div>
+          <nav className="sigc-social-links" aria-label="ACM Amritapuri social links">
+            {contactLinks.map((link) => (
+              <a href={link.href} key={link.label} target="_blank" rel="noreferrer">{link.label}</a>
+            ))}
+          </nav>
+        </section>
+      </div>
+    </section>
+  );
+}
+
+export default function RecruitmentPage() {
+  const [activeSigId, setActiveSigId] = useState("ai");
+  const galleryRef = useRef(null);
+  const pendingMissionRef = useRef(null);
+  const pendingMissionTimeoutRef = useRef(null);
+  const selectMission = useCallback((id) => {
+    const mission = missions.find((item) => item.id === id);
+    if (!mission) return;
+
+    setActiveSigId(id);
+    pendingMissionRef.current = id;
+    window.clearTimeout(pendingMissionTimeoutRef.current);
+    pendingMissionTimeoutRef.current = window.setTimeout(() => {
+      pendingMissionRef.current = null;
+    }, 2500);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.getElementById(`sigc-mission-${id}`)?.scrollIntoView({
+      behavior: reducedMotion ? "instant" : "smooth",
+      block: "start",
+    });
+  }, []);
+
+  useEffect(() => {
+    const markers = document.querySelectorAll("[data-sigc-marker]");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleMarkers = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top));
+        const visible = pendingMissionRef.current
+          ? visibleMarkers.find((entry) => entry.target.dataset.sigcMarker === pendingMissionRef.current)
+          : visibleMarkers[0];
+        if (!visible) return;
+        if (pendingMissionRef.current) {
+          window.clearTimeout(pendingMissionTimeoutRef.current);
+          pendingMissionRef.current = null;
+        }
+        setActiveSigId(visible.target.dataset.sigcMarker);
+      },
+      { rootMargin: "0px 0px -82% 0px", threshold: 0 }
+    );
+
+    markers.forEach((marker) => observer.observe(marker));
+    const clearPendingSelection = () => {
+      window.clearTimeout(pendingMissionTimeoutRef.current);
+      pendingMissionRef.current = null;
+    };
+    window.addEventListener("wheel", clearPendingSelection, { passive: true });
+    window.addEventListener("touchstart", clearPendingSelection, { passive: true });
+    window.addEventListener("keydown", clearPendingSelection);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("wheel", clearPendingSelection);
+      window.removeEventListener("touchstart", clearPendingSelection);
+      window.removeEventListener("keydown", clearPendingSelection);
+      window.clearTimeout(pendingMissionTimeoutRef.current);
+    };
+  }, []);
+
+  const enterOperations = () => selectMission("ai");
+
+  return (
+    <div className="sigc-page">
+      <ControlRoom />
+      <Navbar
+        sigMissionNavigation
+        activeSigId={activeSigId}
+        onSigSelect={selectMission}
+      />
+
+      <div className="sigc-page-content">
+        <section className="sigc-intro" id="sigc-intro" aria-labelledby="sigc-intro-title">
+          <div className="sigc-intro-copy">
+            <p className="sigc-eyebrow">ACM AMRITAPURI <span>/</span> SPECIAL INTEREST GROUPS</p>
+            <h1 id="sigc-intro-title">Ideas become<br /><span>systems.</span></h1>
+            <p className="sigc-intro-summary">
+              Four student communities. One shared workspace for learning, research, and building technology together.
+            </p>
+            <button className="sigc-enter-button" onClick={enterOperations} type="button">
+              Enter operations <span aria-hidden="true">↓</span>
+            </button>
+          </div>
+        </section>
+
+        <div ref={galleryRef}>
+          <SigArchiveGallery />
+        </div>
+
+        <SigSpaceExploration
+          galleryRef={galleryRef}
+          onPlanetChange={setActiveSigId}
+        />
+
+        <div className="sigc-sequence-heading">
+          <p className="sigc-eyebrow">MISSION SEQUENCE</p>
+          <p>Explore the work, the people, and the paths forward.</p>
+        </div>
+
+        {missions.map((mission) => (
+          <MissionContent key={mission.id} mission={mission} />
+        ))}
+
+        <footer className="sigc-page-footer">
+          <span>ACM AMRITAPURI</span>
+          <span>LEARN / BUILD / SHARE</span>
+        </footer>
+      </div>
+    </div>
+  );
 }

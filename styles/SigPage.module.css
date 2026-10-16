@@ -1,0 +1,198 @@
+.sigContainer {
+    background-color: #020204;
+    /* Base dark */
+    color: #F3F5F7;
+    position: relative;
+}
+
+.introSection {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 10%;
+    position: relative;
+    z-index: 10;
+}
+
+.sigSection {
+    height: 100vh;
+    position: relative;
+    scroll-snap-align: start;
+}
+
+/* Sticky canvas for the immersive environment */
+.stickyEnvironment {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Background layers */
+.bgNavy {
+    position: absolute;
+    inset: 0;
+    background: #061A2A;
+    z-index: 0;
+}
+
+/* Starfield / Grid aesthetic */
+.gridOverlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(7, 157, 216, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(7, 157, 216, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.parallaxImage {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.3;
+    mix-blend-mode: luminosity;
+    transition: opacity 0.8s ease, transform 1s ease-out;
+}
+
+.imageOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, #061A2A 30%, transparent 100%);
+    z-index: 2;
+}
+
+/* Details Panel overlaying the visual */
+.detailsPanel {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 10%;
+    z-index: 10;
+    max-width: 500px;
+}
+
+/* Desktop layout constraints */
+@media (min-width: 1024px) {
+    .detailsPanel {
+        left: 15%;
+        max-width: 600px;
+    }
+}
+
+.progressIndicator {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    z-index: 20;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(243, 245, 247, 0.3);
+    transition: all 0.3s ease;
+}
+
+.dotActive {
+    background: #079DD8;
+    transform: scale(1.5);
+    box-shadow: 0 0 10px rgba(7, 157, 216, 0.6);
+}
+
+.activeNumber {
+    position: absolute;
+    right: 5%;
+    top: calc(50% + 120px);
+    font-family: monospace;
+    font-size: 0.875rem;
+    color: #079DD8;
+    letter-spacing: 0.2em;
+}
+
+.contentWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.sigCode {
+    color: #FF6500;
+    font-family: monospace;
+    font-size: 0.875rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+}
+
+.sigTitle {
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: #F3F5F7;
+    margin: 0;
+}
+
+.sigText {
+    font-size: 1.125rem;
+    color: rgba(243, 245, 247, 0.8);
+    line-height: 1.6;
+    margin-top: 1rem;
+}
+
+.exploreBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    color: #079DD8;
+    border: 1px solid #079DD8;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.1em;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.exploreBtn:hover {
+    background: #079DD8;
+    color: #061A2A;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .sigTitle {
+        font-size: 2.5rem;
+    }
+
+    .progressIndicator,
+    .activeNumber {
+        display: none;
+    }
+
+    .detailsPanel {
+        left: 5%;
+        right: 5%;
+        max-width: 100%;
+    }
+
+    .introSection {
+        padding: 0 5%;
+    }
+}
