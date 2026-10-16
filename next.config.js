@@ -1,7 +1,20 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
+  async redirects() {
+    return [
+      {
+        source: '/about',
+        destination: '/sigs',
+        permanent: true,
+      },
+      {
+        source: '/contact',
+        destination: '/',
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     return [
       {

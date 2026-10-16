@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { FaQuoteLeft } from "react-icons/fa";
-import { Navigation, Pagination } from "swiper";
+import { Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";

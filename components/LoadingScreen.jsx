@@ -1,219 +1,353 @@
-import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { FiSearch, FiCornerDownLeft } from "react-icons/fi";
 
-const TARGET_TEXT = "acm amritapuri"
+// Geometric vector paths for the ACM Student Chapter diamond chevrons
+const TOP_CHEVRON = "M 145 135 L 230 50 L 315 135 L 292 158 L 230 96 L 168 158 Z";
+const LEFT_CHEVRON = "M 125 155 L 40 240 L 125 325 L 148 302 L 86 240 L 148 178 Z";
+const BOTTOM_CHEVRON = "M 145 345 L 230 430 L 315 345 L 292 322 L 230 384 L 168 322 Z";
+
+const SEARCH_QUERY = "ACM Amritapuri";
 
 export default function LoadingScreen({ onComplete }) {
-  const [text, setText] = useState('')
-  const [isTyping, setIsTyping] = useState(true)
-  const [step, setStep] = useState('SEARCHING') 
+  const [stage, setStage] = useState("search"); // "search" -> "trace"
+  const [typedText, setTypedText] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
 
-  // Phase 1: Typewriter effect
+  // Stage 1: Slower typing -> 3 blue dots loading pause -> transition to trace
   useEffect(() => {
-    if (step !== 'SEARCHING') return;
-    
-    let timeout;
-    if (isTyping) {
-      if (text.length < TARGET_TEXT.length) {
-        const typingSpeed = Math.random() * 40 + 60;
-        timeout = setTimeout(() => {
-          setText(TARGET_TEXT.slice(0, text.length + 1))
-        }, typingSpeed)
+    let currentIndex = 0;
+    let stageTimeout;
+
+    const typeInterval = setInterval(() => {
+      if (currentIndex <= SEARCH_QUERY.length) {
+        setTypedText(SEARCH_QUERY.slice(0, currentIndex));
+        currentIndex++;
       } else {
-        setIsTyping(false)
+        clearInterval(typeInterval);
+        setIsSearching(true);
+        // Hold for 1.4 seconds to show the three blue dots pulsing
+        stageTimeout = setTimeout(() => {
+          setStage("trace");
+        }, 1400);
       }
-    } else {
-      timeout = setTimeout(() => setStep('DRAWING'), 2000)
-    }
-    return () => clearTimeout(timeout)
-  }, [text, isTyping, step])
+    }, 110); // Slower typing speed
 
-  // Phase 2 & 3: Drawing -> Text Mask Zoom
+    return () => {
+      clearInterval(typeInterval);
+      if (stageTimeout) clearTimeout(stageTimeout);
+    };
+  }, []);
+
+  // Stage 2: Allow slow trace + slow fill to finish before entering homepage
   useEffect(() => {
-    if (step === 'DRAWING') {
-      const timeout = setTimeout(() => {
-        setStep('ZOOMING') 
-      }, 3500); 
-      return () => clearTimeout(timeout);
-    }
-    
-    if (step === 'ZOOMING') {
-      const timeout = setTimeout(() => {
-        if (onComplete) onComplete(); 
-      }, 1200); 
-      return () => clearTimeout(timeout);
-    }
-  }, [step, onComplete])
+    if (stage !== "trace") return;
+
+    const completeTimer = setTimeout(() => {
+      if (onComplete) onComplete();
+    }, 4600);
+
+    return () => clearTimeout(completeTimer);
+  }, [stage, onComplete]);
 
   return (
-    <div className="fixed h-screen inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden pointer-events-none">
-      
-      {/* =========================================
-          THE TEXT MASK ZOOM EFFECT (OPTIMIZED)
-      ========================================= */}
-      <motion.div
-        className="absolute inset-0 flex items-center justify-center w-full pointer-events-none"
-        initial={{ scale: 1, opacity: 1 }}
-        animate={step === 'ZOOMING' ? { scale: 60, opacity: 0 } : { scale: 1, opacity: 1 }}
-        transition={{ 
-          scale: { duration: 1.2, ease: [0.7, 0, 0.2, 1] },
-          opacity: { duration: 0.4, delay: 0.6 } // Fades out midway to completely kill the lag!
+    <motion.div
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0, scale: 1.03, filter: "blur(8px)" }}
+      transition={{ duration: 0.85, ease: "easeInOut" }}
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#071A2B] overflow-hidden select-none"
+      style={{ perspective: "1200px" }}
+    >
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes traceTextSlow {
+          0% {
+            stroke-dasharray: 900;
+            stroke-dashoffset: 900;
+            fill: rgba(27, 92, 162, 0);
+            stroke: rgba(0, 136, 198, 0.75);
+          }
+          58% {
+            stroke-dasharray: 900;
+            stroke-dashoffset: 0;
+            fill: rgba(27, 92, 162, 0);
+            stroke: rgba(0, 136, 198, 0.75);
+          }
+          100% {
+            stroke-dasharray: 900;
+            stroke-dashoffset: 0;
+            fill: rgba(27, 92, 162, 0.9);
+            stroke: rgba(27, 92, 162, 0.9);
+          }
+        }
+
+        @keyframes traceSubtextSlow {
+          0% {
+            stroke-dasharray: 400;
+            stroke-dashoffset: 400;
+            fill: rgba(0, 136, 198, 0);
+            stroke: rgba(0, 136, 198, 0.7);
+          }
+          58% {
+            stroke-dasharray: 400;
+            stroke-dashoffset: 0;
+            fill: rgba(0, 136, 198, 0);
+            stroke: rgba(0, 136, 198, 0.7);
+          }
+          100% {
+            stroke-dasharray: 400;
+            stroke-dashoffset: 0;
+            fill: rgba(0, 136, 198, 0.88);
+            stroke: rgba(0, 136, 198, 0.88);
+          }
+        }
+
+        .acm-main-text {
+          font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+          font-weight: 800;
+          font-size: 138px;
+          letter-spacing: -6px;
+          stroke-width: 2px;
+          animation: traceTextSlow 3.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+          animation-delay: 0.3s;
+          stroke-dasharray: 900;
+          stroke-dashoffset: 900;
+          fill: transparent;
+        }
+
+        .acm-sub-text {
+          font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+          font-weight: 700;
+          font-size: 36px;
+          stroke-width: 1px;
+          animation: traceSubtextSlow 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+          animation-delay: 0.6s;
+          stroke-dasharray: 400;
+          stroke-dashoffset: 400;
+          fill: transparent;
+        }
+
+        .acm-3d-back {
+          font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+          font-weight: 800;
+          font-size: 138px;
+          letter-spacing: -6px;
+          stroke: rgba(0, 136, 198, 0.14);
+          stroke-width: 1.2px;
+          fill: transparent;
+        }
+      `}} />
+
+      {/* Soft, subtle ambient radial glow (toned down) */}
+      <div 
+        className="absolute w-[480px] h-[480px] rounded-full pointer-events-none"
+        style={{
+          background: "radial-gradient(circle, rgba(0, 136, 198, 0.08) 0%, rgba(27, 92, 162, 0.03) 45%, transparent 70%)",
+          filter: "blur(30px)"
         }}
-        style={{ 
-          transformOrigin: "36% 50%",
-          willChange: "transform, opacity" // FORCES GPU HARDWARE ACCELERATION
-        }} 
-      >
-        <svg viewBox="0 0 500 200" className="w-full max-w-4xl px-6 overflow-visible drop-shadow-[0_0_20px_rgba(0,155,222,0.4)]">
-          <defs>
-            <mask id="acm-mask">
-              {/* Drastically reduced rect size to stop CPU overload */}
-              <rect x="-1000" y="-1000" width="3000" height="3000" fill="white" />
-              <g
-                stroke="black"
-                strokeWidth={step === 'ZOOMING' ? "50" : "0"}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                fill="none"
-              >
-                <path d="M 60,160 L 110,40 L 160,160 M 85,100 L 135,100" />
-                <path d="M 280,60 L 250,40 L 210,40 L 180,60 L 180,140 L 210,160 L 250,160 L 280,140" />
-                <path d="M 320,160 L 320,40 L 380,100 L 440,40 L 440,160" />
-              </g>
-            </mask>
-          </defs>
+      />
 
-          {/* Solid black background with holes punched out */}
-          <rect x="-1000" y="-1000" width="3000" height="3000" fill="#020204" mask="url(#acm-mask)" />
-
-          {(step === 'DRAWING' || step === 'ZOOMING') && (
-            <>
-              {/* RESTORED 3D LAYER (Dark Blue Shadow) */}
-              <g stroke="#1B5CA2" strokeWidth="18" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0.5" transform="translate(10, 10)">
-                <motion.path
-                  d="M 60,160 L 110,40 L 160,160 M 85,100 L 135,100"
-                  initial={{ pathLength: 0, opacity: 1 }}
-                  animate={{ pathLength: 1, opacity: step === 'ZOOMING' ? 0 : 1 }}
-                  transition={{ pathLength: { duration: 1, ease: "easeInOut" }, opacity: { duration: 0.3 } }}
-                />
-                <motion.path
-                  d="M 280,60 L 250,40 L 210,40 L 180,60 L 180,140 L 210,160 L 250,160 L 280,140"
-                  initial={{ pathLength: 0, opacity: 1 }}
-                  animate={{ pathLength: 1, opacity: step === 'ZOOMING' ? 0 : 1 }}
-                  transition={{ pathLength: { duration: 1, ease: "easeInOut", delay: 0.3 }, opacity: { duration: 0.3 } }}
-                />
-                <motion.path
-                  d="M 320,160 L 320,40 L 380,100 L 440,40 L 440,160"
-                  initial={{ pathLength: 0, opacity: 1 }}
-                  animate={{ pathLength: 1, opacity: step === 'ZOOMING' ? 0 : 1 }}
-                  transition={{ pathLength: { duration: 1, ease: "easeInOut", delay: 0.6 }, opacity: { duration: 0.3 } }}
-                />
-              </g>
-
-              {/* Main Laser Tracing Layer (Light Blue) */}
-              <g stroke="#009BDE" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" fill="none">
-                <motion.path
-                  d="M 60,160 L 110,40 L 160,160 M 85,100 L 135,100"
-                  initial={{ pathLength: 0, opacity: 1 }}
-                  animate={{ pathLength: 1, opacity: step === 'ZOOMING' ? 0 : 1 }}
-                  transition={{ pathLength: { duration: 1.2, ease: "easeInOut", delay: 0.2 }, opacity: { duration: 0.3 } }}
-                />
-                <motion.path
-                  d="M 280,60 L 250,40 L 210,40 L 180,60 L 180,140 L 210,160 L 250,160 L 280,140"
-                  initial={{ pathLength: 0, opacity: 1 }}
-                  animate={{ pathLength: 1, opacity: step === 'ZOOMING' ? 0 : 1 }}
-                  transition={{ pathLength: { duration: 1.2, ease: "easeInOut", delay: 0.7 }, opacity: { duration: 0.3 } }}
-                />
-                <motion.path
-                  d="M 320,160 L 320,40 L 380,100 L 440,40 L 440,160"
-                  initial={{ pathLength: 0, opacity: 1 }}
-                  animate={{ pathLength: 1, opacity: step === 'ZOOMING' ? 0 : 1 }}
-                  transition={{ pathLength: { duration: 1.2, ease: "easeInOut", delay: 1.2 }, opacity: { duration: 0.3 } }}
-                />
-              </g>
-            </>
-          )}
-        </svg>
-      </motion.div>
-
-      {/* =========================================
-          PHASE 1: SEARCH BAR
-      ========================================= */}
-      <AnimatePresence>
-        {step === 'SEARCHING' && (
-          <motion.div 
-            key="search-bar"
-            className="w-full max-w-2xl px-6 relative"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20, filter: 'blur(10px)' }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+      <AnimatePresence mode="wait">
+        {/* STAGE 1: SEARCH ANIMATION + THREE BLUE DOTS */}
+        {stage === "search" && (
+          <motion.div
+            key="search-stage"
+            initial={{ opacity: 0, y: 18, scale: 0.94 }}
+            animate={{ 
+              opacity: 1, 
+              y: 0, 
+              scale: isSearching ? 0.98 : 1 
+            }}
+            exit={{ opacity: 0, scale: 1.04, filter: "blur(6px)" }}
+            transition={{ duration: 0.45, ease: "easeOut" }}
+            className="relative z-10 w-[90%] max-w-md flex flex-col items-center"
           >
-            <motion.div 
-              className={`relative flex items-center w-full bg-[#121218] border rounded-full px-6 py-4 shadow-2xl transition-all duration-500 ${
-                !isTyping ? 'border-[#009BDE]/50 shadow-[0_0_30px_rgba(0,155,222,0.2)]' : 'border-white/10'
+            <div 
+              className={`w-full flex items-center justify-between px-6 py-4 rounded-full bg-[#0B2033]/90 border transition-all duration-500 ${
+                isSearching 
+                  ? "border-[#009BDE]/60 shadow-[0_0_20px_rgba(0,155,222,0.2)]" 
+                  : "border-[#009BDE]/30 shadow-[0_0_15px_rgba(0,155,222,0.1)]"
               }`}
-              animate={!isTyping ? { scale: 0.98 } : { scale: 1 }}
             >
-              <div className="mr-4 text-neutral-400 flex-shrink-0 transition-colors duration-300">
-                <svg className="h-6 w-6" fill="none" stroke={!isTyping ? "#009BDE" : "currentColor"} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </div>
-
-              <div className="flex-1 overflow-hidden flex items-center h-8">
-                <span className="text-white text-xl md:text-2xl font-medium tracking-wide whitespace-nowrap">
-                  {text}
+              <div className="flex items-center gap-3.5">
+                <FiSearch className="text-[#009BDE]/80 text-xl flex-shrink-0" />
+                <span className="text-white/95 text-lg md:text-xl font-medium tracking-wide">
+                  {typedText}
+                  {!isSearching && (
+                    <span className="inline-block w-[2px] h-5 ml-1 align-middle bg-[#009BDE]/80 animate-pulse" />
+                  )}
                 </span>
-                <motion.span 
-                  className="ml-1 w-[2px] h-6 md:h-8 bg-[#009BDE] inline-block"
-                  animate={{ opacity: [1, 0] }}
-                  transition={{ duration: 0.8, repeat: !isTyping ? 0 : Infinity, ease: "linear" }}
-                  style={{ opacity: !isTyping ? 0 : 1 }}
-                />
               </div>
-            </motion.div>
 
-            {/* 3 DOTS LOADING TRANSITION */}
-            <AnimatePresence>
-              {!isTyping && (
-                <motion.div 
-                  initial={{ opacity: 0, y: -10 }}
+              <div 
+                className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-500 ${
+                  isSearching 
+                    ? "bg-[#009BDE]/85 text-[#071A2B] scale-105" 
+                    : "bg-[#009BDE]/15 text-[#009BDE]/80"
+                }`}
+              >
+                <FiCornerDownLeft className="text-sm" />
+              </div>
+            </div>
+
+            {/* THREE BLUE DOTS AFTER SEARCHING */}
+            <div className="h-10 mt-5 flex items-center justify-center">
+              {isSearching && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="absolute left-0 right-0 mt-8 flex justify-center items-center gap-3"
+                  className="flex items-center gap-2.5"
                 >
-                  {[0, 1, 2].map((index) => (
-                    <motion.div
-                      key={index}
-                      className="w-3 h-3 bg-[#009BDE] rounded-full"
-                      animate={{ y: [0, -12, 0], opacity: [0.5, 1, 0.5] }}
-                      transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut", delay: index * 0.15 }}
-                      style={{ boxShadow: '0 0 12px rgba(0,155,222,0.6)' }}
+                  {[0, 1, 2].map((dot) => (
+                    <motion.span
+                      key={dot}
+                      className="w-2.5 h-2.5 rounded-full bg-[#009BDE]/85"
+                      animate={{
+                        y: [0, -6, 0],
+                        opacity: [0.4, 1, 0.4],
+                      }}
+                      transition={{
+                        duration: 0.75,
+                        repeat: Infinity,
+                        delay: dot * 0.18,
+                        ease: "easeInOut",
+                      }}
                     />
                   ))}
                 </motion.div>
               )}
-            </AnimatePresence>
+            </div>
           </motion.div>
         )}
-      </AnimatePresence>
 
-      {/* TEXT LABEL (Fades out when zooming) */}
-      <AnimatePresence>
-        {(step === 'DRAWING' || step === 'ZOOMING') && (
-          <motion.div 
-            className="absolute bottom-16 left-0 right-0 text-center"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: step === 'ZOOMING' ? 0 : 1, y: 0 }}
-            transition={{ duration: 0.8, delay: step === 'ZOOMING' ? 0 : 2.5 }}
+        {/* STAGE 2: SLOW, SOFT 3D TRACED ACM LOGO */}
+        {stage === "trace" && (
+          <motion.div
+            key="trace-stage"
+            initial={{ rotateX: 24, rotateY: -20, scale: 0.9, opacity: 0 }}
+            animate={{ 
+              rotateX: [24, 8, 0], 
+              rotateY: [-20, 8, 0], 
+              scale: [0.9, 1, 1],
+              opacity: 1 
+            }}
+            transition={{ duration: 3.4, ease: [0.22, 1, 0.36, 1] }}
+            style={{ transformStyle: "preserve-3d" }}
+            className="relative flex flex-col items-center justify-center"
           >
-            <span className="text-[#009BDE] font-retro text-sm tracking-[0.4em] uppercase">
-              Student Chapter Initialization
-            </span>
+            {/* SUBTLE BACK 3D EXTRUSION LAYER */}
+            <svg
+              viewBox="0 0 540 480"
+              className="w-[320px] sm:w-[420px] md:w-[480px] h-auto absolute inset-0 pointer-events-none opacity-25"
+              style={{ transform: "translateZ(-24px) translateX(-6px) translateY(6px)" }}
+            >
+              <path d={TOP_CHEVRON} fill="none" stroke="#0088C6" strokeWidth="1.2" strokeDasharray="4 4" />
+              <path d={LEFT_CHEVRON} fill="none" stroke="#0088C6" strokeWidth="1.2" strokeDasharray="4 4" />
+              <path d={BOTTOM_CHEVRON} fill="none" stroke="#0088C6" strokeWidth="1.2" strokeDasharray="4 4" />
+              <text x="155" y="256" className="acm-3d-back" textLength="315" lengthAdjust="spacingAndGlyphs">
+                acm
+              </text>
+            </svg>
+
+            {/* FRONT LOGO LAYER (No harsh filter flash, smooth slow fill) */}
+            <svg
+              viewBox="0 0 540 480"
+              className="w-[320px] sm:w-[420px] md:w-[480px] h-auto relative z-10 overflow-visible"
+              style={{ transform: "translateZ(16px)" }}
+            >
+              {/* 1. TOP CHEVRON (Softened ACM Blue) */}
+              <motion.path
+                d={TOP_CHEVRON}
+                stroke="rgba(0, 136, 198, 0.75)"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                initial={{ pathLength: 0, fill: "rgba(0, 136, 198, 0)" }}
+                animate={{
+                  pathLength: [0, 1, 1],
+                  fill: ["rgba(0, 136, 198, 0)", "rgba(0, 136, 198, 0)", "rgba(0, 136, 198, 0.88)"]
+                }}
+                transition={{
+                  duration: 3.8,
+                  times: [0, 0.6, 1],
+                  ease: "easeInOut"
+                }}
+              />
+
+              {/* 2. LEFT CHEVRON (Deep ACM Navy-Blue) */}
+              <motion.path
+                d={LEFT_CHEVRON}
+                stroke="rgba(27, 92, 162, 0.8)"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                initial={{ pathLength: 0, fill: "rgba(27, 92, 162, 0)" }}
+                animate={{
+                  pathLength: [0, 1, 1],
+                  fill: ["rgba(27, 92, 162, 0)", "rgba(27, 92, 162, 0)", "rgba(27, 92, 162, 0.92)"]
+                }}
+                transition={{
+                  duration: 3.8,
+                  delay: 0.2,
+                  times: [0, 0.6, 1],
+                  ease: "easeInOut"
+                }}
+              />
+
+              {/* 3. BOTTOM CHEVRON (Softened ACM Blue) */}
+              <motion.path
+                d={BOTTOM_CHEVRON}
+                stroke="rgba(0, 136, 198, 0.75)"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                initial={{ pathLength: 0, fill: "rgba(0, 136, 198, 0)" }}
+                animate={{
+                  pathLength: [0, 1, 1],
+                  fill: ["rgba(0, 136, 198, 0)", "rgba(0, 136, 198, 0)", "rgba(0, 136, 198, 0.88)"]
+                }}
+                transition={{
+                  duration: 3.8,
+                  delay: 0.4,
+                  times: [0, 0.6, 1],
+                  ease: "easeInOut"
+                }}
+              />
+
+              {/* 4. "acm" LOWERCASE BOLD TEXT TRACE */}
+              <text
+                x="155"
+                y="256"
+                className="acm-main-text"
+                textLength="315"
+                lengthAdjust="spacingAndGlyphs"
+              >
+                acm
+              </text>
+
+              {/* 5. "Student Chapter" SUBTITLE TRACE */}
+              <text
+                x="158"
+                y="302"
+                className="acm-sub-text"
+                textLength="310"
+                lengthAdjust="spacing"
+              >
+                Student Chapter
+              </text>
+            </svg>
+
+            {/* Subtle Bottom Progress Bar */}
+            <div className="mt-8 w-44 h-[2px] bg-white/10 rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-[#0088C6]/80"
+                initial={{ width: "0%" }}
+                animate={{ width: "100%" }}
+                transition={{ duration: 4.2, ease: "easeInOut" }}
+              />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
-  )
+    </motion.div>
+  );
 }

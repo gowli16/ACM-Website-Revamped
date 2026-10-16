@@ -103,7 +103,7 @@ export default function Hero({ sig }) {
             Enter Operations
           </HeroButton>
           <HeroButton
-            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => window.open('https://aseam.acm.org/join', '_blank')}
           >
             Join ACM
           </HeroButton>

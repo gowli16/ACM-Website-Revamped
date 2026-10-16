@@ -73,7 +73,7 @@ export default function Manifesto({ sig }) {
               {data.cta.line}
             </p>
             <button
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => window.open('https://aseam.acm.org/join', '_blank')}
               className="relative inline-flex items-center gap-2 rounded-full bg-red-600 px-7 py-3.5 text-xs font-bold uppercase tracking-wider text-neutral-100 shadow-lg shadow-red-900/30 transition-transform duration-300 hover:scale-105 font-retro md:text-sm"
             >
               {data.cta.buttonLabel || 'Join us'} <span>-&gt;</span>
