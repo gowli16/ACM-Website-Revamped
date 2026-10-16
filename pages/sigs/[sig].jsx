@@ -15,7 +15,6 @@ import Achievements from '../../components/Achievements'
 import InternshipsAndPapers from '../../components/papersandinternship'
 import WhyJoin from '../../components/WhyJoin'
 import Manifesto from '../../components/Manifesto'
-import Contact from '../../components/Contact'
 import Spores from '../../components/Spores'
 import StrangerWidgets from '../../components/StrangerWidgets'
 import PsychicSequence from '../../components/PsychicSequence'
@@ -24,7 +23,7 @@ import Web3DBackground from '../../components/Web3DBackground'
 
 
 
-const sectionIds = ['home', 'what-we-do', 'works', 'achievements', 'members', 'events', 'stats', 'why-join', 'contact']
+const sectionIds = ['home', 'what-we-do', 'works', 'achievements', 'members', 'events', 'stats', 'why-join']
 const sigs = [
   {
     id: "ai",
@@ -140,7 +139,6 @@ export default function RecruitmentPage() {
             <Manifesto sig={activeSig} />
             <Members sig={activeSig} />
             <Stats sig={activeSig} />
-            <Contact sig={activeSig} />
           </main>
         ) : (
           <main className="relative z-10 min-h-screen flex flex-col items-center justify-center gap-6 text-center px-6">

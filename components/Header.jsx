@@ -4,14 +4,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 const links = [
-  { label: "About", href: "/about" },
   { label: "SIGs", href: "/sigs" },
   { label: "Events", href: "/events" },
   { label: "Achievements", href: "/achievements" },
   { label: "Core", href: "/core" },
   { label: "Alumni", href: "/alumni" },
-  { label: "Faculty", href: "/faculty" },
-  { label: "Contact", href: "/contact" }
+  { label: "Faculty", href: "/faculty" }
 ];
 
 export default function Header() {
@@ -19,7 +17,7 @@ export default function Header() {
   const router = useRouter();
   
   return (
-    <header className="fixed top-0 left-0 right-0 z-[1000] bg-[#020204]/80 backdrop-blur-md border-b border-white/10">
+    <header className="fixed top-0 left-0 right-0 z-[1000] bg-[#222222]/95 backdrop-blur-md border-b border-[#1993C6]/20">
       {/* Taller header container (h-32) to perfectly house the 95px logo */}
       <div className="max-w-7xl mx-auto px-6 h-32 flex items-center justify-between">
         
@@ -50,13 +48,13 @@ export default function Header() {
         </button>
 
         {/* NAVIGATION LINKS - Larger text size (text-base md:text-lg) and no focus lines */}
-        <nav className={`absolute md:relative top-32 md:top-0 left-0 right-0 bg-[#020204] md:bg-transparent border-b md:border-0 border-white/10 p-6 md:p-0 flex flex-col md:flex-row items-center gap-2 md:gap-4 transition-all duration-300 ${open ? 'flex' : 'hidden md:flex'}`} aria-label="Main navigation">
+        <nav className={`absolute md:relative top-32 md:top-0 left-0 right-0 bg-[#222222] md:bg-transparent border-b md:border-0 border-[#1993C6]/20 p-6 md:p-0 flex flex-col md:flex-row items-center gap-2 md:gap-4 transition-all duration-300 ${open ? 'flex' : 'hidden md:flex'}`} aria-label="Main navigation">
           {links.map(link => (
             <Link 
               className={`px-4 py-2.5 rounded-full text-base md:text-lg font-medium transition-all outline-none focus:outline-none focus:ring-0 active:outline-none ${
                 router.pathname === link.href 
-                  ? 'bg-white/15 text-white font-semibold' 
-                  : 'text-white/80 hover:text-white hover:bg-white/10'
+                  ? 'bg-[#1993C6] text-white font-semibold' 
+                  : 'text-[#A8A8A8] hover:text-white hover:bg-white/10'
               }`}
               href={link.href} 
               key={link.label} 

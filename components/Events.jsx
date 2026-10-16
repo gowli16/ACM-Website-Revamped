@@ -42,7 +42,7 @@ export default function Events({ sig }) {
           </div>
 
           <button
-            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => window.open('https://aseam.acm.org/join', '_blank')}
             className="relative hidden items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-orange-400 backdrop-blur-md transition-all duration-300 hover:border-orange-500/50 hover:bg-white/5 md:inline-flex font-retro"
           >
             Get notified <span className="text-orange-500/50">-&gt;</span>
