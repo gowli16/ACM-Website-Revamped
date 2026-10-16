@@ -10,7 +10,13 @@ const navLinks = [
   { label: 'Events', id: 'events' },
 ]
 
-export default function Navbar({ activeSection, sigId }) {
+export default function Navbar({
+  activeSection,
+  sigId,
+  sigMissionNavigation = false,
+  activeSigId,
+  onSigSelect,
+}) {
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -36,7 +42,7 @@ export default function Navbar({ activeSection, sigId }) {
 
   const currentNavLinks = [...navLinks]
 
-  if (sigId === 'web') {
+  if (!sigMissionNavigation && sigId === 'web') {
     const opsIndex = currentNavLinks.findIndex(
       (l) => l.id === 'what-we-do'
     )
@@ -47,21 +53,33 @@ export default function Navbar({ activeSection, sigId }) {
         id: 'roadmap',
       })
     }
+
   }
+
+  const navigationLinks = sigMissionNavigation
+    ? [
+        { label: 'AI', id: 'ai' },
+        { label: 'Web', id: 'web' },
+        { label: 'Cyber', id: 'cyber' },
+        { label: 'Glitch', id: 'glitch' },
+      ]
+    : currentNavLinks
 
   return (
     <motion.div
-      className="fixed left-0 right-0 top-0 z-50 flex justify-center px-4 pt-4 md:pt-6"
-      initial={{ y: -40, opacity: 0 }}
+      className={`fixed left-0 right-0 top-0 z-50 flex justify-center px-4 pt-4 md:pt-6 ${
+        sigMissionNavigation ? 'sigc-navbar' : ''
+      }`}
+      initial={sigMissionNavigation ? false : { y: -40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{
+      transition={sigMissionNavigation ? { duration: 0 } : {
         duration: 0.7,
         ease: 'easeOut',
         delay: 0.2,
       }}
     >
       <div
-        className={`flex w-full max-w-6xl items-center justify-center overflow-x-auto rounded-2xl border border-white/10 bg-[#071A2B]/95 px-6 py-5 backdrop-blur-xl transition-shadow duration-300 ${
+        className={`${sigMissionNavigation ? 'sigc-navbar-inner' : ''} flex w-full max-w-6xl items-center justify-center overflow-x-auto rounded-2xl border border-white/10 bg-[#071A2B]/95 px-6 py-5 backdrop-blur-xl transition-shadow duration-300 ${
           scrolled
             ? 'shadow-[0_4px_30px_rgba(199,154,59,0.15)]'
             : ''
@@ -70,18 +88,19 @@ export default function Navbar({ activeSection, sigId }) {
         {/* Logo */}
         <motion.button
           className="flex flex-shrink-0 cursor-pointer items-center gap-2 rounded-full"
-          whileHover={{ scale: 1.05 }}
+          whileHover={sigMissionNavigation ? undefined : { scale: 1.05 }}
           transition={{
             type: 'spring',
             stiffness: 400,
             damping: 25,
           }}
-          onClick={() =>
-            window.scrollTo({
-              top: 0,
-              behavior: 'smooth',
-            })
-          }
+          onClick={() => window.scrollTo({
+            top: 0,
+            behavior: sigMissionNavigation &&
+              window.matchMedia('(prefers-reduced-motion: reduce)').matches
+              ? 'auto'
+              : 'smooth',
+          })}
         >
           <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-orange-500/40 bg-orange-500/10 shadow-[0_0_10px_rgba(249,115,22,0.2)]">
             <img
@@ -101,15 +120,20 @@ export default function Navbar({ activeSection, sigId }) {
 
         {/* Navigation */}
         <div className="flex items-center justify-center gap-1 sm:gap-2">
-          {currentNavLinks.map(({ label, id }) => {
-            const isActive = activeSection === id
+          {navigationLinks.map(({ label, id }) => {
+            const isActive = sigMissionNavigation
+              ? activeSigId === id
+              : activeSection === id
 
             return (
               <motion.button
                 key={label}
-                onClick={() => handleNavClick(id)}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
+                aria-current={isActive ? 'location' : undefined}
+                onClick={() =>
+                  sigMissionNavigation ? onSigSelect(id) : handleNavClick(id)
+                }
+                whileHover={sigMissionNavigation ? undefined : { scale: 1.04 }}
+                whileTap={sigMissionNavigation ? undefined : { scale: 0.97 }}
                 className={`whitespace-nowrap cursor-pointer rounded-full px-3 py-1.5 text-xs font-body transition-all duration-300 sm:px-4 sm:py-2 sm:text-sm ${
                   isActive
                     ? 'border border-orange-500/50 bg-gradient-to-r from-orange-500/20 to-yellow-500/10 text-orange-200 shadow-[0_0_15px_rgba(249,115,22,0.25)]'
