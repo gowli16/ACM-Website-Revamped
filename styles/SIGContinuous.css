@@ -48,6 +48,9 @@
 }
 
 .sigc-mission-nav {
+  --sigc-background: #06121D;
+  --sigc-paper: #F4F7FA;
+  --sigc-cyan: #62D4E8;
   position: fixed;
   z-index: 60;
   top: 50%;
