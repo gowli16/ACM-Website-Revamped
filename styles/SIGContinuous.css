@@ -1,5 +1,5 @@
 .sigc-page {
-  --sigc-background: #06121D;
+  --sigc-background: #030B17;
   --sigc-panel: #071827;
   --sigc-panel-raised: #0A1D2B;
   --sigc-cyan: #D0D4D7;
@@ -75,7 +75,7 @@
 }
 
 .sigc-mission-nav {
-  --sigc-background: #06121D;
+  --sigc-background: #030B17;
   --sigc-paper: #F4F7FA;
   --sigc-cyan: #D0D4D7;
   position: fixed;
