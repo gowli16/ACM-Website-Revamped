@@ -62,7 +62,7 @@ export default function SigArchiveGallery() {
     };
 
     const onWheel = (event) => {
-      if (!isVisible) return;
+      if (!isVisible || !stage.contains(event.target)) return;
       const rect = stage.getBoundingClientRect();
       if (rect.bottom <= 0 || rect.top >= window.innerHeight) return;
 
