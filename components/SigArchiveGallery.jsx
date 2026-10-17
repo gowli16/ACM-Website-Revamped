@@ -28,11 +28,24 @@ const galleryColumns = [
 ];
 const photos = galleryColumns.flat();
 
+const cardLayout = [
+  { x: 5, y: 13, r: -7, d: -68, z: 1 },
+  { x: 27, y: 10, r: 5, d: 44, z: 2 },
+  { x: 51, y: 12, r: -3, d: -38, z: 3 },
+  { x: 74, y: 14, r: 7, d: 62, z: 2 },
+  { x: 87, y: 47, r: -5, d: -55, z: 1 },
+  { x: 66, y: 54, r: 4, d: 48, z: 4 },
+  { x: 41, y: 56, r: -6, d: -45, z: 3 },
+  { x: 15, y: 52, r: 3, d: 60, z: 2 },
+  { x: 7, y: 79, r: 5, d: -48, z: 1 },
+  { x: 31, y: 82, r: -4, d: 52, z: 3 },
+  { x: 57, y: 80, r: 6, d: -62, z: 2 },
+  { x: 79, y: 78, r: -3, d: 40, z: 4 },
+];
+
 export default function SigArchiveGallery() {
   const sectionRef = useRef(null);
-  const trackRef = useRef(null);
   const [progress, setProgress] = useState(0);
-  const [travelDistance, setTravelDistance] = useState(0);
 
   useEffect(() => {
     let frame = 0;
@@ -40,9 +53,7 @@ export default function SigArchiveGallery() {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         const section = sectionRef.current;
-        const track = trackRef.current;
-        if (!section || !track) return;
-        setTravelDistance(Math.max(0, track.scrollWidth - window.innerWidth));
+        if (!section) return;
         const distance = Math.max(1, section.offsetHeight - window.innerHeight);
         const travelled = Math.min(distance, Math.max(0, -section.getBoundingClientRect().top));
         setProgress(Math.min(1, travelled / distance));
@@ -61,23 +72,32 @@ export default function SigArchiveGallery() {
   return (
     <section ref={sectionRef} className="sig-gallery" aria-label="ACM Amritapuri event photo gallery">
       <div className="sig-gallery__sticky">
+        <div className="sig-gallery__star sig-gallery__star--one" />
+        <div className="sig-gallery__star sig-gallery__star--two" />
         <h2 className="sig-gallery__title">GALLERY</h2>
-        <div className="sig-gallery__viewport">
-          <div
-            ref={trackRef}
-            className="sig-gallery__track"
-            style={{ transform: `translate3d(-50%, -50%, 0) rotateY(${progress * 360}deg)` }}
-          >
-            {photos.map((photo, index) => (
-              <figure className={`sig-gallery__frame sig-gallery__frame--${photo.shape}`} key={`${photo.src}-${index}`} style={{ transform: `translate(-50%, -50%) rotateY(${(360 / photos.length) * index}deg) translateZ(var(--sig-gallery-radius))` }}>
+        <div className="sig-gallery__collage">
+          {photos.slice(0, 12).map((photo, index) => {
+            const layout = cardLayout[index];
+            const drift = (progress - 0.5) * layout.d * 2;
+            return (
+              <figure
+                className="sig-gallery__frame"
+                key={`${photo.src}-${index}`}
+                style={{
+                  left: `${layout.x}%`,
+                  top: `${layout.y}%`,
+                  zIndex: layout.z,
+                  transform: `translate(-50%, calc(-50% + ${drift}px)) rotate(${layout.r + progress * layout.r * 0.28}deg)`,
+                }}
+              >
                 <div className="sig-gallery__image">
-                  <img alt={photo.name} decoding="async" draggable="false" loading={index > 2 ? "lazy" : "eager"} src={photo.src} />
+                  <img alt={photo.name} decoding="async" draggable="false" loading={index > 3 ? "lazy" : "eager"} src={photo.src} />
                 </div>
               </figure>
-            ))}
-          </div>
+            );
+          })}
         </div>
-        <p className="sig-gallery__hint">SCROLL TO EXPLORE <span aria-hidden="true">→</span></p>
+        <p className="sig-gallery__hint">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></p>
       </div>
     </section>
   );
