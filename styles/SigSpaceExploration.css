@@ -1,7 +1,7 @@
 .sig-space {
   --sig-space-night: #030b17;
   --sig-space-blue: #155f8a;
-  --sig-space-cyan: #75dff4;
+  --sig-space-cyan: #D0D4D7;
   position: relative;
   height: 400vh;
   height: 400svh;
@@ -132,7 +132,7 @@
 .sig-space__planet-wrap--cyber::before {
   width: 128%;
   border-style: dashed;
-  border-color: #83dff2;
+  border-color: #D0D4D7;
   transform: rotate(22deg);
 }
 
@@ -315,13 +315,13 @@
 
 .sig-space__skip:hover,
 .sig-space__skip:focus-visible {
-  border-color: #75dff4;
+  border-color: #D0D4D7;
   color: #e8fcff;
 }
 
 .sig-space__skip:focus-visible,
 .sig-space__indicator-item:focus-visible {
-  outline: 2px solid #75dff4;
+  outline: 2px solid #D0D4D7;
   outline-offset: 3px;
 }
 
@@ -332,7 +332,7 @@
   left: clamp(32px, 6vw, 100px);
   max-width: min(520px, calc(100% - 64px));
   padding: 15px 20px;
-  border-left: 2px solid #75dff4;
+  border-left: 2px solid #D0D4D7;
   background: rgba(3, 11, 23, 0.88);
   text-align: left;
 }
