@@ -70,7 +70,6 @@ export default function SigArchiveGallery() {
     const lookAtPoint = new THREE.Vector3();
     let targetProgress = 0;
     let currentProgress = 0;
-    let lastWheelAt = 0;
 
     galleryItems.forEach((item) => {
       const texture = loader.load(item.src);
@@ -107,9 +106,11 @@ export default function SigArchiveGallery() {
     };
 
     const onWheel = (event) => {
+      const atStart = targetProgress <= 0 && event.deltaY < 0;
+      const atEnd = targetProgress >= 1 && event.deltaY > 0;
+      if (atStart || atEnd) return;
+
       event.preventDefault();
-      const now = performance.now();
-      lastWheelAt = now;
       targetProgress = THREE.MathUtils.clamp(
         targetProgress + event.deltaY * 0.00022,
         0,
