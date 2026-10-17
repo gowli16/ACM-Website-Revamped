@@ -66,10 +66,10 @@ export default function SigArchiveGallery() {
           <div
             ref={trackRef}
             className="sig-gallery__track"
-            style={{ transform: `translate3d(${-progress * travelDistance}px, 0, 0)` }}
+            style={{ transform: `translate3d(-50%, -50%, 0) rotateY(${progress * 360}deg)` }}
           >
             {photos.map((photo, index) => (
-              <figure className={`sig-gallery__frame sig-gallery__frame--${photo.shape}`} key={`${photo.src}-${index}`}>
+              <figure className={`sig-gallery__frame sig-gallery__frame--${photo.shape}`} key={`${photo.src}-${index}`} style={{ transform: `translate(-50%, -50%) rotateY(${(360 / photos.length) * index}deg) translateZ(var(--sig-gallery-radius))` }}>
                 <div className="sig-gallery__image">
                   <img alt={photo.name} decoding="async" draggable="false" loading={index > 2 ? "lazy" : "eager"} src={photo.src} />
                 </div>
