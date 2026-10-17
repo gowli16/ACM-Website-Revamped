@@ -18,8 +18,6 @@ const galleryItems = [
 export default function SigArchiveGallery() {
   const stageRef = useRef(null);
   const cardsRef = useRef([]);
-  const titleRef = useRef(null);
-  const hintRef = useRef(null);
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -30,7 +28,6 @@ export default function SigArchiveGallery() {
     let targetProgress = 0;
     let frame = 0;
     let isVisible = false;
-    let lastWheel = 0;
 
     const observer = new IntersectionObserver(([entry]) => {
       isVisible = entry.isIntersecting;
@@ -61,9 +58,6 @@ export default function SigArchiveGallery() {
         card.style.pointerEvents = abs < 0.48 ? "auto" : "none";
       });
 
-      if (hintRef.current) {
-        hintRef.current.style.opacity = targetProgress >= galleryItems.length - 1 ? "0" : "";
-      }
       frame = requestAnimationFrame(updateCards);
     };
 
@@ -78,10 +72,8 @@ export default function SigArchiveGallery() {
       if (atStart || atEnd) return;
 
       event.preventDefault();
-      const now = performance.now();
       const delta = Math.max(-120, Math.min(120, event.deltaY));
       targetProgress = Math.max(0, Math.min(galleryItems.length - 1, targetProgress + delta * 0.004));
-      lastWheel = now;
     };
 
     const onKeyDown = (event) => {
@@ -108,9 +100,6 @@ export default function SigArchiveGallery() {
   return (
     <section className="sig-gallery" aria-label="ACM Amritapuri angled image gallery">
       <div className="sig-gallery__stage" ref={stageRef}>
-        <div className="sig-gallery__intro" aria-hidden="true">
-          <h2 className="sig-gallery__title"><span ref={titleRef}>GALLERY</span></h2>
-        </div>
         <div className="sig-gallery__angled-scene">
           {galleryItems.map((item, index) => (
             <figure
@@ -119,14 +108,9 @@ export default function SigArchiveGallery() {
               ref={(node) => { cardsRef.current[index] = node; }}
             >
               <img src={item.src} alt={item.name} draggable="false" />
-              <figcaption>
-                <span>{String(index + 1).padStart(2, "0")} / {String(galleryItems.length).padStart(2, "0")}</span>
-                <strong>{item.name}</strong>
-              </figcaption>
             </figure>
           ))}
         </div>
-        <p className="sig-gallery__hint" ref={hintRef}>SCROLL TO EXPLORE <span aria-hidden="true">/</span> ACM AMRITAPURI</p>
       </div>
     </section>
   );
