@@ -8,8 +8,8 @@ const planets = [
     terrain: "A blue world of thinking machines",
     path: "M84 20h48v12h24v12h24v24h12v48h-12v24h-24v24h-48v12H84v-12H60v-24H36v-24H24V84h12V60h24V44h24z",
     details: [
-      [48, 84, 24, 12, "#85E9FA"],
-      [72, 60, 12, 12, "#C5F7FF"],
+      [48, 84, 24, 12, "#D0D4D7"],
+      [72, 60, 12, 12, "#E1E4E6"],
       [108, 72, 24, 12, "#2C8DBA"],
       [132, 108, 36, 12, "#3EA9D0"],
       [72, 132, 24, 12, "#83D9EF"],
@@ -26,14 +26,14 @@ const planets = [
     terrain: "A connected world of bright pathways",
     path: "M84 24h48v12h24v12h12v24h12v48h-12v24h-24v12h-48v12H72v-12H48v-12H36v-24H24V84h12V60h12V48h24V36h12z",
     details: [
-      [48, 72, 36, 12, "#8BEAF8"],
-      [96, 48, 12, 24, "#C6F7FF"],
-      [120, 72, 36, 12, "#42B5DA"],
+      [48, 72, 36, 12, "#D0D4D7"],
+      [96, 48, 12, 24, "#E1E4E6"],
+      [120, 72, 36, 12, "#B9BEC2"],
       [72, 96, 12, 36, "#B1F0FB"],
       [96, 108, 36, 12, "#1B668F"],
       [132, 120, 12, 24, "#9AE8F5"],
       [60, 144, 36, 12, "#247EA6"],
-      [108, 156, 24, 12, "#C6F7FF"],
+      [108, 156, 24, 12, "#E1E4E6"],
     ],
     satellites: "web",
   },
@@ -44,11 +44,11 @@ const planets = [
     terrain: "A guarded frontier beneath icy peaks",
     path: "M72 24h48v12h24v12h24v24h12v48h-12v24h-24v12h-48v12H72v-12H48v-12H36v-24H24V84h12V60h12V48h24z",
     details: [
-      [48, 108, 24, 12, "#B6F4FF"],
-      [72, 84, 12, 24, "#D8FAFF"],
-      [84, 72, 12, 12, "#80DFF3"],
-      [96, 96, 12, 12, "#D8FAFF"],
-      [108, 84, 12, 24, "#8BEAF8"],
+      [48, 108, 24, 12, "#E1E4E6"],
+      [72, 84, 12, 24, "#ECEEEF"],
+      [84, 72, 12, 12, "#D0D4D7"],
+      [96, 96, 12, 12, "#ECEEEF"],
+      [108, 84, 12, 24, "#D0D4D7"],
       [120, 108, 24, 12, "#1B668F"],
       [60, 144, 48, 12, "#247EA6"],
       [144, 72, 12, 12, "#43B2D8"],
@@ -62,13 +62,13 @@ const planets = [
     terrain: "A playful world of arcades and odd moons",
     path: "M84 20h48v12h24v24h12v24h12v48h-12v24h-24v12h-48v-12H60v-12H36v-24H24V84h12V60h12V44h24V32h12z",
     details: [
-      [48, 84, 24, 12, "#91E9F8"],
-      [72, 60, 12, 12, "#C6F7FF"],
+      [48, 84, 24, 12, "#D0D4D7"],
+      [72, 60, 12, 12, "#E1E4E6"],
       [96, 84, 12, 12, "#1B668F"],
-      [120, 72, 36, 12, "#42B5DA"],
-      [60, 120, 12, 24, "#C6F7FF"],
+      [120, 72, 36, 12, "#B9BEC2"],
+      [60, 120, 12, 24, "#E1E4E6"],
       [84, 132, 36, 12, "#2C8DBA"],
-      [132, 120, 24, 12, "#B5F3FF"],
+      [132, 120, 24, 12, "#DDE1E3"],
       [108, 156, 12, 12, "#247EA6"],
     ],
     satellites: "glitch",
@@ -91,7 +91,7 @@ function PlanetArt({ planet }) {
       aria-label={`${planet.title} pixel-art planet`}
       shapeRendering="crispEdges"
     >
-      <path d={planet.path} fill="#155F8A" stroke="#75DFF4" strokeWidth="4" />
+      <path d={planet.path} fill="#155F8A" stroke="#D0D4D7" strokeWidth="4" />
       {planet.details.map(([x, y, width, height, color], index) => (
         <rect
           key={`${planet.id}-terrain-${index}`}
@@ -104,34 +104,34 @@ function PlanetArt({ planet }) {
       ))}
       {planet.satellites === "ai" && (
         <>
-          <rect x="168" y="38" width="24" height="8" fill="#5FCBE6" />
-          <rect x="176" y="30" width="8" height="24" fill="#B8F4FF" />
-          <rect x="168" y="150" width="8" height="8" fill="#C6F7FF" />
+          <rect x="168" y="38" width="24" height="8" fill="#C0C5C8" />
+          <rect x="176" y="30" width="8" height="24" fill="#E1E4E6" />
+          <rect x="168" y="150" width="8" height="8" fill="#E1E4E6" />
         </>
       )}
       {planet.satellites === "web" && (
         <>
-          <rect x="16" y="48" width="24" height="8" fill="#80DFF3" />
-          <rect x="24" y="40" width="8" height="24" fill="#C6F7FF" />
-          <rect x="172" y="152" width="16" height="8" fill="#5FCBE6" />
+          <rect x="16" y="48" width="24" height="8" fill="#D0D4D7" />
+          <rect x="24" y="40" width="8" height="24" fill="#E1E4E6" />
+          <rect x="172" y="152" width="16" height="8" fill="#C0C5C8" />
         </>
       )}
       {planet.satellites === "cyber" && (
         <>
-          <rect x="168" y="36" width="8" height="32" fill="#B8F4FF" />
-          <rect x="160" y="44" width="24" height="8" fill="#5FCBE6" />
-          <rect x="40" y="160" width="8" height="16" fill="#C6F7FF" />
+          <rect x="168" y="36" width="8" height="32" fill="#E1E4E6" />
+          <rect x="160" y="44" width="24" height="8" fill="#C0C5C8" />
+          <rect x="40" y="160" width="8" height="16" fill="#E1E4E6" />
         </>
       )}
       {planet.satellites === "glitch" && (
         <>
-          <rect x="20" y="44" width="16" height="16" fill="#8BEAF8" />
-          <rect x="28" y="36" width="8" height="32" fill="#C6F7FF" />
-          <rect x="168" y="144" width="24" height="8" fill="#5FCBE6" />
+          <rect x="20" y="44" width="16" height="16" fill="#D0D4D7" />
+          <rect x="28" y="36" width="8" height="32" fill="#E1E4E6" />
+          <rect x="168" y="144" width="24" height="8" fill="#C0C5C8" />
         </>
       )}
-      <rect x="180" y="80" width="4" height="4" fill="#D9FAFF" />
-      <rect x="28" y="132" width="4" height="4" fill="#D9FAFF" />
+      <rect x="180" y="80" width="4" height="4" fill="#F0F2F3" />
+      <rect x="28" y="132" width="4" height="4" fill="#F0F2F3" />
     </svg>
   );
 }
@@ -141,11 +141,11 @@ function PixelRocket({ className = "" }) {
     <div className={`sig-space__rocket ${className}`} aria-hidden="true">
       <svg viewBox="0 0 40 52" shapeRendering="crispEdges">
         <rect x="16" y="0" width="8" height="8" fill="#EAFBFF" />
-        <rect x="12" y="8" width="16" height="8" fill="#A9EDFA" />
-        <rect x="8" y="16" width="24" height="16" fill="#55BFE0" />
+        <rect x="12" y="8" width="16" height="8" fill="#D0D4D7" />
+        <rect x="8" y="16" width="24" height="16" fill="#B9BEC2" />
         <rect x="16" y="20" width="8" height="8" fill="#09243A" />
-        <rect x="4" y="24" width="8" height="12" fill="#B5F3FF" />
-        <rect x="28" y="24" width="8" height="12" fill="#B5F3FF" />
+        <rect x="4" y="24" width="8" height="12" fill="#DDE1E3" />
+        <rect x="28" y="24" width="8" height="12" fill="#DDE1E3" />
         <rect x="12" y="32" width="16" height="8" fill="#EAFBFF" />
         <rect x="16" y="40" width="8" height="8" fill="#FFCF70" />
       </svg>
