@@ -17,7 +17,7 @@ const galleryItems = [
 ];
 
 const visibleCards = 4;
-const rotationInterval = 2100;
+const rotationInterval = 1200;
 const motionEase = [0.22, 1, 0.36, 1];
 
 export default function SigArchiveGallery() {
@@ -59,14 +59,14 @@ export default function SigArchiveGallery() {
                     opacity: 0,
                     rotate: 5,
                     scale: 0.96,
-                    transition: { duration: 0.28, ease: motionEase },
+                    transition: { duration: 0.24, ease: motionEase },
                   }}
                   transition={{
-                    x: { duration: 0.48, ease: motionEase },
-                    y: { duration: 0.48, ease: motionEase },
-                    scale: { duration: 0.48, ease: motionEase },
-                    opacity: { duration: 0.38, ease: motionEase },
-                    rotate: { duration: 0.48, ease: motionEase },
+                    x: { duration: 0.34, ease: motionEase },
+                    y: { duration: 0.34, ease: motionEase },
+                    scale: { duration: 0.34, ease: motionEase },
+                    opacity: { duration: 0.28, ease: motionEase },
+                    rotate: { duration: 0.34, ease: motionEase },
                   }}
                   style={{ zIndex: visibleCards - index, willChange: "transform, opacity" }}
                 >
