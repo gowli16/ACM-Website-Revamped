@@ -38,6 +38,19 @@ export default function SigArchiveGallery() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    // Keep the SIG shortcut rail out of the opening/landing view.
+    const gallerySection = canvas.closest(".sig-gallery");
+    const updateMissionRail = () => {
+      const rail = document.querySelector(".sigc-mission-nav");
+      if (!gallerySection || !rail) return;
+      const galleryBottom = gallerySection.getBoundingClientRect().bottom;
+      const beyondGallery = galleryBottom <= 2;
+      rail.classList.toggle("sigc-mission-nav--visible", beyondGallery);
+    };
+    updateMissionRail();
+    window.addEventListener("scroll", updateMissionRail, { passive: true });
+    window.addEventListener("resize", updateMissionRail);
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(52, 1, 0.1, 100);
     const overviewPosition = new THREE.Vector3(0, 0, 15.5);
@@ -184,6 +197,8 @@ export default function SigArchiveGallery() {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("scroll", updateMissionRail);
+      window.removeEventListener("resize", updateMissionRail);
       canvas.removeEventListener("wheel", onWheel);
       cards.forEach((mesh) => {
         mesh.geometry.dispose();
