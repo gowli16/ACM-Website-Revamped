@@ -98,7 +98,6 @@ export default function SigArchiveGallery() {
     const onWheel = (event) => {
       event.preventDefault();
       targetProgress += event.deltaY * 0.00018;
-      targetProgress = THREE.MathUtils.clamp(targetProgress, -2.5, 2.5);
     };
 
     resize();
