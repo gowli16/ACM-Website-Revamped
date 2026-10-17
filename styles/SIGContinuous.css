@@ -206,6 +206,28 @@
   color: var(--sigc-cyan);
 }
 
+.sigc-typing-cursor {
+  display: inline-block;
+  width: 0.075em;
+  height: 0.82em;
+  margin-left: 0.08em;
+  vertical-align: -0.04em;
+  background: var(--sigc-cyan);
+  animation: sigc-cursor-blink 0.85s steps(2, start) infinite;
+}
+
+@keyframes sigc-cursor-blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sigc-typing-cursor {
+    animation: none;
+  }
+}
+
 .sigc-intro-summary {
   max-width: 500px;
   margin: 26px 0 0;
