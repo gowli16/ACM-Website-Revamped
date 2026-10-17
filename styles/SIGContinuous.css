@@ -1616,3 +1616,62 @@
     animation: none;
   }
 }
+
+
+/* A short launch across the viewport when switching between SIG destinations. */
+.sigc-rocket-transition {
+  position: fixed;
+  z-index: 120;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  animation: sigc-rocket-screen-fade 1150ms ease-out forwards;
+}
+
+.sigc-rocket-transition svg {
+  position: absolute;
+  top: 50%;
+  left: -90px;
+  width: clamp(48px, 6vw, 76px);
+  height: auto;
+  filter: drop-shadow(0 0 10px rgba(221, 228, 232, 0.16));
+  transform: translateY(-50%) rotate(45deg);
+  animation: sigc-rocket-crossing 1050ms cubic-bezier(.35,.05,.65,.95) forwards;
+}
+
+.sigc-rocket-transition__trail {
+  position: absolute;
+  top: 50%;
+  left: -22vw;
+  width: 24vw;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 145, 77, 0.1), rgba(221, 228, 232, 0.72));
+  transform: translateY(-50%) rotate(-31deg);
+  transform-origin: right center;
+  animation: sigc-rocket-trail 1050ms ease-out forwards;
+}
+
+@keyframes sigc-rocket-crossing {
+  0% { left: -90px; top: 76%; opacity: 0; }
+  12% { opacity: 1; }
+  52% { top: 42%; }
+  100% { left: calc(100vw + 100px); top: 18%; opacity: 0; }
+}
+
+@keyframes sigc-rocket-trail {
+  0% { left: -24vw; opacity: 0; }
+  15% { opacity: 0.8; }
+  100% { left: 100vw; opacity: 0; }
+}
+
+@keyframes sigc-rocket-screen-fade {
+  0%, 82% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sigc-rocket-transition {
+    display: none;
+    animation: none;
+  }
+}
