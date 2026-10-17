@@ -231,7 +231,7 @@
   gap: clamp(28px, 8vw, 120px);
   margin: 0 auto;
   padding: 90px 0 70px;
-  border-bottom: 1px solid var(--sigc-rule);
+  border-bottom: 0;
 }
 
 .sigc-intro-copy {
