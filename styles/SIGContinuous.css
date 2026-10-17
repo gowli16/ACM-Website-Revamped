@@ -877,7 +877,10 @@
   overflow: hidden;
   white-space: nowrap;
   border-right: 2px solid #D0D4D7;
-  animation: sig-gallery-type 1.1s steps(7, end) .35s forwards, sig-gallery-caret .8s steps(1, end) 1.45s infinite;
+  animation: none;
+}
+.sig-gallery--entered .sig-gallery__title span {
+  animation: sig-gallery-type 1.1s steps(7, end) .15s forwards, sig-gallery-caret .8s steps(1, end) 1.25s infinite;
 }
 .sig-gallery__intro > p {
   margin: 2px 0 0;
@@ -925,7 +928,8 @@
   .sig-gallery__hint { width: 94%; white-space: normal; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .sig-gallery__title span { width: 6.5em; animation: none; border-right: 0; }
+  .sig-gallery__title span { width: 0; animation: none; border-right: 2px solid #D0D4D7; }
+  .sig-gallery--entered .sig-gallery__title span { width: 6.5em; border-right: 0; }
   .sig-gallery__hint { animation: none; }
 }
 .sigc-sequence-heading .sigc-eyebrow {
