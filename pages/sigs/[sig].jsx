@@ -324,6 +324,8 @@ function MissionContent({ mission }) {
 export default function RecruitmentPage() {
   const [typedHeading, setTypedHeading] = useState("");
   const [activeSigId, setActiveSigId] = useState("ai");
+  const [rocketFlight, setRocketFlight] = useState(false);
+  const rocketTimeoutRef = useRef(null);
 
   useEffect(() => {
     const fullHeading = "WELCOME TO OUR SIGs.";
@@ -353,6 +355,11 @@ export default function RecruitmentPage() {
     const mission = missions.find((item) => item.id === id);
     if (!mission) return;
 
+    if (id !== activeSigId && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setRocketFlight(true);
+      window.clearTimeout(rocketTimeoutRef.current);
+      rocketTimeoutRef.current = window.setTimeout(() => setRocketFlight(false), 1150);
+    }
     setActiveSigId(id);
     pendingMissionRef.current = id;
     window.clearTimeout(pendingMissionTimeoutRef.current);
@@ -364,7 +371,9 @@ export default function RecruitmentPage() {
       behavior: reducedMotion ? "instant" : "smooth",
       block: "start",
     });
-  }, []);
+  }, [activeSigId]);
+
+  useEffect(() => () => window.clearTimeout(rocketTimeoutRef.current), []);
 
   useEffect(() => {
     const markers = document.querySelectorAll("[data-sigc-marker]");
@@ -407,6 +416,18 @@ export default function RecruitmentPage() {
 
   return (
     <>
+      {rocketFlight && (
+        <div className="sigc-rocket-transition" aria-hidden="true">
+          <span className="sigc-rocket-transition__trail" />
+          <svg viewBox="0 0 64 64" role="presentation">
+            <path d="M32 5C21 16 18 29 20 40l12 10 12-10C46 29 43 16 32 5Z" fill="#DDE4E8" />
+            <circle cx="32" cy="27" r="6" fill="#0A1D2B" stroke="#7E9AA9" strokeWidth="2" />
+            <path d="m20 34-10 9 1 10 13-7M44 34l10 9-1 10-13-7" fill="#9AAEB9" />
+            <path d="M27 48h10l-5 12Z" fill="#FF914D" />
+            <path d="M30 49h4l-2 7Z" fill="#FFF1C7" />
+          </svg>
+        </div>
+      )}
       <Navbar
         sigMissionNavigation
         activeSigId={activeSigId}
