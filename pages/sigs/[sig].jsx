@@ -412,7 +412,6 @@ export default function RecruitmentPage() {
         <div className="sigc-page-content">
         <section className="sigc-intro" id="sigc-intro" aria-labelledby="sigc-intro-title">
           <div className="sigc-intro-copy">
-            <p className="sigc-eyebrow">ACM AMRITAPURI <span>/</span> SPECIAL INTEREST GROUPS</p>
             <h1 id="sigc-intro-title" aria-label="WELCOME TO OUR SIGs.">
               {typedHeading.length <= 7 ? (
                 <>{typedHeading}<span className="sigc-typing-cursor" aria-hidden="true" /></>
