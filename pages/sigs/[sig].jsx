@@ -189,6 +189,12 @@ function MissionContent({ mission }) {
           {data.description && <p className="sigc-overview-copy">{data.description}</p>}
         </header>
 
+        {mission.id === "glitch" && (
+          <div className="sigc-glitch-game" aria-label="Glitch Gaming arcade">
+            <SpaceShooter />
+          </div>
+        )}
+
         <StorySection mission={mission} />
 
         {Array.isArray(data.domains) && data.domains.length > 0 && (
@@ -428,12 +434,10 @@ export default function RecruitmentPage() {
               Enter operations <span aria-hidden="true">↓</span>
             </button>
           </div>
-          <SpaceShooter />
+          <div className="sigc-intro-gallery" ref={galleryRef}>
+            <SigArchiveGallery />
+          </div>
         </section>
-
-        <div ref={galleryRef}>
-          <SigArchiveGallery />
-        </div>
 
         {missions.map((mission) => (
           <MissionContent key={mission.id} mission={mission} />
