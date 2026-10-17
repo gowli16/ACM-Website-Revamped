@@ -8,6 +8,31 @@ export default function SpaceShooter() {
   const gameRef = useRef({ shipY: HEIGHT / 2, up: false, down: false, bullets: [], rocks: [], frame: 0, score: 0 });
   const [score, setScore] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [instruction, setInstruction] = useState("");
+  useEffect(() => {
+    const message = "USE THE ARROW KEYS TO MOVE";
+    let index = 0;
+    let deleting = false;
+    let timer;
+    const type = () => {
+      if (!deleting) {
+        index += 1;
+        setInstruction(message.slice(0, index));
+        if (index >= message.length) {
+          deleting = true;
+          timer = window.setTimeout(type, 1400);
+          return;
+        }
+      } else {
+        index -= 1;
+        setInstruction(message.slice(0, index));
+        if (index <= 0) deleting = false;
+      }
+      timer = window.setTimeout(type, deleting ? 38 : 68);
+    };
+    timer = window.setTimeout(type, 300);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -24,10 +49,10 @@ export default function SpaceShooter() {
       }
     };
     const keyDown = (event) => {
-      if (["ArrowUp", "ArrowDown", " "].includes(event.key)) event.preventDefault();
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(event.key)) event.preventDefault();
       if (event.key === "ArrowUp" || event.key.toLowerCase() === "w") game.up = true;
       if (event.key === "ArrowDown" || event.key.toLowerCase() === "s") game.down = true;
-      if (event.key === " ") shoot();
+      if (event.key.toLowerCase() === "f") shoot();
     };
     const keyUp = (event) => {
       if (event.key === "ArrowUp" || event.key.toLowerCase() === "w") game.up = false;
@@ -180,14 +205,10 @@ export default function SpaceShooter() {
           <div><p className="sigc-eyebrow">ARCADE / 01</p><h2>ASTEROID DEFENCE</h2></div>
           <span className="sigc-shooter-score">SCORE <strong>{score.toString().padStart(4, "0")}</strong></span>
         </div>
-        <div className="sigc-shooter-controls">
-          <button type="button" aria-label="Move ship up" onPointerDown={() => move("up", true)} onPointerUp={() => move("up", false)} onPointerLeave={() => move("up", false)}>↑</button>
-          <button type="button" aria-label="Move ship down" onPointerDown={() => move("down", true)} onPointerUp={() => move("down", false)} onPointerLeave={() => move("down", false)}>↓</button>
-          <button type="button" className="sigc-shooter-fire" onClick={fire}>FIRE</button>
-          <button type="button" onClick={() => setPaused((value) => !value)}>{paused ? "RESUME" : "PAUSE"}</button>
-          <button type="button" onClick={reset}>RESET</button>
+        <div className="sigc-shooter-instructions" aria-live="polite">
+          <p><span>{instruction}</span><i aria-hidden="true" /></p>
+          <p className="sigc-shooter-fire-instruction">PRESS <strong>F</strong> TO FIRE</p>
         </div>
-        <p className="sigc-shooter-help">MOVE: ↑ ↓ / W S <span>FIRE: SPACE</span></p>
       </div>
     </aside>
   );
