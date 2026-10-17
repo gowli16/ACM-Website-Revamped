@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
-const WIDTH = 360;
-const HEIGHT = 300;
+const WIDTH = 1600;
+const HEIGHT = 500;
 
 export default function SpaceShooter() {
   const canvasRef = useRef(null);
@@ -19,7 +19,7 @@ export default function SpaceShooter() {
 
     const shoot = () => {
       if (!paused && performance.now() - lastShot > 220) {
-        game.bullets.push({ x: WIDTH - 42, y: game.shipY });
+        game.bullets.push({ x: WIDTH - 52, y: game.shipY });
         lastShot = performance.now();
       }
     };
@@ -40,37 +40,46 @@ export default function SpaceShooter() {
 
     const drawAsteroid = (rock) => {
       ctx.save();
+      ctx.translate(rock.x, rock.y);
+      ctx.rotate(rock.rotation);
+      ctx.shadowColor = "rgba(98, 212, 232, .58)";
+      ctx.shadowBlur = 5;
       ctx.strokeStyle = "#62D4E8";
-      ctx.lineWidth = 1.7;
-      ctx.shadowColor = "rgba(98, 212, 232, .7)";
-      ctx.shadowBlur = 7;
+      ctx.lineWidth = 2;
       ctx.beginPath();
       rock.points.forEach((point, index) => {
-        const angle = point.angle + rock.rotation;
-        const x = rock.x + Math.cos(angle) * point.radius;
-        const y = rock.y + Math.sin(angle) * point.radius;
-        if (index === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        if (!index) ctx.moveTo(point.x, point.y);
+        else ctx.lineTo(point.x, point.y);
       });
       ctx.closePath();
+      ctx.stroke();
+      // Small angular crater details give the rocks a pixel-art / arcade silhouette.
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = "rgba(98, 212, 232, .45)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(-rock.radius * 0.28, -rock.radius * 0.12);
+      ctx.lineTo(-rock.radius * 0.02, -rock.radius * 0.32);
+      ctx.lineTo(rock.radius * 0.16, -rock.radius * 0.02);
       ctx.stroke();
       ctx.restore();
     };
 
     const drawShip = () => {
       ctx.save();
-      ctx.translate(WIDTH - 28, game.shipY);
-      ctx.rotate(Math.PI / 2);
+      ctx.translate(WIDTH - 42, game.shipY);
       ctx.fillStyle = "#62D4E8";
       ctx.beginPath();
-      ctx.moveTo(0, -13);
-      ctx.lineTo(-10, 10);
-      ctx.lineTo(0, 5);
-      ctx.lineTo(10, 10);
+      ctx.moveTo(15, 0);
+      ctx.lineTo(-11, -11);
+      ctx.lineTo(-5, 0);
+      ctx.lineTo(-11, 11);
       ctx.closePath();
       ctx.fill();
       ctx.fillStyle = "#F4F7FA";
-      ctx.fillRect(-2, 4, 4, 5);
+      ctx.fillRect(-7, -2, 10, 4);
+      ctx.fillStyle = "rgba(255, 145, 77, .85)";
+      ctx.fillRect(-16, -3, 6, 6);
       ctx.restore();
     };
 
@@ -78,42 +87,46 @@ export default function SpaceShooter() {
       game.frame += 1;
       ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
-      // Tiny ambient stars remain static; asteroids enter from the left.
-      for (let i = 0; i < 24; i += 1) {
-        ctx.globalAlpha = i % 4 === 0 ? 0.6 : 0.22;
-        ctx.fillStyle = i % 4 === 0 ? "#62D4E8" : "#91A9B8";
-        ctx.fillRect((i * 71 + 19) % WIDTH, (i * 47 + 11) % HEIGHT, 1.4, 1.4);
+      // Keep the game canvas transparent: only a few stars and game sprites are drawn.
+      for (let i = 0; i < 42; i += 1) {
+        ctx.globalAlpha = i % 5 === 0 ? 0.48 : 0.16;
+        ctx.fillStyle = i % 5 === 0 ? "#62D4E8" : "#91A9B8";
+        ctx.fillRect((i * 97 + 19) % WIDTH, (i * 67 + 13) % HEIGHT, 1.5, 1.5);
       }
       ctx.globalAlpha = 1;
 
       if (!paused) {
-        if (game.up) game.shipY -= 3.2;
-        if (game.down) game.shipY += 3.2;
-        game.shipY = Math.max(15, Math.min(HEIGHT - 15, game.shipY));
+        if (game.up) game.shipY -= 4;
+        if (game.down) game.shipY += 4;
+        game.shipY = Math.max(18, Math.min(HEIGHT - 18, game.shipY));
 
-        if (game.frame % 48 === 0) {
-          const radius = 8 + Math.random() * 9;
+        if (game.frame % 45 === 0) {
+          const radius = 10 + Math.random() * 13;
+          const vertices = 8 + Math.floor(Math.random() * 4);
+          const points = Array.from({ length: vertices }, (_, index) => {
+            const angle = (Math.PI * 2 * index) / vertices;
+            const distance = radius * (0.62 + Math.random() * 0.48);
+            return { x: Math.cos(angle) * distance, y: Math.sin(angle) * distance };
+          });
           game.rocks.push({
-            x: -radius,
-            y: 18 + Math.random() * (HEIGHT - 65),
-            speed: 0.75 + Math.random() * 0.85,
-            rotation: 0,
-            points: Array.from({ length: 9 }, (_, index) => ({
-              angle: (Math.PI * 2 * index) / 9,
-              radius: radius * (0.66 + Math.random() * 0.52),
-            })),
+            x: -radius - 4,
+            y: 20 + Math.random() * (HEIGHT - 40),
+            radius,
+            speed: 1.4 + Math.random() * 1.4,
+            rotation: Math.random() * 0.5,
+            points,
           });
         }
 
-        game.rocks.forEach((rock) => { rock.x += rock.speed; rock.rotation += 0.006; });
-        game.bullets.forEach((bullet) => { bullet.x -= 5; });
-        game.rocks = game.rocks.filter((rock) => rock.x < WIDTH + 24);
-        game.bullets = game.bullets.filter((bullet) => bullet.x > -8);
+        game.rocks.forEach((rock) => { rock.x += rock.speed; rock.rotation += 0.008; });
+        game.bullets.forEach((bullet) => { bullet.x -= 8; });
+        game.rocks = game.rocks.filter((rock) => rock.x < WIDTH + 40);
+        game.bullets = game.bullets.filter((bullet) => bullet.x > -12);
 
         game.bullets = game.bullets.filter((bullet) => {
-          const hit = game.rocks.findIndex((rock) => Math.hypot(rock.x - bullet.x, rock.y - bullet.y) < 15);
-          if (hit < 0) return true;
-          game.rocks.splice(hit, 1);
+          const hitIndex = game.rocks.findIndex((rock) => Math.hypot(rock.x - bullet.x, rock.y - bullet.y) < rock.radius + 8);
+          if (hitIndex < 0) return true;
+          game.rocks.splice(hitIndex, 1);
           game.score += 10;
           setScore(game.score);
           return false;
@@ -122,16 +135,16 @@ export default function SpaceShooter() {
 
       game.rocks.forEach(drawAsteroid);
       ctx.fillStyle = "#FF914D";
-      game.bullets.forEach((bullet) => ctx.fillRect(bullet.x, bullet.y - 1, 8, 2));
+      game.bullets.forEach((bullet) => ctx.fillRect(bullet.x - 1, bullet.y - 1, 10, 2));
       drawShip();
 
       if (paused) {
         ctx.fillStyle = "rgba(6, 18, 29, .72)";
-        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+        ctx.fillRect(WIDTH - 390, 0, 390, HEIGHT);
         ctx.fillStyle = "#F4F7FA";
         ctx.textAlign = "center";
-        ctx.font = "bold 15px monospace";
-        ctx.fillText("PAUSED", WIDTH / 2, HEIGHT / 2);
+        ctx.font = "bold 16px monospace";
+        ctx.fillText("PAUSED", WIDTH - 195, HEIGHT / 2);
       }
       raf = window.requestAnimationFrame(loop);
     };
@@ -150,7 +163,7 @@ export default function SpaceShooter() {
     gameRef.current.down = direction === "down" && active;
   };
   const fire = () => {
-    if (!paused) gameRef.current.bullets.push({ x: WIDTH - 42, y: gameRef.current.shipY });
+    if (!paused) gameRef.current.bullets.push({ x: WIDTH - 52, y: gameRef.current.shipY });
   };
   const reset = () => {
     gameRef.current = { shipY: HEIGHT / 2, up: false, down: false, bullets: [], rocks: [], frame: 0, score: 0 };
@@ -160,23 +173,22 @@ export default function SpaceShooter() {
 
   return (
     <aside className="sigc-shooter" aria-label="Mini space shooter game">
-      <div className="sigc-shooter-heading">
-        <div>
-          <p className="sigc-eyebrow">ARCADE / 01</p>
-          <h2>ASTEROID DEFENCE</h2>
+      <canvas ref={canvasRef} className="sigc-shooter-canvas" width={WIDTH} height={HEIGHT}
+        aria-label="Asteroids travel from left to right. Use up and down arrow keys or W and S to move. Press space to fire." />
+      <div className="sigc-shooter-interface">
+        <div className="sigc-shooter-heading">
+          <div><p className="sigc-eyebrow">ARCADE / 01</p><h2>ASTEROID DEFENCE</h2></div>
+          <span className="sigc-shooter-score">SCORE <strong>{score.toString().padStart(4, "0")}</strong></span>
         </div>
-        <span className="sigc-shooter-score">SCORE <strong>{score.toString().padStart(4, "0")}</strong></span>
+        <div className="sigc-shooter-controls">
+          <button type="button" aria-label="Move ship up" onPointerDown={() => move("up", true)} onPointerUp={() => move("up", false)} onPointerLeave={() => move("up", false)}>↑</button>
+          <button type="button" aria-label="Move ship down" onPointerDown={() => move("down", true)} onPointerUp={() => move("down", false)} onPointerLeave={() => move("down", false)}>↓</button>
+          <button type="button" className="sigc-shooter-fire" onClick={fire}>FIRE</button>
+          <button type="button" onClick={() => setPaused((value) => !value)}>{paused ? "RESUME" : "PAUSE"}</button>
+          <button type="button" onClick={reset}>RESET</button>
+        </div>
+        <p className="sigc-shooter-help">MOVE: ↑ ↓ / W S <span>FIRE: SPACE</span></p>
       </div>
-      <canvas ref={canvasRef} className="sigc-shooter-canvas" width={WIDTH} height={HEIGHT} tabIndex={0}
-        aria-label="Use up and down arrow keys or W and S to move. Press space to fire." />
-      <div className="sigc-shooter-controls">
-        <button type="button" aria-label="Move ship up" onPointerDown={() => move("up", true)} onPointerUp={() => move("up", false)} onPointerLeave={() => move("up", false)}>↑</button>
-        <button type="button" aria-label="Move ship down" onPointerDown={() => move("down", true)} onPointerUp={() => move("down", false)} onPointerLeave={() => move("down", false)}>↓</button>
-        <button type="button" className="sigc-shooter-fire" onClick={fire}>FIRE</button>
-        <button type="button" onClick={() => setPaused((value) => !value)}>{paused ? "RESUME" : "PAUSE"}</button>
-        <button type="button" onClick={reset}>RESET</button>
-      </div>
-      <p className="sigc-shooter-help">MOVE: ↑ ↓ / W S <span>FIRE: SPACE</span></p>
     </aside>
   );
 }
