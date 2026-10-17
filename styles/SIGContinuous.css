@@ -785,6 +785,11 @@
 .sig-gallery__title::after { display: block; width: 52px; height: 2px; margin: 13px auto 0; background: var(--sigc-cyan); content: ""; }
 .sig-gallery__hint { position: absolute; z-index: 2; bottom: 3%; left: 50%; margin: 0; color: var(--sigc-muted); font: 9px monospace; letter-spacing: .16em; transform: translateX(-50%); white-space: nowrap; }
 .sig-gallery__hint span { margin: 0 8px; color: var(--sigc-cyan); }
+.sig-gallery__focus-caption { position: absolute; z-index: 3; left: 50%; bottom: 10%; display: grid; justify-items: center; gap: 8px; width: min(90%, 520px); text-align: center; transform: translateX(-50%); pointer-events: none; }
+.sig-gallery__focus-caption span { color: var(--sigc-cyan); font: 9px monospace; letter-spacing: .16em; }
+.sig-gallery__focus-caption strong { color: var(--sigc-paper); font-size: clamp(16px, 2vw, 22px); font-weight: 500; letter-spacing: .02em; }
+.sig-gallery__focus-caption small { color: var(--sigc-muted); font: 8px monospace; letter-spacing: .12em; }
+.sig-gallery__canvas { cursor: pointer; touch-action: pan-y; }
 @media (max-width: 600px) {
   .sig-gallery, .sig-gallery__stage { min-height: 560px; }
   .sig-gallery__title { top: 6%; font-size: 24px; }
