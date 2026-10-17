@@ -93,6 +93,38 @@
   background: #061827;
   box-shadow: 0 12px 34px rgba(0, 0, 0, 0.28);
   transform: translateY(-50%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 220ms ease, visibility 220ms ease;
+}
+
+.sigc-mission-nav.sigc-mission-nav--visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* More recognizable symbols for the AI and Web SIG shortcuts. */
+.sigc-nav-item:nth-child(1) .sigc-nav-icon svg,
+.sigc-nav-item:nth-child(2) .sigc-nav-icon svg {
+  display: none;
+}
+
+.sigc-nav-item:nth-child(1) .sigc-nav-icon::after {
+  content: "✳";
+  color: currentColor;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.sigc-nav-item:nth-child(2) .sigc-nav-icon::after {
+  content: "</>";
+  color: currentColor;
+  font: 700 17px/1 monospace;
+  letter-spacing: -0.08em;
 }
 
 .sigc-mission-nav::before {
