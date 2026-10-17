@@ -41,12 +41,20 @@
   inset: 0;
 }
 
+.sigc-starfield span {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  background: #F4F7FA;
+  box-shadow: 0 0 3px rgba(244, 247, 250, 0.24);
+}
+
 .sigc-starfield {
   will-change: transform;
 }
 
 .sigc-starfield--distant span {
-  background: #AFC5D4;
+  background: #F4F7FA;
 }
 
 .sigc-starfield--near span {
@@ -54,8 +62,8 @@
 }
 
 .sigc-starfield--near span:nth-child(4n) {
-  background: var(--sigc-cyan);
-  box-shadow: 0 0 5px rgba(98, 212, 232, 0.24);
+  background: #FFFFFF;
+  box-shadow: 0 0 3px rgba(255, 255, 255, 0.2);
 }
 
 @media (prefers-reduced-motion: reduce) {
