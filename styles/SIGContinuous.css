@@ -784,6 +784,7 @@
 .sig-gallery__title { position: absolute; top: 5%; left: 50%; z-index: 2; margin: 0; color: var(--sigc-paper); font-size: clamp(27px, 3.5vw, 44px); font-weight: 600; letter-spacing: .22em; line-height: 1; text-align: center; transform: translateX(-50%); pointer-events: none; text-shadow: 0 2px 16px rgba(0,0,0,.4); }
 .sig-gallery__title::after { display: block; width: 52px; height: 2px; margin: 13px auto 0; background: var(--sigc-cyan); content: ""; }
 .sig-gallery__hint { position: absolute; z-index: 2; bottom: 3%; left: 50%; margin: 0; color: var(--sigc-muted); font: 9px monospace; letter-spacing: .16em; transform: translateX(-50%); white-space: nowrap; }
+.sig-gallery__hint { pointer-events: none; }
 .sig-gallery__hint span { margin: 0 8px; color: var(--sigc-cyan); }
 .sig-gallery__focus-caption { position: absolute; z-index: 3; left: 50%; bottom: 10%; display: grid; justify-items: center; gap: 8px; width: min(90%, 520px); text-align: center; transform: translateX(-50%); pointer-events: none; }
 .sig-gallery__focus-caption span { color: var(--sigc-cyan); font: 9px monospace; letter-spacing: .16em; }
