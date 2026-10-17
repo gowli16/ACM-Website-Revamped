@@ -19,10 +19,16 @@ const galleryItems = [
 function ribbonPoint(t) {
   const a = t * Math.PI * 2;
   return new THREE.Vector3(
-    Math.sin(a) * 7.6,
-    Math.sin(a * 2) * 1.85,
-    Math.cos(a) * 5.2
+    Math.sin(a) * 7.7,
+    Math.sin(a * 2) * 1.8,
+    Math.cos(a) * 4.7
   );
+}
+
+function cameraPoint(t) {
+  const point = ribbonPoint(t);
+  const inward = new THREE.Vector3(-point.x, 0, -point.z).normalize();
+  return point.add(inward.multiplyScalar(1.9));
 }
 
 export default function SigArchiveGallery() {
@@ -33,8 +39,9 @@ export default function SigArchiveGallery() {
     if (!canvas) return;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 100);
-    camera.position.set(0, 0, 16.2);
+    const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 100);
+    const overviewPosition = new THREE.Vector3(0, 0, 18);
+    camera.position.copy(overviewPosition);
     camera.lookAt(0, 0, 0);
 
     let renderer;
@@ -55,10 +62,13 @@ export default function SigArchiveGallery() {
     const loader = new THREE.TextureLoader();
     const textures = new Map();
     const cards = [];
-    const copies = 6;
-    const totalCards = galleryItems.length * copies;
-    const cardW = 2.05;
-    const cardH = 1.35;
+    const totalCards = galleryItems.length * 2;
+    const cardW = 1.62;
+    const cardH = 1.08;
+    const lookAhead = new THREE.Vector3();
+    const desiredCamera = new THREE.Vector3();
+    const desiredLook = new THREE.Vector3();
+    const startLook = new THREE.Vector3(0, 0, 0);
     let targetProgress = 0;
     let currentProgress = 0;
 
@@ -82,7 +92,8 @@ export default function SigArchiveGallery() {
       });
       const mesh = new THREE.Mesh(geometry, material);
       mesh.userData.item = item;
-      groupSafeAdd(scene, mesh);
+      mesh.userData.pathT = index / totalCards;
+      scene.add(mesh);
       cards.push(mesh);
     }
 
@@ -91,13 +102,16 @@ export default function SigArchiveGallery() {
       const height = canvas.clientHeight || window.innerHeight;
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
-      camera.position.z = width < 600 ? 19 : width < 900 ? 17.5 : 16.2;
       camera.updateProjectionMatrix();
     };
 
     const onWheel = (event) => {
       event.preventDefault();
-      targetProgress += event.deltaY * 0.00018;
+      targetProgress = THREE.MathUtils.clamp(
+        targetProgress + event.deltaY * 0.00012,
+        0,
+        1
+      );
     };
 
     resize();
@@ -107,33 +121,58 @@ export default function SigArchiveGallery() {
     let raf = 0;
     const animate = () => {
       raf = requestAnimationFrame(animate);
-      currentProgress += (targetProgress - currentProgress) * 0.085;
+      currentProgress += (targetProgress - currentProgress) * 0.075;
 
-      cards.forEach((mesh, index) => {
-        const t = (index / totalCards + currentProgress) % 1;
-        const wrappedT = t < 0 ? t + 1 : t;
-        const point = ribbonPoint(wrappedT);
+      // First scroll transitions from the full-ribbon overview into the ride.
+      const rideBlend = THREE.MathUtils.smoothstep(currentProgress, 0.035, 0.19);
+      const rideT = THREE.MathUtils.clamp((currentProgress - 0.12) / 0.88, 0, 0.999);
+      const pathPoint = ribbonPoint(rideT);
+      const nextPoint = ribbonPoint((rideT + 0.018) % 1);
+      const tangent = nextPoint.clone().sub(pathPoint).normalize();
+      const inward = new THREE.Vector3(-pathPoint.x, 0, -pathPoint.z).normalize();
+
+      desiredCamera.copy(cameraPoint(rideT));
+      desiredCamera.addScaledVector(tangent, -1.3);
+      desiredCamera.y += 0.25;
+      desiredLook.copy(pathPoint).addScaledVector(tangent, 2.6);
+      desiredLook.y += 0.15;
+
+      camera.position.lerpVectors(overviewPosition, desiredCamera, rideBlend);
+      lookAhead.copy(startLook).lerp(desiredLook, rideBlend);
+      camera.lookAt(lookAhead);
+
+      cards.forEach((mesh) => {
+        const t = mesh.userData.pathT;
+        const point = ribbonPoint(t);
+        const angle = t * Math.PI * 2;
         mesh.position.copy(point);
 
-        const angle = wrappedT * Math.PI * 2;
-        mesh.rotation.x = Math.sin(angle) * 0.07;
-        mesh.rotation.y = Math.sin(angle) * 0.22;
-        mesh.rotation.z = Math.sin(angle * 2) * 0.035;
+        // In the overview, cards face toward the viewer; during the ride, they face inward toward the track.
+        const inwardYaw = Math.atan2(-Math.sin(angle), -Math.cos(angle));
+        const overviewYaw = Math.sin(angle) * 0.18;
+        mesh.rotation.set(
+          Math.sin(angle * 2) * 0.045,
+          THREE.MathUtils.lerp(overviewYaw, inwardYaw, rideBlend),
+          Math.sin(angle * 2) * 0.025
+        );
 
-        const depthScale = THREE.MathUtils.clamp((point.z + 5.8) / 8.4, 0.34, 1.12);
-        mesh.scale.setScalar(depthScale);
-        mesh.material.opacity = THREE.MathUtils.clamp((point.z + 6.2) / 7.6, 0.18, 1);
+        const depthScale = THREE.MathUtils.clamp((point.z + 5.4) / 8.4, 0.52, 1.02);
+        const targetScale = THREE.MathUtils.lerp(depthScale, 1.0, rideBlend);
+        mesh.scale.setScalar(targetScale);
+
+        const depthOpacity = THREE.MathUtils.clamp((point.z + 5.8) / 7.3, 0.42, 1);
+        mesh.material.opacity = THREE.MathUtils.lerp(depthOpacity, 1, rideBlend);
         mesh.renderOrder = Math.round(point.z * 10);
       });
 
       renderer.render(scene, camera);
     };
 
-    cards.forEach((mesh, index) => {
-      const t = index / totalCards;
-      const point = ribbonPoint(t);
+    cards.forEach((mesh) => {
+      const point = ribbonPoint(mesh.userData.pathT);
       mesh.position.copy(point);
-      mesh.scale.setScalar(THREE.MathUtils.clamp((point.z + 5.8) / 8.4, 0.34, 1.12));
+      mesh.rotation.y = Math.sin(mesh.userData.pathT * Math.PI * 2) * 0.18;
+      mesh.scale.setScalar(THREE.MathUtils.clamp((point.z + 5.4) / 8.4, 0.52, 1.02));
     });
 
     raf = requestAnimationFrame(animate);
@@ -158,14 +197,10 @@ export default function SigArchiveGallery() {
         <canvas
           ref={canvasRef}
           className="sig-gallery__canvas"
-          aria-label="Scroll with the mouse wheel to travel through the 3D ribbon of ACM photographs"
+          aria-label="Scroll with the mouse wheel to zoom into and travel along the 3D ribbon of ACM photographs"
         />
-        <p className="sig-gallery__hint">SCROLL TO EXPLORE <span aria-hidden="true">/</span> ACM AMRITAPURI</p>
+        <p className="sig-gallery__hint">SCROLL TO RIDE <span aria-hidden="true">/</span> ACM AMRITAPURI</p>
       </div>
     </section>
   );
-}
-
-function groupSafeAdd(scene, mesh) {
-  scene.add(mesh);
 }
