@@ -67,9 +67,9 @@ export default function SpaceShooter() {
       ctx.save();
       ctx.translate(rock.x, rock.y);
       ctx.rotate(rock.rotation);
-      ctx.shadowColor = "rgba(98, 212, 232, .58)";
+      ctx.shadowColor = "rgba(244, 247, 250, .38)";
       ctx.shadowBlur = 5;
-      ctx.strokeStyle = "#62D4E8";
+      ctx.strokeStyle = "#F4F7FA";
       ctx.lineWidth = 2;
       ctx.beginPath();
       rock.points.forEach((point, index) => {
