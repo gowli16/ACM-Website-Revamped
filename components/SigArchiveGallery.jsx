@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 const galleryItems = [
@@ -17,61 +17,49 @@ const galleryItems = [
 ];
 
 const visibleCards = 4;
+const rotationInterval = 3200;
 
 export default function SigArchiveGallery() {
   const [stack, setStack] = useState(galleryItems);
 
-  const sendToBack = (draggedItem, info) => {
-    const distance = Math.abs(info.offset.x);
-    const speed = Math.abs(info.velocity.x);
-    if (distance < 65 && speed < 450) return;
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setStack((current) => [...current.slice(1), current[0]]);
+    }, rotationInterval);
 
-    setStack((current) => {
-      if (current[0]?.src !== draggedItem.src) return current;
-      return [...current.slice(1), current[0]];
-    });
-  };
+    return () => window.clearInterval(intervalId);
+  }, []);
 
   return (
-    <section className="sig-gallery" aria-label="ACM Amritapuri draggable photo stack">
+    <section className="sig-gallery" aria-label="ACM Amritapuri automatically rotating photo gallery">
       <div className="sig-gallery__stage">
         <div className="sig-gallery__stack">
           <AnimatePresence initial={false}>
-            {stack.slice(0, visibleCards).map((item, index) => {
-              const isTop = index === 0;
-              return (
-                <motion.figure
-                  className="sig-gallery__stack-card"
-                  key={item.src}
-                  drag={isTop ? "x" : false}
-                  dragDirectionLock
-                  dragMomentum={false}
-                  dragElastic={0.72}
-                  onDragEnd={(_, info) => sendToBack(item, info)}
-                  initial={{ opacity: 0, scale: 0.9, x: 38, rotate: 5 }}
-                  animate={{
-                    opacity: 1 - index * 0.13,
-                    scale: 1 - index * 0.045,
-                    x: index * 9,
-                    y: index * 8,
-                    rotate: index === 0 ? 0 : (index % 2 ? 3 : -3),
-                  }}
-                  exit={{
-                    x: 560,
-                    opacity: 0,
-                    rotate: 12,
-                    scale: 0.92,
-                    transition: { duration: 0.24, ease: "easeIn" },
-                  }}
-                  transition={{ type: "spring", stiffness: 260, damping: 25 }}
-                  style={{ zIndex: visibleCards - index, touchAction: isTop ? "pan-y" : "auto" }}
-                  whileDrag={isTop ? { scale: 1.035, rotate: 3, cursor: "grabbing" } : undefined}
-                  aria-label={isTop ? "Drag this image sideways to send it to the back of the stack" : item.name}
-                >
-                  <img src={item.src} alt={item.name} draggable="false" />
-                </motion.figure>
-              );
-            })}
+            {stack.slice(0, visibleCards).map((item, index) => (
+              <motion.figure
+                className="sig-gallery__stack-card"
+                key={item.src}
+                initial={{ opacity: 0, scale: 0.9, x: 38, rotate: 5 }}
+                animate={{
+                  opacity: 1 - index * 0.13,
+                  scale: 1 - index * 0.045,
+                  x: index * 9,
+                  y: index * 8,
+                  rotate: index === 0 ? 0 : (index % 2 ? 3 : -3),
+                }}
+                exit={{
+                  x: 560,
+                  opacity: 0,
+                  rotate: 12,
+                  scale: 0.92,
+                  transition: { duration: 0.42, ease: "easeInOut" },
+                }}
+                transition={{ type: "spring", stiffness: 210, damping: 24 }}
+                style={{ zIndex: visibleCards - index }}
+              >
+                <img src={item.src} alt={item.name} draggable="false" />
+              </motion.figure>
+            ))}
           </AnimatePresence>
         </div>
       </div>
