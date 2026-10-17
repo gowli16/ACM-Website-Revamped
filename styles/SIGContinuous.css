@@ -784,9 +784,9 @@
 .sig-gallery__title::after { display: block; width: 52px; height: 2px; margin: 13px auto 0; background: var(--sigc-cyan); content: ""; }
 .sig-gallery__columns { position: absolute; inset: 0 3.5% 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3.5vw, 56px); overflow: hidden; mask-image: linear-gradient(to bottom, transparent 0%, #000 9%, #000 91%, transparent 100%); }
 .sig-gallery__column { position: relative; height: 100%; overflow: hidden; }
-.sig-gallery__column-track { display: flex; flex-direction: column; gap: clamp(18px, 2.5vw, 36px); padding: 15vh 0; animation: sig-gallery-scroll-up 42s linear infinite; will-change: transform; }
-.sig-gallery__column--2 .sig-gallery__column-track { padding-top: 4vh; animation-name: sig-gallery-scroll-down; animation-duration: 48s; }
-.sig-gallery__column--3 .sig-gallery__column-track { animation-duration: 45s; }
+.sig-gallery__column-track { display: flex; flex-direction: column; gap: clamp(18px, 2.5vw, 36px); padding: 15vh 0; animation: sig-gallery-scroll-up 18s linear infinite; will-change: transform; }
+.sig-gallery__column--2 .sig-gallery__column-track { padding-top: 4vh; animation-name: sig-gallery-scroll-down; animation-duration: 22s; }
+.sig-gallery__column--3 .sig-gallery__column-track { animation-duration: 20s; }
 .sig-gallery__frame { flex: 0 0 auto; width: 100%; height: clamp(190px, 27vh, 310px); margin: 0; padding: 0; border: 0; border-radius: 2px; background: transparent; box-shadow: none; overflow: hidden; }
 .sig-gallery__frame img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; border: 0; border-radius: 2px; -webkit-user-drag: none; transition: transform .45s ease; }
 .sig-gallery__frame:hover img { transform: scale(1.035); }
@@ -806,8 +806,8 @@
   .sig-gallery__columns { inset: 15% 4% 7%; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .sig-gallery__column--3 { display: none; }
   .sig-gallery__frame { height: 175px; }
-  .sig-gallery__column-track { gap: 12px; animation-duration: 36s; }
-  .sig-gallery__column--2 .sig-gallery__column-track { animation-duration: 42s; }
+  .sig-gallery__column-track { gap: 12px; animation-duration: 16s; }
+  .sig-gallery__column--2 .sig-gallery__column-track { animation-duration: 19s; }
 }
 @media (prefers-reduced-motion: reduce) {
   .sig-gallery { height: auto; }
