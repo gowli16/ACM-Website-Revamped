@@ -213,9 +213,7 @@ export default function SigArchiveGallery() {
     <section className="sig-gallery" aria-label="ACM Amritapuri interactive photo journey">
       <div className="sig-gallery__stage">
         <div className="sig-gallery__intro" aria-hidden="true">
-          <span className="sig-gallery__eyebrow">ACM AMRITAPURI / ARCHIVE</span>
-          <h2 className="sig-gallery__title"><span>GALLERY</span><i /></h2>
-          <p>MEMORIES IN MOTION</p>
+          <h2 className="sig-gallery__title"><span>GALLERY</span></h2>
         </div>
         <canvas
           ref={canvasRef}
