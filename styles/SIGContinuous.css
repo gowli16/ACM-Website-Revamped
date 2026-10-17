@@ -916,6 +916,8 @@
 .sigc-glitch-game .sigc-shooter {
   position: relative;
   top: auto;
+  right: auto;
+  bottom: auto;
   left: auto;
   width: 100%;
   height: clamp(250px, 34vw, 430px);
