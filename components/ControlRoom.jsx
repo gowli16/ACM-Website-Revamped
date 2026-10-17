@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 const stars = [
   [4, 8, 1, 0.48], [9, 18, 1, 0.52], [16, 31, 1, 0.38],
   [23, 12, 2, 0.42], [29, 43, 1, 0.5], [35, 23, 1, 0.45],
@@ -14,23 +16,64 @@ const stars = [
   [91, 95, 1, 0.4],
 ];
 
-export default function ControlRoom() {
+function StarLayer({ depth, className }) {
   return (
-    <div className="sigc-space-background" aria-hidden="true">
-      <div className="sigc-starfield">
-        {stars.map(([left, top, size, opacity], index) => (
-          <span
-            key={index}
-            style={{
-              left: `${left}%`,
-              top: `${top}%`,
-              width: `${size}px`,
-              height: `${size}px`,
-              opacity,
-            }}
-          />
-        ))}
-      </div>
+    <div className={`sigc-starfield ${className}`} data-parallax-depth={depth}>
+      {stars.map(([left, top, size, opacity], index) => (
+        <span
+          key={index}
+          style={{
+            left: `${left}%`,
+            top: `${top}%`,
+            width: `${size}px`,
+            height: `${size}px`,
+            opacity,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+export default function ControlRoom() {
+  const backgroundRef = useRef(null);
+
+  useEffect(() => {
+    const background = backgroundRef.current;
+    if (!background) return undefined;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const layers = Array.from(background.querySelectorAll("[data-parallax-depth]"));
+    let frame = 0;
+
+    const updateParallax = () => {
+      frame = 0;
+      if (reducedMotion) return;
+      const scrollY = window.scrollY || 0;
+      layers.forEach((layer) => {
+        const depth = Number(layer.dataset.parallaxDepth) || 0;
+        layer.style.transform = `translate3d(0, ${scrollY * depth * -1}px, 0)`;
+      });
+    };
+
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateParallax);
+    };
+
+    updateParallax();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  return (
+    <div ref={backgroundRef} className="sigc-space-background" aria-hidden="true">
+      <StarLayer depth={0.018} className="sigc-starfield--distant" />
+      <StarLayer depth={0.055} className="sigc-starfield--near" />
+      <span className="sigc-shooting-star sigc-shooting-star--one" />
+      <span className="sigc-shooting-star sigc-shooting-star--two" />
     </div>
   );
 }
