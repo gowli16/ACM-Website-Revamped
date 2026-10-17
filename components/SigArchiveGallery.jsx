@@ -32,6 +32,7 @@ export default function SigArchiveGallery() {
   const sectionRef = useRef(null);
   const trackRef = useRef(null);
   const [progress, setProgress] = useState(0);
+  const [travelDistance, setTravelDistance] = useState(0);
 
   useEffect(() => {
     let frame = 0;
@@ -41,7 +42,7 @@ export default function SigArchiveGallery() {
         const section = sectionRef.current;
         const track = trackRef.current;
         if (!section || !track) return;
-        const available = Math.max(1, track.scrollWidth - window.innerWidth);
+        setTravelDistance(Math.max(0, track.scrollWidth - window.innerWidth));
         const distance = Math.max(1, section.offsetHeight - window.innerHeight);
         const travelled = Math.min(distance, Math.max(0, -section.getBoundingClientRect().top));
         setProgress(Math.min(1, travelled / distance));
@@ -65,7 +66,7 @@ export default function SigArchiveGallery() {
           <div
             ref={trackRef}
             className="sig-gallery__track"
-            style={{ transform: `translate3d(${-progress * Math.max(0, (photos.length * 310) - window.innerWidth)}px, 0, 0)` }}
+            style={{ transform: `translate3d(${-progress * travelDistance}px, 0, 0)` }}
           >
             {photos.map((photo, index) => (
               <figure className={`sig-gallery__frame sig-gallery__frame--${photo.shape}`} key={`${photo.src}-${index}`}>
