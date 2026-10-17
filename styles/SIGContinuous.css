@@ -238,21 +238,22 @@
 .sigc-shooter-heading h2 { margin:0; color:var(--sigc-paper); font-family:monospace; font-size:clamp(12px,1.1vw,15px); letter-spacing:.04em; }
 .sigc-shooter-score { display:grid; gap:3px; color:var(--sigc-muted); font:8px monospace; letter-spacing:.1em; text-align:right; }
 .sigc-shooter-score strong { color:var(--sigc-cyan); font-size:15px; }
-.sigc-shooter-controls { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:390px; }
-.sigc-shooter-controls button { min-height:30px; padding:0 9px; border:1px solid rgba(98,212,232,.38); color:var(--sigc-cyan); background:transparent; font:9px monospace; cursor:pointer; touch-action:manipulation; }
-.sigc-shooter-controls button:hover { border-color:var(--sigc-cyan); color:var(--sigc-paper); }
-.sigc-shooter-controls .sigc-shooter-fire { border-color:rgba(255,145,77,.7); color:var(--sigc-orange); }
-.sigc-shooter-help { display:flex; justify-content:space-between; gap:8px; margin:10px 0 0; color:var(--sigc-muted); font:8px monospace; letter-spacing:.04em; }
-.sigc-shooter-help span { color:var(--sigc-orange); }
+.sigc-shooter-instructions { margin-top:390px; color:var(--sigc-muted); font:10px/1.6 monospace; letter-spacing:.08em; text-transform:uppercase; }
+.sigc-shooter-instructions p { margin:0; min-height:17px; }
+.sigc-shooter-instructions p:first-child { color:var(--sigc-paper); }
+.sigc-shooter-instructions i { display:inline-block; width:6px; height:12px; margin-left:4px; vertical-align:-2px; background:var(--sigc-cyan); animation:sigc-type-caret .8s steps(1) infinite; }
+.sigc-shooter-fire-instruction { margin-top:7px !important; color:var(--sigc-orange); }
+.sigc-shooter-fire-instruction strong { color:var(--sigc-paper); border-bottom:1px solid var(--sigc-orange); padding:0 3px; }
+@keyframes sigc-type-caret { 50% { opacity:0; } }
 @media (max-width: 900px) {
   .sigc-shooter { left: calc((min(100vw - 36px, 1200px) - 100vw) / 2); height: 390px; }
   .sigc-shooter-interface { right: 5vw; width: min(300px, 36vw); }
-  .sigc-shooter-controls { margin-top: 310px; }
+  .sigc-shooter-instructions { margin-top: 310px; }
 }
 @media (max-width: 650px) {
   .sigc-shooter { top: auto; bottom: 18px; left: 0; height: 250px; transform: none; }
   .sigc-shooter-interface { top: 0; right: 18px; width: 210px; }
-  .sigc-shooter-controls { margin-top: 205px; }
+  .sigc-shooter-instructions { margin-top: 205px; font-size:8px; }
   .sigc-shooter-help { display: none; }
 }
 
