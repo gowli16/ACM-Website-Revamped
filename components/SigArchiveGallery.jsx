@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 const galleryItems = [
   { name: "Epochon 2.0 hackathon", src: "/assets/aiEvents/epochon 2.0.jpeg" },
@@ -15,101 +16,63 @@ const galleryItems = [
   { name: "Web SIG exploration", src: "/assets/webexplorations/5.jpeg" },
 ];
 
+const visibleCards = 4;
+
 export default function SigArchiveGallery() {
-  const stageRef = useRef(null);
-  const cardsRef = useRef([]);
+  const [stack, setStack] = useState(galleryItems);
 
-  useEffect(() => {
-    const stage = stageRef.current;
-    if (!stage) return;
+  const sendToBack = (draggedItem, info) => {
+    const distance = Math.abs(info.offset.x);
+    const speed = Math.abs(info.velocity.x);
+    if (distance < 65 && speed < 450) return;
 
-    const section = stage.closest(".sig-gallery");
-    let progress = 0;
-    let targetProgress = 0;
-    let frame = 0;
-    let isVisible = false;
-
-    const observer = new IntersectionObserver(([entry]) => {
-      isVisible = entry.isIntersecting;
-      if (entry.intersectionRatio >= 0.25) {
-        section?.classList.add("sig-gallery--entered");
-      }
-    }, { threshold: [0, 0.25, 0.6] });
-    observer.observe(section || stage);
-
-    const updateCards = () => {
-      progress += (targetProgress - progress) * 0.09;
-      cardsRef.current.forEach((card, index) => {
-        if (!card) return;
-        const offset = index - progress;
-        const abs = Math.abs(offset);
-        const visible = abs < 3.2;
-        const side = Math.sign(offset);
-        const x = offset * 39;
-        const y = Math.abs(offset) * 5.5;
-        const z = -abs * 150;
-        const rotateY = side * -27;
-        const rotateZ = side * (Math.min(abs, 2) * 2.8);
-        const scale = Math.max(0.58, 1 - abs * 0.13);
-        card.style.opacity = visible ? String(Math.max(0, 1 - abs * 0.27)) : "0";
-        card.style.visibility = visible ? "visible" : "hidden";
-        card.style.zIndex = String(100 - Math.round(abs * 10));
-        card.style.transform = `translate3d(calc(-50% + ${x}vw), calc(-50% + ${y}px), ${z}px) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg) scale(${scale})`;
-        card.style.pointerEvents = abs < 0.48 ? "auto" : "none";
-      });
-
-      frame = requestAnimationFrame(updateCards);
-    };
-
-    const onWheel = (event) => {
-      if (!isVisible || !stage.contains(event.target)) return;
-      const rect = stage.getBoundingClientRect();
-      if (rect.bottom <= 0 || rect.top >= window.innerHeight) return;
-
-      const direction = Math.sign(event.deltaY);
-      const atStart = targetProgress <= 0 && direction < 0;
-      const atEnd = targetProgress >= galleryItems.length - 1 && direction > 0;
-      if (atStart || atEnd) return;
-
-      event.preventDefault();
-      const delta = Math.max(-120, Math.min(120, event.deltaY));
-      targetProgress = Math.max(0, Math.min(galleryItems.length - 1, targetProgress + delta * 0.004));
-    };
-
-    const onKeyDown = (event) => {
-      if (!isVisible) return;
-      if (event.key === "ArrowDown" || event.key === "ArrowRight") {
-        targetProgress = Math.min(galleryItems.length - 1, targetProgress + 0.35);
-      } else if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
-        targetProgress = Math.max(0, targetProgress - 0.35);
-      }
-    };
-
-    window.addEventListener("wheel", onWheel, { passive: false });
-    window.addEventListener("keydown", onKeyDown);
-    frame = requestAnimationFrame(updateCards);
-
-    return () => {
-      observer.disconnect();
-      cancelAnimationFrame(frame);
-      window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, []);
+    setStack((current) => {
+      if (current[0]?.src !== draggedItem.src) return current;
+      return [...current.slice(1), current[0]];
+    });
+  };
 
   return (
-    <section className="sig-gallery" aria-label="ACM Amritapuri angled image gallery">
-      <div className="sig-gallery__stage" ref={stageRef}>
-        <div className="sig-gallery__angled-scene">
-          {galleryItems.map((item, index) => (
-            <figure
-              className="sig-gallery__angled-card"
-              key={item.src}
-              ref={(node) => { cardsRef.current[index] = node; }}
-            >
-              <img src={item.src} alt={item.name} draggable="false" />
-            </figure>
-          ))}
+    <section className="sig-gallery" aria-label="ACM Amritapuri draggable photo stack">
+      <div className="sig-gallery__stage">
+        <div className="sig-gallery__stack">
+          <AnimatePresence initial={false}>
+            {stack.slice(0, visibleCards).map((item, index) => {
+              const isTop = index === 0;
+              return (
+                <motion.figure
+                  className="sig-gallery__stack-card"
+                  key={item.src}
+                  drag={isTop ? "x" : false}
+                  dragDirectionLock
+                  dragMomentum={false}
+                  dragElastic={0.72}
+                  onDragEnd={(_, info) => sendToBack(item, info)}
+                  initial={{ opacity: 0, scale: 0.9, x: 38, rotate: 5 }}
+                  animate={{
+                    opacity: 1 - index * 0.13,
+                    scale: 1 - index * 0.045,
+                    x: index * 9,
+                    y: index * 8,
+                    rotate: index === 0 ? 0 : (index % 2 ? 3 : -3),
+                  }}
+                  exit={{
+                    x: 560,
+                    opacity: 0,
+                    rotate: 12,
+                    scale: 0.92,
+                    transition: { duration: 0.24, ease: "easeIn" },
+                  }}
+                  transition={{ type: "spring", stiffness: 260, damping: 25 }}
+                  style={{ zIndex: visibleCards - index, touchAction: isTop ? "pan-y" : "auto" }}
+                  whileDrag={isTop ? { scale: 1.035, rotate: 3, cursor: "grabbing" } : undefined}
+                  aria-label={isTop ? "Drag this image sideways to send it to the back of the stack" : item.name}
+                >
+                  <img src={item.src} alt={item.name} draggable="false" />
+                </motion.figure>
+              );
+            })}
+          </AnimatePresence>
         </div>
       </div>
     </section>
