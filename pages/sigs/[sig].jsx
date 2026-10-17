@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import ControlRoom from "../../components/ControlRoom";
+import SpaceShooter from "../../components/SpaceShooter";
 import Navbar from "../../components/Navbar";
 import SigArchiveGallery from "../../components/SigArchiveGallery";
 import SigSpaceExploration from "../../components/SigSpaceExploration";
@@ -429,6 +430,7 @@ export default function RecruitmentPage() {
               Enter operations <span aria-hidden="true">↓</span>
             </button>
           </div>
+          <SpaceShooter />
         </section>
 
         <div ref={galleryRef}>
