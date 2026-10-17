@@ -183,13 +183,6 @@ export default function SpaceShooter() {
     };
   }, [paused]);
 
-  const move = (direction, active) => {
-    gameRef.current.up = direction === "up" && active;
-    gameRef.current.down = direction === "down" && active;
-  };
-  const fire = () => {
-    if (!paused) gameRef.current.bullets.push({ x: WIDTH - 52, y: gameRef.current.shipY });
-  };
   const reset = () => {
     gameRef.current = { shipY: HEIGHT / 2, up: false, down: false, bullets: [], rocks: [], frame: 0, score: 0 };
     setScore(0);
@@ -201,10 +194,6 @@ export default function SpaceShooter() {
       <canvas ref={canvasRef} className="sigc-shooter-canvas" width={WIDTH} height={HEIGHT}
         aria-label="Asteroids travel from left to right. Use up and down arrow keys or W and S to move. Press space to fire." />
       <div className="sigc-shooter-interface">
-        <div className="sigc-shooter-heading">
-          <div><p className="sigc-eyebrow">ARCADE / 01</p><h2>ASTEROID DEFENCE</h2></div>
-          <span className="sigc-shooter-score">SCORE <strong>{score.toString().padStart(4, "0")}</strong></span>
-        </div>
         <div className="sigc-shooter-instructions" aria-live="polite">
           <p><span>{instruction}</span><i aria-hidden="true" /></p>
           <p className="sigc-shooter-fire-instruction">PRESS <strong>F</strong> TO FIRE</p>
