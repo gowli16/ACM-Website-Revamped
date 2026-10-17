@@ -3,7 +3,6 @@ import ControlRoom from "../../components/ControlRoom";
 import SpaceShooter from "../../components/SpaceShooter";
 import Navbar from "../../components/Navbar";
 import SigArchiveGallery from "../../components/SigArchiveGallery";
-import SigSpaceExploration from "../../components/SigSpaceExploration";
 import { ai } from "../../data/sigs/ai";
 import { web } from "../../data/sigs/web";
 import { cyber } from "../../data/sigs/cyber";
@@ -435,11 +434,6 @@ export default function RecruitmentPage() {
         <div ref={galleryRef}>
           <SigArchiveGallery />
         </div>
-
-        <SigSpaceExploration
-          galleryRef={galleryRef}
-          onPlanetChange={setActiveSigId}
-        />
 
         <div className="sigc-sequence-heading">
           <p className="sigc-eyebrow">MISSION SEQUENCE</p>
