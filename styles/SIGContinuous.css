@@ -1466,3 +1466,70 @@
     display: none;
   }
 }
+
+
+/* Draggable photo stack used beside the SIG welcome copy. */
+.sigc-intro {
+  grid-template-columns: minmax(0, 1.05fr) minmax(300px, 0.95fr);
+  gap: clamp(28px, 5vw, 76px);
+}
+.sigc-intro-gallery {
+  width: 100%;
+  min-width: 0;
+}
+.sigc-intro-gallery .sig-gallery,
+.sigc-intro-gallery .sig-gallery__stage {
+  width: 100%;
+  height: clamp(340px, 48vw, 520px);
+  min-height: 340px;
+  overflow: visible;
+}
+.sig-gallery__stack {
+  position: relative;
+  width: min(100%, 440px);
+  height: 100%;
+  margin: 0 auto;
+  perspective: 1000px;
+}
+.sig-gallery__stack-card {
+  position: absolute;
+  inset: 5% 3%;
+  margin: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.38);
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
+}
+.sig-gallery__stack-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+.sig-gallery__stack-card:not(:first-child) {
+  cursor: default;
+}
+@media (max-width: 850px) {
+  .sigc-intro {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+  .sigc-intro-gallery {
+    width: min(100%, 500px);
+    margin: 8px auto 0;
+  }
+  .sigc-intro-gallery .sig-gallery,
+  .sigc-intro-gallery .sig-gallery__stage {
+    height: clamp(300px, 75vw, 390px);
+    min-height: 300px;
+  }
+}
