@@ -40,6 +40,19 @@ export default function SigArchiveGallery() {
 
     // Keep the SIG shortcut rail out of the opening/landing view.
     const gallerySection = canvas.closest(".sig-gallery");
+    let galleryObserver;
+    if (gallerySection && "IntersectionObserver" in window) {
+      galleryObserver = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.25)) {
+          gallerySection.classList.add("sig-gallery--entered");
+          galleryObserver.disconnect();
+        }
+      }, { threshold: [0.25] });
+      galleryObserver.observe(gallerySection);
+    } else {
+      gallerySection?.classList.add("sig-gallery--entered");
+    }
+
     const updateMissionRail = () => {
       const rail = document.querySelector(".sigc-mission-nav");
       if (!gallerySection || !rail) return;
@@ -196,6 +209,7 @@ export default function SigArchiveGallery() {
 
     return () => {
       cancelAnimationFrame(raf);
+      galleryObserver?.disconnect();
       window.removeEventListener("resize", resize);
       window.removeEventListener("scroll", updateMissionRail);
       window.removeEventListener("resize", updateMissionRail);
