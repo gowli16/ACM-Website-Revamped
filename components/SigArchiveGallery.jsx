@@ -57,7 +57,7 @@ export default function SigArchiveGallery() {
         card.style.opacity = visible ? String(Math.max(0, 1 - abs * 0.27)) : "0";
         card.style.visibility = visible ? "visible" : "hidden";
         card.style.zIndex = String(100 - Math.round(abs * 10));
-        card.style.transform = \`translate3d(calc(-50% + \${x}vw), calc(-50% + \${y}px), \${z}px) rotateY(\${rotateY}deg) rotateZ(\${rotateZ}deg) scale(\${scale})\`;
+        card.style.transform = `translate3d(calc(-50% + ${x}vw), calc(-50% + ${y}px), ${z}px) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg) scale(${scale})`;
         card.style.pointerEvents = abs < 0.48 ? "auto" : "none";
       });
 
