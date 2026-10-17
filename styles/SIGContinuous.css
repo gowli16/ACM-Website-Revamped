@@ -1533,3 +1533,164 @@
     min-height: 300px;
   }
 }
+
+
+/* Animated Areas of Practice cards: restrained motion, clear hierarchy, no neon glow. */
+.sigc-record-grid-domains {
+  gap: 14px;
+  perspective: 1100px;
+}
+
+.sigc-record-grid-domains .sigc-record {
+  --domain-index: 0;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 178px;
+  padding: clamp(19px, 2vw, 27px);
+  border: 1px solid rgba(145, 169, 184, 0.2);
+  border-radius: 3px;
+  background:
+    linear-gradient(125deg, rgba(244, 247, 250, 0.035), transparent 52%),
+    rgba(10, 29, 44, 0.88);
+  transform: translateY(22px) rotateX(2deg);
+  opacity: 0;
+  animation: domain-card-enter 720ms cubic-bezier(.2,.75,.25,1) forwards;
+  animation-delay: calc(var(--domain-index) * 95ms);
+  transition:
+    transform 360ms cubic-bezier(.2,.75,.25,1),
+    border-color 300ms ease,
+    background-color 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.sigc-record-grid-domains .sigc-record:nth-child(1) { --domain-index: 0; }
+.sigc-record-grid-domains .sigc-record:nth-child(2) { --domain-index: 1; }
+.sigc-record-grid-domains .sigc-record:nth-child(3) { --domain-index: 2; }
+.sigc-record-grid-domains .sigc-record:nth-child(4) { --domain-index: 3; }
+.sigc-record-grid-domains .sigc-record:nth-child(5) { --domain-index: 4; }
+.sigc-record-grid-domains .sigc-record:nth-child(6) { --domain-index: 5; }
+.sigc-record-grid-domains .sigc-record:nth-child(7) { --domain-index: 6; }
+.sigc-record-grid-domains .sigc-record:nth-child(8) { --domain-index: 7; }
+
+.sigc-record-grid-domains .sigc-record::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: #D0D4D7;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 360ms cubic-bezier(.2,.75,.25,1);
+}
+
+.sigc-record-grid-domains .sigc-record::after {
+  content: "";
+  position: absolute;
+  top: -80%;
+  left: -45%;
+  width: 34%;
+  height: 260%;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(244,247,250,.055), transparent);
+  transform: translateX(-180%) rotate(18deg);
+  transition: transform 700ms cubic-bezier(.2,.75,.25,1);
+}
+
+.sigc-record-grid-domains .sigc-record:hover {
+  z-index: 2;
+  border-color: rgba(208, 212, 215, 0.58);
+  background-color: rgba(14, 35, 51, 0.98);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.2);
+  transform: translateY(-6px) rotateX(0deg);
+}
+
+.sigc-record-grid-domains .sigc-record:hover::before,
+.sigc-record-grid-domains .sigc-record:focus-within::before {
+  transform: scaleY(1);
+  transform-origin: top;
+}
+
+.sigc-record-grid-domains .sigc-record:hover::after {
+  transform: translateX(520%) rotate(18deg);
+}
+
+.sigc-record-grid-domains .sigc-record h4 {
+  position: relative;
+  width: fit-content;
+  margin-bottom: 12px;
+  font-size: clamp(15px, 1.2vw, 18px);
+  letter-spacing: -0.025em;
+  transition: transform 300ms ease, color 300ms ease;
+}
+
+.sigc-record-grid-domains .sigc-record:hover h4 {
+  transform: translateX(4px);
+  color: #FFFFFF;
+}
+
+.sigc-record-grid-domains .sigc-record p {
+  font-size: 13px;
+  line-height: 1.8;
+  transition: color 300ms ease;
+}
+
+.sigc-record-grid-domains .sigc-tags {
+  gap: 7px;
+  margin-top: 17px;
+}
+
+.sigc-record-grid-domains .sigc-tags li {
+  border-radius: 2px;
+  transition:
+    color 220ms ease,
+    border-color 220ms ease,
+    background-color 220ms ease,
+    transform 220ms ease;
+}
+
+.sigc-record-grid-domains .sigc-record:hover .sigc-tags li {
+  border-color: rgba(208, 212, 215, 0.48);
+  background: rgba(208, 212, 215, 0.06);
+}
+
+.sigc-record-grid-domains .sigc-tags li:hover {
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+
+@keyframes domain-card-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(22px) rotateX(2deg);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-3px) rotateX(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sigc-record-grid-domains .sigc-record {
+    opacity: 1;
+    transform: none;
+    animation: none;
+    transition: none;
+  }
+  .sigc-record-grid-domains .sigc-record::before,
+  .sigc-record-grid-domains .sigc-record::after {
+    transition: none;
+  }
+  .sigc-record-grid-domains .sigc-record:hover,
+  .sigc-record-grid-domains .sigc-record:hover h4,
+  .sigc-record-grid-domains .sigc-tags li:hover {
+    transform: none;
+  }
+}
