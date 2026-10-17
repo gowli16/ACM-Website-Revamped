@@ -865,7 +865,7 @@
 }
 @keyframes sig-gallery-type {
   from { width: 0; }
-  to { width: 7ch; }
+  to { width: 8.5ch; }
 }
 @keyframes sig-gallery-caret {
   50% { border-color: transparent; }
@@ -904,7 +904,7 @@
   .sig-gallery__hint { width: 94%; white-space: normal; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .sig-gallery__title span { width: 7ch; animation: none; border-right: 0; }
+  .sig-gallery__title span { width: 8.5ch; animation: none; border-right: 0; }
   .sig-gallery__eyebrow, .sig-gallery__intro > p { opacity: 1; animation: none; }
   .sig-gallery__title i { width: 54px; animation: none; }
   .sig-gallery__hint { animation: none; }
