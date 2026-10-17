@@ -18,10 +18,11 @@ const galleryItems = [
 
 function ribbonPoint(t) {
   const a = t * Math.PI * 2;
+  // A near-circular track with a gentle rise and dip for a roller-coaster feel.
   return new THREE.Vector3(
-    Math.sin(a) * 7.2,
-    Math.sin(a * 2) * 2.1,
-    Math.cos(a) * 4.5
+    Math.sin(a) * 6.6,
+    Math.sin(a * 2) * 1.25,
+    Math.cos(a) * 6.6
   );
 }
 
@@ -168,7 +169,7 @@ export default function SigArchiveGallery() {
       camera.position.lerpVectors(overviewPosition, desiredCamera, rideBlend);
       lookAtPoint.set(0, 0, 0).lerp(desiredLook, rideBlend);
       camera.lookAt(lookAtPoint);
-      camera.rotation.z += Math.sin(rideT * Math.PI * 6) * rideBlend * 0.0015;
+      camera.rotation.z = Math.sin(rideT * Math.PI * 4) * rideBlend * 0.018;
 
       cards.forEach((mesh, index) => {
         const t = mesh.userData.pathT;
