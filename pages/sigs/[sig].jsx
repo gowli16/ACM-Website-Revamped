@@ -435,11 +435,6 @@ export default function RecruitmentPage() {
           <SigArchiveGallery />
         </div>
 
-        <div className="sigc-sequence-heading">
-          <p className="sigc-eyebrow">MISSION SEQUENCE</p>
-          <p>Explore the work, the people, and the paths forward.</p>
-        </div>
-
         {missions.map((mission) => (
           <MissionContent key={mission.id} mission={mission} />
         ))}
