@@ -316,7 +316,30 @@ function MissionContent({ mission }) {
 }
 
 export default function RecruitmentPage() {
+  const [typedHeading, setTypedHeading] = useState("");
   const [activeSigId, setActiveSigId] = useState("ai");
+
+  useEffect(() => {
+    const fullHeading = "WELCOME TO OUR SIGs.";
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      setTypedHeading(fullHeading);
+      return undefined;
+    }
+
+    let index = 0;
+    let timeoutId;
+    const typeNextCharacter = () => {
+      index += 1;
+      setTypedHeading(fullHeading.slice(0, index));
+      if (index < fullHeading.length) {
+        timeoutId = window.setTimeout(typeNextCharacter, 95);
+      }
+    };
+
+    timeoutId = window.setTimeout(typeNextCharacter, 220);
+    return () => window.clearTimeout(timeoutId);
+  }, []);
   const galleryRef = useRef(null);
   const pendingMissionRef = useRef(null);
   const pendingMissionTimeoutRef = useRef(null);
@@ -389,7 +412,16 @@ export default function RecruitmentPage() {
         <section className="sigc-intro" id="sigc-intro" aria-labelledby="sigc-intro-title">
           <div className="sigc-intro-copy">
             <p className="sigc-eyebrow">ACM AMRITAPURI <span>/</span> SPECIAL INTEREST GROUPS</p>
-            <h1 id="sigc-intro-title">Ideas become<br /><span>systems.</span></h1>
+            <h1 id="sigc-intro-title" aria-label="WELCOME TO OUR SIGs.">
+              {typedHeading.length <= 7 ? (
+                <>{typedHeading}<span className="sigc-typing-cursor" aria-hidden="true" /></>
+              ) : (
+                <>
+                  WELCOME<br />
+                  <span>{typedHeading.slice(8)}</span><span className="sigc-typing-cursor" aria-hidden="true" />
+                </>
+              )}
+            </h1>
             <p className="sigc-intro-summary">
               Four student communities. One shared workspace for learning, research, and building technology together.
             </p>
