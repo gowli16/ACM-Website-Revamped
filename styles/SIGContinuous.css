@@ -182,6 +182,7 @@
 }
 
 .sigc-intro {
+  position: relative;
   display: grid;
   width: min(1200px, calc(100% - 72px));
   min-height: min(850px, 100svh);
@@ -194,6 +195,8 @@
 }
 
 .sigc-intro-copy {
+  position: relative;
+  z-index: 2;
   max-width: 690px;
 }
 
