@@ -238,7 +238,7 @@
 .sigc-shooter-heading h2 { margin:0; color:var(--sigc-paper); font-family:monospace; font-size:clamp(12px,1.1vw,15px); letter-spacing:.04em; }
 .sigc-shooter-score { display:grid; gap:3px; color:var(--sigc-muted); font:8px monospace; letter-spacing:.1em; text-align:right; }
 .sigc-shooter-score strong { color:var(--sigc-cyan); font-size:15px; }
-.sigc-shooter-instructions { margin-top:390px; color:var(--sigc-muted); font:10px/1.6 monospace; letter-spacing:.08em; text-transform:uppercase; }
+.sigc-shooter-instructions { margin-top:0; color:var(--sigc-muted); font:10px/1.6 monospace; letter-spacing:.08em; text-transform:uppercase; }
 .sigc-shooter-instructions p { margin:0; min-height:17px; }
 .sigc-shooter-instructions p:first-child { color:var(--sigc-paper); }
 .sigc-shooter-instructions i { display:inline-block; width:6px; height:12px; margin-left:4px; vertical-align:-2px; background:var(--sigc-cyan); animation:sigc-type-caret .8s steps(1) infinite; }
@@ -248,12 +248,12 @@
 @media (max-width: 900px) {
   .sigc-shooter { left: calc((min(100vw - 36px, 1200px) - 100vw) / 2); height: 390px; }
   .sigc-shooter-interface { right: 5vw; width: min(300px, 36vw); }
-  .sigc-shooter-instructions { margin-top: 310px; }
+  .sigc-shooter-instructions { margin-top: 0; }
 }
 @media (max-width: 650px) {
   .sigc-shooter { top: auto; bottom: 18px; left: 0; height: 250px; transform: none; }
   .sigc-shooter-interface { top: 0; right: 18px; width: 210px; }
-  .sigc-shooter-instructions { margin-top: 205px; font-size:8px; }
+  .sigc-shooter-instructions { margin-top: 0; font-size:8px; }
   .sigc-shooter-help { display: none; }
 }
 
