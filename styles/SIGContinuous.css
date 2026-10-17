@@ -41,10 +41,73 @@
   inset: 0;
 }
 
-.sigc-starfield span {
-  position: absolute;
-  display: block;
+.sigc-starfield {
+  will-change: transform;
+}
+
+.sigc-starfield--distant span {
+  background: #AFC5D4;
+}
+
+.sigc-starfield--near span {
   background: var(--sigc-paper);
+}
+
+.sigc-starfield--near span:nth-child(4n) {
+  background: var(--sigc-cyan);
+  box-shadow: 0 0 5px rgba(98, 212, 232, 0.24);
+}
+
+.sigc-shooting-star {
+  position: absolute;
+  top: 12%;
+  left: -24%;
+  width: 110px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(98, 212, 232, 0.9), #F4F7FA);
+  transform: rotate(-28deg);
+  transform-origin: right center;
+  animation: sigc-shooting-star 11s linear infinite;
+}
+
+.sigc-shooting-star--one {
+  top: 19%;
+  animation-delay: 2.5s;
+}
+
+.sigc-shooting-star--two {
+  top: 58%;
+  width: 76px;
+  animation-delay: 7.5s;
+  animation-duration: 13s;
+}
+
+@keyframes sigc-shooting-star {
+  0%, 72%, 100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) rotate(-28deg);
+  }
+  74% {
+    opacity: 0.85;
+  }
+  80% {
+    opacity: 0;
+    transform: translate3d(145vw, 36vh, 0) rotate(-28deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sigc-starfield {
+    transform: none !important;
+    will-change: auto;
+  }
+
+  .sigc-shooting-star {
+    display: none;
+    animation: none;
+  }
 }
 
 .sigc-mission-nav {
