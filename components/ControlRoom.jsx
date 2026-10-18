@@ -86,6 +86,9 @@ export default function ControlRoom() {
     <div ref={backgroundRef} className="sigc-space-background" aria-hidden="true">
       <StarLayer depth={0.018} className="sigc-starfield--distant" />
       <StarLayer depth={0.055} className="sigc-starfield--near" />
+      <div className="sigc-shooting-stars" aria-hidden="true">
+        <span /><span /><span /><span /><span />
+      </div>
     </div>
   );
 }
