@@ -2299,3 +2299,46 @@
     transform: none;
   }
 }
+
+
+/* Expand the neural network edge-to-edge and slow the left-to-right build. */
+.sigc-mission[data-sigc-mission="ai"] {
+  position: relative;
+  isolation: isolate;
+}
+.sigc-mission[data-sigc-mission="ai"] > .sigc-neural-bg {
+  position: absolute;
+  z-index: 0;
+  inset: 0 auto auto 50%;
+  width: 100vw;
+  max-width: none;
+  height: min(100vh, 900px);
+  min-height: 600px;
+  transform: translateX(-50%);
+  opacity: 0.3;
+  mask-image: linear-gradient(to bottom, #000 0%, #000 76%, transparent 100%);
+}
+.sigc-mission[data-sigc-mission="ai"] > .sigc-mission-marker,
+.sigc-mission[data-sigc-mission="ai"] > .sigc-mission-inner {
+  position: relative;
+  z-index: 1;
+}
+.sigc-mission[data-sigc-mission="ai"] > .sigc-neural-bg {
+  z-index: -1;
+}
+.sigc-neural-link {
+  animation-duration: 1150ms;
+}
+.sigc-neural-node {
+  animation-duration: 780ms;
+}
+@media (max-width: 700px) {
+  .sigc-mission[data-sigc-mission="ai"] > .sigc-neural-bg {
+    inset: 0 auto auto 50%;
+    width: 150vw;
+    height: 78vh;
+    min-height: 520px;
+    transform: translateX(-50%);
+    opacity: 0.22;
+  }
+}
