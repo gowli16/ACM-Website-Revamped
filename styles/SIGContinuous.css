@@ -1621,7 +1621,7 @@
 /* A short launch across the viewport when switching between SIG destinations. */
 .sigc-rocket-transition {
   position: fixed;
-  z-index: 120;
+  z-index: 9999;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
@@ -1632,7 +1632,7 @@
   position: absolute;
   top: 50%;
   left: -90px;
-  width: clamp(48px, 6vw, 76px);
+  width: clamp(64px, 7vw, 92px);
   height: auto;
   filter: drop-shadow(0 0 10px rgba(221, 228, 232, 0.16));
   transform: translateY(-50%) rotate(45deg);
@@ -1643,8 +1643,8 @@
   position: absolute;
   top: 50%;
   left: -22vw;
-  width: 24vw;
-  height: 2px;
+  width: 32vw;
+  height: 3px;
   background: linear-gradient(90deg, transparent, rgba(255, 145, 77, 0.1), rgba(221, 228, 232, 0.72));
   transform: translateY(-50%) rotate(-31deg);
   transform-origin: right center;
@@ -1652,15 +1652,15 @@
 }
 
 @keyframes sigc-rocket-crossing {
-  0% { left: -90px; top: 76%; opacity: 0; }
-  12% { opacity: 1; }
-  52% { top: 42%; }
-  100% { left: calc(100vw + 100px); top: 18%; opacity: 0; }
+  0% { left: -110px; top: 78%; opacity: 0; }
+  10% { opacity: 1; }
+  48% { top: 43%; }
+  100% { left: calc(100vw + 120px); top: 12%; opacity: 0; }
 }
 
 @keyframes sigc-rocket-trail {
-  0% { left: -24vw; opacity: 0; }
-  15% { opacity: 0.8; }
+  0% { left: -32vw; opacity: 0; }
+  12% { opacity: 0.95; }
   100% { left: 100vw; opacity: 0; }
 }
 
