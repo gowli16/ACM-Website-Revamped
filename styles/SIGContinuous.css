@@ -2870,3 +2870,42 @@
     transform: scale(1.12);
   }
 }
+
+
+/* AI network begins beneath the overview copy and continues through the space before Domains. */
+.sigc-mission[data-sigc-mission="ai"] .sigc-mission-header {
+  overflow: visible;
+  z-index: 0;
+}
+.sigc-mission[data-sigc-mission="ai"] .sigc-mission-header > .sigc-neural-bg {
+  position: absolute;
+  z-index: -1;
+  top: 175px;
+  bottom: -650px;
+  left: 50%;
+  right: auto;
+  width: 100vw;
+  height: auto;
+  min-height: 0;
+  max-width: none;
+  inset-inline: auto;
+  transform: translateX(-50%);
+  opacity: 0.34;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 5%, #000 94%, transparent 100%);
+  pointer-events: none;
+}
+.sigc-mission[data-sigc-mission="ai"] .sigc-mission-header > .sigc-neural-bg .sigc-neural-bg__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: none;
+}
+@media (max-width: 700px) {
+  .sigc-mission[data-sigc-mission="ai"] .sigc-mission-header > .sigc-neural-bg {
+    top: 190px;
+    bottom: -480px;
+    width: 100vw;
+    opacity: 0.24;
+  }
+}
