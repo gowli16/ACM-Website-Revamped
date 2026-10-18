@@ -2568,3 +2568,47 @@
     display: none;
   }
 }
+
+
+/* Make the Glitch title distortion clearly visible, with several short bursts per cycle. */
+.sigc-mission[data-sigc-mission="glitch"] .sigc-mission-header h2.sigc-glitch-title {
+  text-shadow: 2px 0 rgba(255, 145, 77, 0.24), -2px 0 rgba(145, 169, 184, 0.22);
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title::before {
+  color: var(--sigc-orange);
+  clip-path: inset(5% 0 72% 0);
+  animation: sigc-glitch-channel-warm 3.2s steps(1, end) infinite;
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title::after {
+  color: var(--sigc-muted);
+  clip-path: inset(56% 0 10% 0);
+  animation: sigc-glitch-channel-cool 3.2s steps(1, end) infinite;
+}
+@keyframes sigc-glitch-channel-warm {
+  0%, 59%, 63%, 78%, 82%, 100% { opacity: 0; transform: translateX(0); }
+  60% { opacity: 1; transform: translateX(7px) skewX(-2deg); clip-path: inset(8% 0 68% 0); }
+  61% { opacity: .85; transform: translateX(-5px); clip-path: inset(38% 0 45% 0); }
+  62% { opacity: .95; transform: translateX(4px); clip-path: inset(72% 0 8% 0); }
+  79% { opacity: .9; transform: translateX(-6px); clip-path: inset(22% 0 58% 0); }
+  80% { opacity: .75; transform: translateX(3px); clip-path: inset(60% 0 20% 0); }
+  81% { opacity: .95; transform: translateX(5px); }
+}
+@keyframes sigc-glitch-channel-cool {
+  0%, 59%, 63%, 78%, 82%, 100% { opacity: 0; transform: translateX(0); }
+  60% { opacity: .9; transform: translateX(-7px) skewX(2deg); clip-path: inset(48% 0 28% 0); }
+  61% { opacity: .7; transform: translateX(5px); clip-path: inset(10% 0 70% 0); }
+  62% { opacity: .9; transform: translateX(-4px); clip-path: inset(64% 0 12% 0); }
+  79% { opacity: .85; transform: translateX(6px); clip-path: inset(52% 0 30% 0); }
+  80% { opacity: .8; transform: translateX(-3px); clip-path: inset(18% 0 62% 0); }
+  81% { opacity: .9; transform: translateX(-5px); }
+}
+
+/* The pinned Domains scene should advance briskly instead of leaving a long blank scroll tail. */
+.sigc-domain-scroll-stage {
+  height: max(100svh, calc(var(--sigc-domain-count, 5) * 30svh)) !important;
+}
+@media (max-width: 700px) {
+  .sigc-domain-scroll-stage {
+    height: max(100svh, calc(var(--sigc-domain-count, 5) * 36svh)) !important;
+  }
+}
