@@ -2612,3 +2612,83 @@
     height: max(100svh, calc(var(--sigc-domain-count, 5) * 36svh)) !important;
   }
 }
+
+
+/* Actual character-scramble glitch for Glitch Gaming, using the site's navy, orange and slate palette. */
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title {
+  position: relative;
+  display: inline-grid;
+  isolation: isolate;
+  vertical-align: baseline;
+  color: inherit;
+  text-shadow: none;
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title::before,
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title::after {
+  content: none !important;
+  display: none !important;
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title__reserve {
+  grid-area: 1 / 1;
+  visibility: hidden;
+  white-space: pre;
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title__main,
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title__channel {
+  grid-area: 1 / 1;
+  white-space: pre;
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title__main {
+  position: relative;
+  z-index: 2;
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title__channel {
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title__channel--warm {
+  color: var(--sigc-orange, #FF914D);
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title__channel--cool {
+  color: var(--sigc-muted, #91A9B8);
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title.is-glitching .sigc-glitch-title__main {
+  animation: sigc-glitch-main-jitter 110ms steps(2, end) infinite;
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title.is-glitching .sigc-glitch-title__channel--warm {
+  opacity: .92;
+  transform: translateX(5px);
+  clip-path: inset(7% 0 66% 0);
+  animation: sigc-glitch-warm-slice 110ms steps(2, end) infinite;
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title.is-glitching .sigc-glitch-title__channel--cool {
+  opacity: .9;
+  transform: translateX(-4px);
+  clip-path: inset(53% 0 16% 0);
+  animation: sigc-glitch-cool-slice 130ms steps(2, end) infinite;
+}
+@keyframes sigc-glitch-main-jitter {
+  0% { transform: translate(0); }
+  50% { transform: translate(1px, -1px); }
+  100% { transform: translate(-1px, 1px); }
+}
+@keyframes sigc-glitch-warm-slice {
+  0% { clip-path: inset(5% 0 76% 0); transform: translateX(6px); }
+  50% { clip-path: inset(36% 0 40% 0); transform: translateX(-3px); }
+  100% { clip-path: inset(72% 0 7% 0); transform: translateX(4px); }
+}
+@keyframes sigc-glitch-cool-slice {
+  0% { clip-path: inset(58% 0 12% 0); transform: translateX(-5px); }
+  50% { clip-path: inset(14% 0 65% 0); transform: translateX(3px); }
+  100% { clip-path: inset(40% 0 36% 0); transform: translateX(-4px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title__channel,
+  .sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title.is-glitching .sigc-glitch-title__main {
+    animation: none;
+    opacity: 0;
+    transform: none;
+  }
+}
