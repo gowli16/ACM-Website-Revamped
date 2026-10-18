@@ -2743,7 +2743,43 @@
   text-shadow: 0 2px 24px rgba(3, 11, 23, 0.9);
 }
 .sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title-game-background .sigc-shooter-interface {
-  display: none;
+  display: block;
+  top: auto;
+  right: clamp(18px, 5vw, 72px);
+  bottom: 24px;
+  width: min(250px, 27vw);
+  padding: 13px 15px;
+  border: 1px solid rgba(98, 212, 232, 0.38);
+  background: rgba(3, 11, 23, 0.82);
+  box-shadow: 0 0 24px rgba(98, 212, 232, 0.08);
+  backdrop-filter: blur(5px);
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title-game-background .sigc-shooter-instructions {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  color: #D7EAF2;
+  font: 10px/1.5 monospace;
+  letter-spacing: 0.1em;
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title-game-background .sigc-shooter-instructions p {
+  min-height: 0;
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title-game-background .sigc-shooter-instructions p:first-child {
+  color: #D7EAF2;
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title-game-background .sigc-shooter-move-instruction strong,
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title-game-background .sigc-shooter-fire-instruction strong {
+  color: #62D4E8;
+  font-size: 12px;
+}
+@media (max-width: 650px) {
+  .sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title-game-background .sigc-shooter-interface {
+    right: 12px;
+    bottom: 12px;
+    width: 190px;
+    padding: 10px;
+  }
 }
 @media (max-width: 650px) {
   .sigc-mission[data-sigc-mission="glitch"] .sigc-mission-header {
