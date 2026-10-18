@@ -1815,3 +1815,66 @@
   .sigc-domain-topic, .sigc-domain-topic::before, .sigc-domain-arrow, .sigc-domain-progress span { transition: none; }
   .sigc-domain-detail h4, .sigc-domain-description, .sigc-domain-tools { animation: none; }
 }
+
+
+/* Floating-in-space domain explorer: no cards, panels, or directional arrows. */
+.sigc-domain-section {
+  border: 0;
+  background: transparent;
+}
+.sigc-domain-section > .sigc-section-heading {
+  max-width: none;
+  margin: 0 auto 28px;
+  text-align: center;
+}
+.sigc-domain-section > .sigc-section-heading h3 {
+  margin: 0;
+  color: var(--sigc-paper);
+  font-size: clamp(32px, 4.5vw, 52px);
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  text-align: center;
+}
+.sigc-domain-explorer {
+  background: transparent;
+}
+.sigc-domain-topic {
+  background: transparent !important;
+}
+.sigc-domain-topic.is-active {
+  padding-left: 16px;
+  background: transparent !important;
+}
+.sigc-domain-topic::before {
+  display: none;
+}
+.sigc-domain-arrow {
+  display: none !important;
+}
+.sigc-domain-detail {
+  min-height: 280px;
+  border: 0;
+  border-top: 1px solid var(--sigc-rule);
+  background: transparent;
+  padding: 28px 8px;
+}
+.sigc-domain-detail > .sigc-eyebrow {
+  color: var(--sigc-orange);
+  letter-spacing: 0.14em;
+}
+.sigc-domain-progress {
+  background: rgba(145, 169, 184, 0.18);
+}
+@media (max-width: 700px) {
+  .sigc-domain-section > .sigc-section-heading {
+    margin-bottom: 18px;
+    text-align: center;
+  }
+  .sigc-domain-detail {
+    padding: 20px 8px;
+    border-top: 1px solid var(--sigc-rule);
+  }
+  .sigc-domain-topic.is-active {
+    padding-left: 10px;
+  }
+}
