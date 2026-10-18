@@ -2414,3 +2414,14 @@
     min-height: 680px;
   }
 }
+
+
+/* Nudge the neural graphic right so its outer neuron columns have balanced margins. */
+.sigc-mission[data-sigc-mission="ai"] > .sigc-neural-bg {
+  transform: translateX(calc(-50% + clamp(40px, 5vw, 94px)));
+}
+@media (max-width: 700px) {
+  .sigc-mission[data-sigc-mission="ai"] > .sigc-neural-bg {
+    transform: translateX(calc(-50% + 4vw));
+  }
+}
