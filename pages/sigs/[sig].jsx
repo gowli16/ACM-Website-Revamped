@@ -165,7 +165,7 @@ function DomainExplorer({ mission }) {
       style={{ "--sigc-domain-count": domains.length }}
     >
       <div className="sigc-domain-scroll-screen">
-        <SectionHeading title="Domains" description={mission.data.domainsDescription} />
+        <SectionHeading title="Domains" />
         <div className="sigc-domain-explorer">
           <div className="sigc-domain-list" aria-label="Domain topics">
             {domains.map((domain, index) => {
@@ -188,7 +188,6 @@ function DomainExplorer({ mission }) {
             })}
           </div>
           <aside className="sigc-domain-detail" aria-live="polite" aria-atomic="true">
-            <p className="sigc-eyebrow">DOMAIN / {String(activeIndex + 1).padStart(2, "0")}</p>
             <h4 key={activeValues[0]}>{activeValues[0]}</h4>
             <p className="sigc-domain-description">{activeValues[1]}</p>
             {activeTags.length > 0 && (
