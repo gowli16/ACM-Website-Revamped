@@ -1932,3 +1932,71 @@
     padding: 20px 8px;
   }
 }
+
+
+/* Space-first treatment across the SIG page: content floats over the starfield. */
+.sigc-page-content :is(
+  .sigc-record,
+  .sigc-structured-item,
+  .sigc-structured-grid,
+  .sigc-domain-detail,
+  .sigc-contact,
+  .sigc-glitch-game,
+  .sigc-briefing-list li,
+  .sigc-record-grid,
+  .sigc-content-section,
+  .sigc-mission-inner
+) {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.sigc-page-content :is(
+  .sigc-record,
+  .sigc-structured-item,
+  .sigc-domain-detail,
+  .sigc-contact,
+  .sigc-briefing-list li
+) {
+  border-color: transparent !important;
+}
+
+.sigc-page-content .sigc-record::before {
+  display: none !important;
+}
+
+.sigc-page-content .sigc-tags li {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.sigc-page-content :is(
+  .sigc-record-grid,
+  .sigc-structured-grid,
+  .sigc-domain-explorer,
+  .sigc-domain-list,
+  .sigc-domain-topic,
+  .sigc-domain-detail,
+  .sigc-contact
+) {
+  background-color: transparent !important;
+}
+
+.sigc-page-content .sigc-domain-topic {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.sigc-page-content .sigc-domain-topic.is-active {
+  background: transparent !important;
+}
+
+.sigc-page-content .sigc-domain-detail {
+  border: 0 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sigc-page-content .sigc-record {
+    animation: none !important;
+  }
+}
