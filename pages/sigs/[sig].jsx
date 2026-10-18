@@ -97,14 +97,22 @@ function RecordCards({ records, type }) {
 function DomainExplorer({ mission }) {
   const domains = Array.isArray(mission.data.domains) ? mission.data.domains : [];
   const [activeIndex, setActiveIndex] = useState(0);
-  const explorerRef = useRef(null);
+  const stageRef = useRef(null);
   const activeIndexRef = useRef(0);
-  const lastWheelChangeRef = useRef(0);
 
-  const chooseDomain = useCallback((index) => {
+  const setDomain = useCallback((index) => {
     const nextIndex = Math.max(0, Math.min(domains.length - 1, index));
     activeIndexRef.current = nextIndex;
     setActiveIndex(nextIndex);
+    const stage = stageRef.current;
+    if (!stage || domains.length < 2) return;
+    const stageTop = stage.getBoundingClientRect().top + window.scrollY;
+    const travel = Math.max(1, stage.offsetHeight - window.innerHeight);
+    const target = stageTop + (nextIndex / (domains.length - 1)) * travel;
+    window.scrollTo({
+      top: target,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+    });
   }, [domains.length]);
 
   useEffect(() => {
@@ -113,33 +121,32 @@ function DomainExplorer({ mission }) {
   }, [mission.id]);
 
   useEffect(() => {
-    if (domains.length < 2) return undefined;
+    const stage = stageRef.current;
+    if (!stage || domains.length < 2) return undefined;
+    let frame = 0;
 
-    const handleWheel = (event) => {
-      const explorer = explorerRef.current;
-      if (!explorer || Math.abs(event.deltaY) < 8) return;
-      const rect = explorer.getBoundingClientRect();
-      const inExplorer = rect.top <= window.innerHeight * 0.55 &&
-        rect.bottom >= window.innerHeight * 0.45;
-      if (!inExplorer) return;
-
-      const currentIndex = activeIndexRef.current;
-      const direction = event.deltaY > 0 ? 1 : -1;
-      const nextIndex = currentIndex + direction;
-      const canChange = nextIndex >= 0 && nextIndex < domains.length;
-      if (!canChange) return;
-
-      // Prevent the document from moving while changing between domain topics.
-      event.preventDefault();
-      const now = Date.now();
-      if (now - lastWheelChangeRef.current < 420) return;
-      lastWheelChangeRef.current = now;
-      activeIndexRef.current = nextIndex;
-      setActiveIndex(nextIndex);
+    const updateFromScroll = () => {
+      frame = 0;
+      const rect = stage.getBoundingClientRect();
+      const travel = Math.max(1, stage.offsetHeight - window.innerHeight);
+      const progress = Math.min(1, Math.max(0, -rect.top / travel));
+      const nextIndex = Math.round(progress * (domains.length - 1));
+      if (nextIndex !== activeIndexRef.current) {
+        activeIndexRef.current = nextIndex;
+        setActiveIndex(nextIndex);
+      }
     };
-
-    window.addEventListener("wheel", handleWheel, { passive: false });
-    return () => window.removeEventListener("wheel", handleWheel);
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateFromScroll);
+    };
+    updateFromScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, [domains.length]);
 
   if (!domains.length) return null;
@@ -150,40 +157,49 @@ function DomainExplorer({ mission }) {
   const activeTags = Array.isArray(activeValues[2]) ? activeValues[2] : [];
 
   return (
-    <div className="sigc-domain-explorer" ref={explorerRef}>
-      <div className="sigc-domain-list" aria-label="Domain topics">
-        {domains.map((domain, index) => {
-          const values = Array.isArray(domain)
-            ? domain
-            : [domain.title, domain.description, domain.tags];
-          const isActive = index === activeIndex;
-          return (
-            <button
-              className={`sigc-domain-topic${isActive ? " is-active" : ""}`}
-              key={values[0] || index}
-              type="button"
-              aria-pressed={isActive}
-              onClick={() => chooseDomain(index)}
-            >
-              <span className="sigc-domain-number">{String(index + 1).padStart(2, "0")}</span>
-              <span className="sigc-domain-topic-title">{values[0]}</span>
-            </button>
-          );
-        })}
-      </div>
-      <aside className="sigc-domain-detail" aria-live="polite" aria-atomic="true">
-        <p className="sigc-eyebrow">DOMAIN / {String(activeIndex + 1).padStart(2, "0")}</p>
-        <h4 key={activeValues[0]}>{activeValues[0]}</h4>
-        <p className="sigc-domain-description">{activeValues[1]}</p>
-        {activeTags.length > 0 && (
-          <div className="sigc-domain-tools">
-            <p className="sigc-domain-tools-label">TOOLS & CONCEPTS</p>
-            <ul className="sigc-tags">
-              {activeTags.filter((tag) => typeof tag === "string").map((tag) => <li key={tag}>{tag}</li>)}
-            </ul>
+    <div
+      className="sigc-domain-scroll-stage"
+      ref={stageRef}
+      style={{ "--sigc-domain-count": domains.length }}
+    >
+      <div className="sigc-domain-scroll-screen">
+        <SectionHeading title="Domains" description={mission.data.domainsDescription} />
+        <div className="sigc-domain-explorer">
+          <div className="sigc-domain-list" aria-label="Domain topics">
+            {domains.map((domain, index) => {
+              const values = Array.isArray(domain)
+                ? domain
+                : [domain.title, domain.description, domain.tags];
+              const isActive = index === activeIndex;
+              return (
+                <button
+                  className={`sigc-domain-topic${isActive ? " is-active" : ""}`}
+                  key={values[0] || index}
+                  type="button"
+                  aria-pressed={isActive}
+                  onClick={() => setDomain(index)}
+                >
+                  <span className="sigc-domain-number">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="sigc-domain-topic-title">{values[0]}</span>
+                </button>
+              );
+            })}
           </div>
-        )}
-      </aside>
+          <aside className="sigc-domain-detail" aria-live="polite" aria-atomic="true">
+            <p className="sigc-eyebrow">DOMAIN / {String(activeIndex + 1).padStart(2, "0")}</p>
+            <h4 key={activeValues[0]}>{activeValues[0]}</h4>
+            <p className="sigc-domain-description">{activeValues[1]}</p>
+            {activeTags.length > 0 && (
+              <div className="sigc-domain-tools">
+                <p className="sigc-domain-tools-label">TOOLS & CONCEPTS</p>
+                <ul className="sigc-tags">
+                  {activeTags.filter((tag) => typeof tag === "string").map((tag) => <li key={tag}>{tag}</li>)}
+                </ul>
+              </div>
+            )}
+          </aside>
+        </div>
+      </div>
     </div>
   );
 }
@@ -293,10 +309,6 @@ function MissionContent({ mission }) {
 
         {Array.isArray(data.domains) && data.domains.length > 0 && (
           <section className="sigc-content-section sigc-domain-section" id={`${mission.id}-domains`}>
-            <SectionHeading
-              title="Domains"
-              description={data.domainsDescription}
-            />
             <DomainExplorer key={mission.id} mission={mission} />
           </section>
         )}
