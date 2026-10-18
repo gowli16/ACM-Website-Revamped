@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 
 const layers = [
-  { x: 0, count: 5 },
-  { x: 320, count: 5 },
-  { x: 640, count: 5 },
-  { x: 960, count: 5 },
-  { x: 1280, count: 5 },
-  { x: 1600, count: 3 },
+  { x: 0, count: 4 },
+  { x: 180, count: 4 },
+  { x: 360, count: 4 },
+  { x: 540, count: 4 },
+  { x: 720, count: 4 },
+  { x: 900, count: 3 },
 ];
 
 function nodeY(index, count) {
-  return 55 + (index * 390) / Math.max(1, count - 1);
+  return 42 + (index * 216) / Math.max(1, count - 1);
 }
 
 const connections = layers.slice(0, -1).flatMap((layer, layerIndex) => {
@@ -52,7 +52,7 @@ export default function NeuralNetworkBackground() {
 
   return (
     <div ref={backgroundRef} className={`sigc-neural-bg${isVisible ? " is-visible" : ""}`} aria-hidden="true">
-      <svg className="sigc-neural-bg__svg" viewBox="0 0 1600 500" preserveAspectRatio="none">
+      <svg className="sigc-neural-bg__svg" viewBox="0 0 900 300" preserveAspectRatio="none">
         <defs>
           <marker id="sigc-neural-arrow" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
             <path d="M0,0 L5,2.5 L0,5 Z" fill="#56DCE0" />
@@ -73,7 +73,7 @@ export default function NeuralNetworkBackground() {
               y2={line.y2}
               pathLength="1"
               markerEnd="url(#sigc-neural-arrow)"
-              style={{ "--link-delay": `${0.85 + line.layerIndex * 0.8 + line.order * 0.018}s` }}
+              style={{ "--link-delay": `${0.35 + line.layerIndex * 0.45 + line.order * 0.012}s` }}
             />
           ))}
         </g>
@@ -82,9 +82,9 @@ export default function NeuralNetworkBackground() {
             {Array.from({ length: layer.count }, (_, index) => {
               const y = nodeY(index, layer.count);
               return (
-                <g className="sigc-neural-node" key={index} style={{ "--node-delay": `${layerIndex * 0.8 + index * 0.07}s` }}>
-                  <circle cx={layer.x} cy={y} r="34" fill="url(#sigc-neural-node-glow)" />
-                  <circle className="sigc-neural-node-core" cx={layer.x} cy={y} r="16" />
+                <g className="sigc-neural-node" key={index} style={{ "--node-delay": `${layerIndex * 0.45 + index * 0.06}s` }}>
+                  <circle cx={layer.x} cy={y} r="24" fill="url(#sigc-neural-node-glow)" />
+                  <circle className="sigc-neural-node-core" cx={layer.x} cy={y} r="10" />
                 </g>
               );
             })}
