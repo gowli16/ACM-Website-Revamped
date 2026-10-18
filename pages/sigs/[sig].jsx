@@ -3,6 +3,7 @@ import ControlRoom from "../../components/ControlRoom";
 import SpaceShooter from "../../components/SpaceShooter";
 import Navbar from "../../components/Navbar";
 import SigArchiveGallery from "../../components/SigArchiveGallery";
+import NeuralNetworkBackground from "../../components/NeuralNetworkBackground";
 import { ai } from "../../data/sigs/ai";
 import { web } from "../../data/sigs/web";
 import { cyber } from "../../data/sigs/cyber";
@@ -287,6 +288,7 @@ function MissionContent({ mission }) {
       data-sigc-mission={mission.id}
       aria-labelledby={`${mission.id}-title`}
     >
+      {mission.id === "ai" && <NeuralNetworkBackground />}
       <span className="sigc-mission-marker" data-sigc-marker={mission.id} />
       <div className="sigc-mission-inner">
         <header className="sigc-mission-header">
