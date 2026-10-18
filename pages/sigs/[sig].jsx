@@ -424,24 +424,45 @@ export default function RecruitmentPage() {
 
   useEffect(() => {
     const fullHeading = "WELCOME TO OUR SIGs.";
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reducedMotion) {
+    const intro = document.querySelector("#sigc-intro");
+    if (!intro || !("IntersectionObserver" in window)) {
       setTypedHeading(fullHeading);
       return undefined;
     }
 
-    let index = 0;
-    let timeoutId;
-    const typeNextCharacter = () => {
-      index += 1;
-      setTypedHeading(fullHeading.slice(0, index));
-      if (index < fullHeading.length) {
-        timeoutId = window.setTimeout(typeNextCharacter, 95);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let timeoutId = null;
+
+    const replayWelcomeAnimation = () => {
+      if (timeoutId !== null) window.clearTimeout(timeoutId);
+      if (reducedMotion) {
+        setTypedHeading(fullHeading);
+        return;
       }
+
+      let index = 0;
+      setTypedHeading("");
+      const typeNextCharacter = () => {
+        index += 1;
+        setTypedHeading(fullHeading.slice(0, index));
+        if (index < fullHeading.length) {
+          timeoutId = window.setTimeout(typeNextCharacter, 95);
+        } else {
+          timeoutId = null;
+        }
+      };
+      timeoutId = window.setTimeout(typeNextCharacter, 220);
     };
 
-    timeoutId = window.setTimeout(typeNextCharacter, 220);
-    return () => window.clearTimeout(timeoutId);
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) replayWelcomeAnimation();
+    }, { threshold: 0.2 });
+
+    observer.observe(intro);
+    return () => {
+      observer.disconnect();
+      if (timeoutId !== null) window.clearTimeout(timeoutId);
+    };
   }, []);
   const galleryRef = useRef(null);
   const pendingMissionRef = useRef(null);
