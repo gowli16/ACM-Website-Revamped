@@ -77,7 +77,9 @@ export default function SpaceShooter() {
       ctx.save();
       const shipX = Math.round(WIDTH * 0.86);
       ctx.translate(shipX, game.shipY);
-      ctx.rotate(-Math.PI / 2); // Rotate the nose toward incoming asteroids on the left.\n      ctx.shadowColor = "rgba(98, 212, 232, 0.75)";\n      ctx.shadowBlur = 10;
+      ctx.rotate(-Math.PI / 2); // Rotate the nose toward incoming asteroids on the left.
+      ctx.shadowColor = "rgba(98, 212, 232, 0.75)";
+      ctx.shadowBlur = 10;
 
       const px = 5;
       const pixels = [
