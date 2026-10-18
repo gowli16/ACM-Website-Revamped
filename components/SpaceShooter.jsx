@@ -39,13 +39,13 @@ export default function SpaceShooter() {
     const ctx = canvas && canvas.getContext("2d");
     if (!ctx) return undefined;
     const game = gameRef.current;
-    game.firing = false;
+    game.firing = true; // Keep the background arcade visibly active behind the Glitch title.
     let raf;
     let lastShot = 0;
 
     const shoot = () => {
       if (!paused && performance.now() - lastShot > 220) {
-        game.bullets.push({ x: WIDTH - 82, y: game.shipY, length: 34 });
+        game.bullets.push({ x: Math.round(WIDTH * 0.86) - 24, y: game.shipY, length: 42 });
         lastShot = performance.now();
       }
     };
@@ -98,7 +98,8 @@ export default function SpaceShooter() {
     const drawShip = () => {
       // A clearly visible little rocket, with an animated exhaust flame.
       ctx.save();
-      ctx.translate(WIDTH - 58, game.shipY);
+      const shipX = Math.round(WIDTH * 0.86);
+      ctx.translate(shipX, game.shipY);
       ctx.scale(-1, 1);
 
       const flameLength = 12 + Math.sin(game.frame * 0.55) * 5;
@@ -240,7 +241,7 @@ export default function SpaceShooter() {
   }, [paused]);
 
   const reset = () => {
-    gameRef.current = { shipY: HEIGHT / 2, up: false, down: false, bullets: [], rocks: [], frame: 0, score: 0 };
+    gameRef.current = { shipY: HEIGHT / 2, up: false, down: false, firing: true, bullets: [], rocks: [], frame: 0, score: 0 };
     setScore(0);
     setPaused(false);
   };
