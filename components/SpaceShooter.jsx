@@ -96,61 +96,45 @@ export default function SpaceShooter() {
     };
 
     const drawShip = () => {
-      // A clearly visible little rocket, with an animated exhaust flame.
+      // Pixel-art arcade ship inspired by the supplied sprite.
+      // The sprite points upward, with pixelated cyan wings and a flickering orange engine.
       ctx.save();
       const shipX = Math.round(WIDTH * 0.86);
       ctx.translate(shipX, game.shipY);
-      ctx.scale(-1, 1);
-
-      const flameLength = 12 + Math.sin(game.frame * 0.55) * 5;
-      ctx.shadowColor = "rgba(255, 145, 77, .75)";
-      ctx.shadowBlur = 14;
-      ctx.fillStyle = "#FF914D";
-      ctx.beginPath();
-      ctx.moveTo(-15, 0);
-      ctx.lineTo(-15 - flameLength, -5);
-      ctx.lineTo(-12 - flameLength * 0.55, 0);
-      ctx.lineTo(-15 - flameLength, 5);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.shadowColor = "rgba(221, 238, 246, .65)";
-      ctx.shadowBlur = 12;
-      ctx.fillStyle = "#F4F7FA";
-      ctx.beginPath();
-      ctx.moveTo(24, 0);
-      ctx.quadraticCurveTo(12, -10, -13, -8);
-      ctx.lineTo(-19, -4);
-      ctx.lineTo(-19, 4);
-      ctx.lineTo(-13, 8);
-      ctx.quadraticCurveTo(12, 10, 24, 0);
-      ctx.closePath();
-      ctx.fill();
-
       ctx.shadowBlur = 0;
+
+      const px = 5;
+      const pixels = [
+        // red/orange nose
+        [0,-8,"#FF3D35"],[-1,-7,"#FF3D35"],[1,-7,"#FF3D35"],
+        [-2,-6,"#FF9A24"],[-1,-6,"#FF9A24"],[0,-6,"#FFD34E"],[1,-6,"#FF9A24"],[2,-6,"#FF9A24"],
+        // cockpit and central hull
+        [-1,-5,"#E8F7FF"],[0,-5,"#E8F7FF"],[1,-5,"#E8F7FF"],
+        [-1,-4,"#F4F7FA"],[0,-4,"#62D4E8"],[1,-4,"#F4F7FA"],
+        [-1,-3,"#F4F7FA"],[0,-3,"#62D4E8"],[1,-3,"#F4F7FA"],
+        [-1,-2,"#F4F7FA"],[0,-2,"#F4F7FA"],[1,-2,"#F4F7FA"],
+        [-1,-1,"#62D4E8"],[0,-1,"#F4F7FA"],[1,-1,"#62D4E8"],
+        // broad wings
+        [-3,-1,"#62D4E8"],[-2,-1,"#F4F7FA"],[2,-1,"#F4F7FA"],[3,-1,"#62D4E8"],
+        [-3,0,"#62D4E8"],[-2,0,"#F4F7FA"],[2,0,"#F4F7FA"],[3,0,"#62D4E8"],
+        [-3,1,"#FF9A24"],[-2,1,"#62D4E8"],[2,1,"#62D4E8"],[3,1,"#FF9A24"],
+        [-1,1,"#F4F7FA"],[0,1,"#F4F7FA"],[1,1,"#F4F7FA"],
+        // engine
+        [-1,2,"#62D4E8"],[0,2,"#F4F7FA"],[1,2,"#62D4E8"],
+      ];
+      pixels.forEach(([x,y,color]) => {
+        ctx.fillStyle = color;
+        ctx.fillRect(x * px, y * px, px, px);
+      });
+
+      const flame = 2 + Math.floor((Math.sin(game.frame * 0.7) + 1) * 1.5);
+      ctx.fillStyle = "#FF9A24";
+      ctx.fillRect(-px, 3 * px, px, flame * px);
+      ctx.fillStyle = "#FFF4B0";
+      ctx.fillRect(0, 3 * px, px, Math.max(px, (flame - 1) * px));
       ctx.fillStyle = "#62D4E8";
-      ctx.beginPath();
-      ctx.ellipse(5, 0, 7, 4, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = "#91A9B8";
-      ctx.beginPath();
-      ctx.moveTo(-7, -7);
-      ctx.lineTo(-15, -15);
-      ctx.lineTo(1, -8);
-      ctx.closePath();
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(-7, 7);
-      ctx.lineTo(-15, 15);
-      ctx.lineTo(1, 8);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.fillStyle = "#FF914D";
-      ctx.beginPath();
-      ctx.arc(17, 0, 2, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.fillRect(-4 * px, -px, px, 2 * px);
+      ctx.fillRect(3 * px, -px, px, 2 * px);
       ctx.restore();
     };
 
@@ -249,11 +233,11 @@ export default function SpaceShooter() {
   return (
     <aside className="sigc-shooter" aria-label="Mini space shooter game">
       <canvas ref={canvasRef} className="sigc-shooter-canvas" width={WIDTH} height={HEIGHT}
-        aria-label="Asteroids spawn on the left and travel toward your rocket on the right. Use up and down arrow keys or W and S to move. Hold Space or F to fire energy beams." />
+        aria-label="Pixel-art rocket. Use the Up and Down arrow keys to move and press F to fire energy beams." />
       <div className="sigc-shooter-interface">
         <div className="sigc-shooter-instructions" aria-live="polite">
-          <p><span>{instruction}</span><i aria-hidden="true" /></p>
-          <p className="sigc-shooter-fire-instruction">HOLD <strong>SPACE</strong> / <strong>F</strong> TO FIRE BEAMS</p>
+          <p className="sigc-shooter-move-instruction">↑ / ↓ <strong>MOVE</strong></p>
+          <p className="sigc-shooter-fire-instruction">PRESS <strong>F</strong> TO FIRE</p>
         </div>
       </div>
     </aside>
