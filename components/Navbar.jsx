@@ -63,14 +63,29 @@ export default function Navbar({
   onSigSelect,
 }) {
   const [scrolled, setScrolled] = useState(false)
+  const [missionNavVisible, setMissionNavVisible] = useState(false)
 
   useEffect(() => {
-    if (sigMissionNavigation) return undefined
+    if (sigMissionNavigation) {
+      const updateMissionNav = () => {
+        const gallery = document.querySelector('.sigc-intro-gallery')
+        const shouldShow = gallery
+          ? gallery.getBoundingClientRect().bottom < window.innerHeight * 0.35
+          : window.scrollY > 320
+        setMissionNavVisible(shouldShow)
+      }
+
+      updateMissionNav()
+      window.addEventListener('scroll', updateMissionNav, { passive: true })
+      window.addEventListener('resize', updateMissionNav)
+      return () => {
+        window.removeEventListener('scroll', updateMissionNav)
+        window.removeEventListener('resize', updateMissionNav)
+      }
+    }
 
     const onScroll = () => setScrolled(window.scrollY > 100)
-
     window.addEventListener('scroll', onScroll, { passive: true })
-
     return () => window.removeEventListener('scroll', onScroll)
   }, [sigMissionNavigation])
 
@@ -110,7 +125,7 @@ export default function Navbar({
   if (sigMissionNavigation) {
     return (
       <nav
-        className="sigc-mission-nav"
+        className={`sigc-mission-nav${missionNavVisible ? " sigc-mission-nav--visible" : ""}`}
         aria-label="SIG navigation"
       >
         <div className="sigc-nav-list">
