@@ -91,20 +91,59 @@ export default function SpaceShooter() {
     };
 
     const drawShip = () => {
+      // A clearly visible little rocket, with an animated exhaust flame.
       ctx.save();
-      ctx.translate(WIDTH - 42, game.shipY);
-      ctx.fillStyle = "#62D4E8";
+      ctx.translate(WIDTH - 58, game.shipY);
+
+      const flameLength = 12 + Math.sin(game.frame * 0.55) * 5;
+      ctx.shadowColor = "rgba(255, 145, 77, .75)";
+      ctx.shadowBlur = 14;
+      ctx.fillStyle = "#FF914D";
       ctx.beginPath();
-      ctx.moveTo(15, 0);
-      ctx.lineTo(-11, -11);
-      ctx.lineTo(-5, 0);
-      ctx.lineTo(-11, 11);
+      ctx.moveTo(-15, 0);
+      ctx.lineTo(-15 - flameLength, -5);
+      ctx.lineTo(-12 - flameLength * 0.55, 0);
+      ctx.lineTo(-15 - flameLength, 5);
       ctx.closePath();
       ctx.fill();
+
+      ctx.shadowColor = "rgba(221, 238, 246, .65)";
+      ctx.shadowBlur = 12;
       ctx.fillStyle = "#F4F7FA";
-      ctx.fillRect(-7, -2, 10, 4);
-      ctx.fillStyle = "rgba(255, 145, 77, .85)";
-      ctx.fillRect(-16, -3, 6, 6);
+      ctx.beginPath();
+      ctx.moveTo(24, 0);
+      ctx.quadraticCurveTo(12, -10, -13, -8);
+      ctx.lineTo(-19, -4);
+      ctx.lineTo(-19, 4);
+      ctx.lineTo(-13, 8);
+      ctx.quadraticCurveTo(12, 10, 24, 0);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = "#62D4E8";
+      ctx.beginPath();
+      ctx.ellipse(5, 0, 7, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#91A9B8";
+      ctx.beginPath();
+      ctx.moveTo(-7, -7);
+      ctx.lineTo(-15, -15);
+      ctx.lineTo(1, -8);
+      ctx.closePath();
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(-7, 7);
+      ctx.lineTo(-15, 15);
+      ctx.lineTo(1, 8);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = "#FF914D";
+      ctx.beginPath();
+      ctx.arc(17, 0, 2, 0, Math.PI * 2);
+      ctx.fill();
       ctx.restore();
     };
 
