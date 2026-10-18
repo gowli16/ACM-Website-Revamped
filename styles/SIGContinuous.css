@@ -2911,11 +2911,12 @@
 }
 
 
-/* Medium-scale AI network: shift the SVG frame right and keep its last nodes in view. */
+/* Center the AI network frame so both viewport edges have equal margins. */
 .sigc-mission[data-sigc-mission="ai"] .sigc-mission-header > .sigc-neural-bg {
   top: 175px;
   bottom: -180px;
-  left: calc(50% + 12vw);
+  left: 50%;
+  right: auto;
   width: 100vw;
   height: auto;
   inset-inline: auto;
@@ -2924,6 +2925,7 @@
   overflow: hidden;
 }
 .sigc-mission[data-sigc-mission="ai"] .sigc-mission-header > .sigc-neural-bg .sigc-neural-bg__svg {
+  display: block;
   width: 100%;
   height: 100%;
   transform: none;
@@ -2932,8 +2934,10 @@
   .sigc-mission[data-sigc-mission="ai"] .sigc-mission-header > .sigc-neural-bg {
     top: 190px;
     bottom: -120px;
-    left: calc(50% + 6vw);
+    left: 50%;
+    right: auto;
     width: 100vw;
+    transform: translateX(-50%);
     opacity: 0.24;
   }
 }
