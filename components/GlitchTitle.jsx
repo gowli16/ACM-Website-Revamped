@@ -17,6 +17,7 @@ function scrambleText(text) {
 export default function GlitchTitle({ children }) {
   const original = String(children);
   const [displayText, setDisplayText] = useState(original);
+  const [glitching, setGlitching] = useState(true);
 
   useEffect(() => {
     let frame = 0;
@@ -26,6 +27,7 @@ export default function GlitchTitle({ children }) {
       if (frame * 85 >= 3000) {
         window.clearInterval(interval);
         setDisplayText(original);
+        setGlitching(false);
         return;
       }
       setDisplayText(scrambleText(original));
@@ -36,7 +38,7 @@ export default function GlitchTitle({ children }) {
 
   return (
     <span
-      className="sigc-glitch-title"
+      className={`sigc-glitch-title${glitching ? " is-glitching" : ""}`}
       data-text={displayText}
       aria-label={original}
     >
