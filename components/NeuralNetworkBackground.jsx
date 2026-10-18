@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 
 const layers = [
-  { x: 45, count: 5 },
-  { x: 245, count: 5 },
-  { x: 445, count: 5 },
-  { x: 645, count: 5 },
-  { x: 845, count: 5 },
-  { x: 1045, count: 3 },
+  { x: 0, count: 5 },
+  { x: 320, count: 5 },
+  { x: 640, count: 5 },
+  { x: 960, count: 5 },
+  { x: 1280, count: 5 },
+  { x: 1600, count: 3 },
 ];
 
 function nodeY(index, count) {
@@ -18,9 +18,9 @@ const connections = layers.slice(0, -1).flatMap((layer, layerIndex) => {
   return Array.from({ length: layer.count }, (_, from) =>
     Array.from({ length: next.count }, (_, to) => ({
       key: `${layerIndex}-${from}-${to}`,
-      x1: layer.x + 25,
+      x1: layer.x,
       y1: nodeY(from, layer.count),
-      x2: next.x - 20,
+      x2: next.x,
       y2: nodeY(to, next.count),
       layerIndex,
       order: from * next.count + to,
@@ -52,7 +52,7 @@ export default function NeuralNetworkBackground() {
 
   return (
     <div ref={backgroundRef} className={`sigc-neural-bg${isVisible ? " is-visible" : ""}`} aria-hidden="true">
-      <svg className="sigc-neural-bg__svg" viewBox="0 0 1100 500" preserveAspectRatio="xMidYMid meet">
+      <svg className="sigc-neural-bg__svg" viewBox="0 0 1600 500" preserveAspectRatio="none">
         <defs>
           <marker id="sigc-neural-arrow" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
             <path d="M0,0 L5,2.5 L0,5 Z" fill="#56DCE0" />
