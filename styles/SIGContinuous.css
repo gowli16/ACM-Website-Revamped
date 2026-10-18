@@ -2342,3 +2342,42 @@
     opacity: 0.22;
   }
 }
+
+
+/* Keep the neural network below the AI intro copy, spanning the full viewport width. */
+.sigc-mission[data-sigc-mission="ai"] > .sigc-neural-bg {
+  top: clamp(270px, 34vh, 360px);
+  right: auto;
+  left: 50%;
+  width: 100vw;
+  height: min(66vh, 620px);
+  min-height: 360px;
+  transform: translateX(-50%);
+  opacity: 0.28;
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 82%, transparent 100%);
+}
+.sigc-neural-link {
+  animation-play-state: paused;
+}
+.sigc-neural-node {
+  animation-play-state: paused;
+}
+.sigc-neural-bg.is-visible .sigc-neural-link,
+.sigc-neural-bg.is-visible .sigc-neural-node {
+  animation-play-state: running;
+}
+@media (max-width: 700px) {
+  .sigc-mission[data-sigc-mission="ai"] > .sigc-neural-bg {
+    top: 245px;
+    width: 150vw;
+    height: 55vh;
+    min-height: 320px;
+    opacity: 0.2;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sigc-neural-link,
+  .sigc-neural-node {
+    animation-play-state: running;
+  }
+}
