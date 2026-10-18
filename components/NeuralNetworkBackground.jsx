@@ -5,7 +5,8 @@ const layers = [
   { x: 245, count: 5 },
   { x: 445, count: 5 },
   { x: 645, count: 5 },
-  { x: 845, count: 3 },
+  { x: 845, count: 5 },
+  { x: 1045, count: 3 },
 ];
 
 function nodeY(index, count) {
@@ -51,7 +52,7 @@ export default function NeuralNetworkBackground() {
 
   return (
     <div ref={backgroundRef} className={`sigc-neural-bg${isVisible ? " is-visible" : ""}`} aria-hidden="true">
-      <svg className="sigc-neural-bg__svg" viewBox="0 0 900 500" preserveAspectRatio="xMidYMid meet">
+      <svg className="sigc-neural-bg__svg" viewBox="0 0 1100 500" preserveAspectRatio="xMidYMid meet">
         <defs>
           <marker id="sigc-neural-arrow" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
             <path d="M0,0 L5,2.5 L0,5 Z" fill="#56DCE0" />
