@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import GlitchTitle from "../../components/GlitchTitle";
 import ControlRoom from "../../components/ControlRoom";
 import SpaceShooter from "../../components/SpaceShooter";
 import Navbar from "../../components/Navbar";
@@ -294,7 +295,7 @@ function MissionContent({ mission }) {
       <div className="sigc-mission-inner">
         <header className="sigc-mission-header">
           {mission.id !== "ai" && <p className="sigc-eyebrow">{mission.station} <span>{data.heroEyebrow || mission.signal}</span></p>}
-          <h2 id={`${mission.id}-title`} className={mission.id === "glitch" ? "sigc-glitch-title" : undefined} data-text={mission.id === "glitch" ? mission.title : undefined}>{mission.title}</h2>
+          <h2 id={`${mission.id}-title`}>{mission.id === "glitch" ? <GlitchTitle>{mission.title}</GlitchTitle> : mission.title}</h2>
           {overview?.title && <p className="sigc-overview-title">{overview.title}</p>}
           <p className="sigc-mission-tagline">{data.tagline}</p>
           {overview?.lines?.map((line, index) => <p className="sigc-overview-copy" key={index}>{line}</p>)}
