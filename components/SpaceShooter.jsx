@@ -8,31 +8,7 @@ export default function SpaceShooter() {
   const gameRef = useRef({ shipY: HEIGHT / 2, up: false, down: false, bullets: [], rocks: [], frame: 0, score: 0 });
   const [score, setScore] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [instruction, setInstruction] = useState("");
-  useEffect(() => {
-    const message = "USE THE ARROW KEYS TO MOVE";
-    let index = 0;
-    let deleting = false;
-    let timer;
-    const type = () => {
-      if (!deleting) {
-        index += 1;
-        setInstruction(message.slice(0, index));
-        if (index >= message.length) {
-          deleting = true;
-          timer = window.setTimeout(type, 1400);
-          return;
-        }
-      } else {
-        index -= 1;
-        setInstruction(message.slice(0, index));
-        if (index <= 0) deleting = false;
-      }
-      timer = window.setTimeout(type, deleting ? 38 : 68);
-    };
-    timer = window.setTimeout(type, 300);
-    return () => window.clearTimeout(timer);
-  }, []);
+  
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -45,7 +21,7 @@ export default function SpaceShooter() {
 
     const shoot = () => {
       if (!paused && performance.now() - lastShot > 220) {
-        game.bullets.push({ x: Math.round(WIDTH * 0.86) - 24, y: game.shipY, length: 42 });
+        game.bullets.push({ x: Math.round(WIDTH * 0.86) - 38, y: game.shipY, length: 58 });
         lastShot = performance.now();
       }
     };
@@ -101,7 +77,7 @@ export default function SpaceShooter() {
       ctx.save();
       const shipX = Math.round(WIDTH * 0.86);
       ctx.translate(shipX, game.shipY);
-      ctx.shadowBlur = 0;
+      ctx.rotate(-Math.PI / 2); // Rotate the nose toward incoming asteroids on the left.\n      ctx.shadowColor = "rgba(98, 212, 232, 0.75)";\n      ctx.shadowBlur = 10;
 
       const px = 5;
       const pixels = [
@@ -151,7 +127,7 @@ export default function SpaceShooter() {
       ctx.globalAlpha = 1;
 
       if (!paused) {
-        if (game.firing) shoot();
+        shoot();
         if (game.up) game.shipY -= 4;
         if (game.down) game.shipY += 4;
         game.shipY = Math.max(18, Math.min(HEIGHT - 18, game.shipY));
@@ -233,7 +209,7 @@ export default function SpaceShooter() {
   return (
     <aside className="sigc-shooter" aria-label="Mini space shooter game">
       <canvas ref={canvasRef} className="sigc-shooter-canvas" width={WIDTH} height={HEIGHT}
-        aria-label="Pixel-art rocket. Use the Up and Down arrow keys to move and press F to fire energy beams." />
+        aria-label="Pixel-art rocket automatically fires energy beams. Use the Up and Down arrow keys to move." />
       <div className="sigc-shooter-interface">
         <div className="sigc-shooter-instructions" aria-live="polite">
           <p className="sigc-shooter-move-instruction">↑ / ↓ <strong>MOVE</strong></p>
