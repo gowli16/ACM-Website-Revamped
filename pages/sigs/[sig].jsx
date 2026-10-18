@@ -105,8 +105,8 @@ function DomainExplorer({ mission }) {
     const stage = stageRef.current;
     if (!stage || domains.length < 2) return;
     const stageTop = stage.getBoundingClientRect().top + window.scrollY;
-    const scrollableDistance = Math.max(1, stage.offsetHeight - window.innerHeight);
-    const targetScroll = stageTop + (nextIndex / (domains.length - 1)) * scrollableDistance;
+    const distance = Math.max(1, stage.offsetHeight - window.innerHeight);
+    const targetScroll = stageTop + (nextIndex / (domains.length - 1)) * distance;
     window.scrollTo({
       top: targetScroll,
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
@@ -115,16 +115,13 @@ function DomainExplorer({ mission }) {
 
   useEffect(() => {
     setActiveIndex(0);
-    if (stageRef.current) {
-      stageRef.current.dataset.activeDomain = "0";
-    }
   }, [mission.id]);
 
   useEffect(() => {
     const stage = stageRef.current;
     if (!stage || domains.length < 2) return undefined;
-
     let frame = 0;
+
     const updateFromScroll = () => {
       frame = 0;
       const rect = stage.getBoundingClientRect();
@@ -155,13 +152,9 @@ function DomainExplorer({ mission }) {
   const activeTags = Array.isArray(activeValues[2]) ? activeValues[2] : [];
 
   return (
-    <div
-      className="sigc-domain-scroll-stage"
-      ref={stageRef}
-      style={{ "--sigc-domain-count": domains.length }}
-      data-active-domain={activeIndex}
-    >
+    <div className="sigc-domain-scroll-stage" ref={stageRef} style={{ "--sigc-domain-count": domains.length }}>
       <div className="sigc-domain-scroll-screen">
+        <SectionHeading title="Domains" description={mission.data.domainsDescription} />
         <div className="sigc-domain-explorer">
           <div className="sigc-domain-list" aria-label="Domain topics">
             {domains.map((domain, index) => {
@@ -307,12 +300,7 @@ function MissionContent({ mission }) {
 
         {Array.isArray(data.domains) && data.domains.length > 0 && (
           <section className="sigc-content-section sigc-domain-section" id={`${mission.id}-domains`}>
-            <div className="sigc-domain-scroll-stage-shell">
-              <div className="sigc-domain-scroll-screen">
-                <SectionHeading title="Domains" description={data.domainsDescription} />
-                <DomainExplorer key={mission.id} mission={mission} />
-              </div>
-            </div>
+            <DomainExplorer key={mission.id} mission={mission} />
           </section>
         )}
 
