@@ -66,11 +66,44 @@
   box-shadow: 0 0 3px rgba(255, 255, 255, 0.2);
 }
 
+/* Occasional shooting stars add motion without competing with the SIG content. */
+.sigc-shooting-stars {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.sigc-shooting-stars span {
+  position: absolute;
+  top: -12%;
+  left: -20%;
+  width: clamp(70px, 9vw, 150px);
+  height: 1.5px;
+  opacity: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(98, 212, 232, 0.15) 18%, rgba(225, 246, 255, 0.95) 100%);
+  box-shadow: 0 0 7px rgba(98, 212, 232, 0.45);
+  transform: rotate(32deg);
+  transform-origin: right center;
+  animation: sigc-shooting-star 8s linear infinite;
+}
+.sigc-shooting-stars span:nth-child(1) { top: 12%; animation-delay: 0.4s; animation-duration: 9s; }
+.sigc-shooting-stars span:nth-child(2) { top: 34%; animation-delay: 3.1s; animation-duration: 10s; width: 100px; }
+.sigc-shooting-stars span:nth-child(3) { top: 57%; animation-delay: 5.8s; animation-duration: 9.5s; width: 125px; }
+.sigc-shooting-stars span:nth-child(4) { top: 73%; animation-delay: 7.4s; animation-duration: 11s; width: 85px; }
+.sigc-shooting-stars span:nth-child(5) { top: 88%; animation-delay: 9.2s; animation-duration: 10.5s; width: 115px; }
+@keyframes sigc-shooting-star {
+  0%, 72%, 100% { opacity: 0; transform: translate3d(0, 0, 0) rotate(32deg); }
+  74% { opacity: 0.9; }
+  79% { opacity: 0; transform: translate3d(125vw, 75vh, 0) rotate(32deg); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .sigc-starfield {
     transform: none !important;
     will-change: auto;
   }
+  .sigc-shooting-stars span { animation: none !important; display: none; }
 
 }
 
