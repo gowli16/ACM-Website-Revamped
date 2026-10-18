@@ -292,7 +292,7 @@ function MissionContent({ mission }) {
       <span className="sigc-mission-marker" data-sigc-marker={mission.id} />
       <div className="sigc-mission-inner">
         <header className="sigc-mission-header">
-          <p className="sigc-eyebrow">{mission.station} <span>{data.heroEyebrow || mission.signal}</span></p>
+          {mission.id !== "ai" && <p className="sigc-eyebrow">{mission.station} <span>{data.heroEyebrow || mission.signal}</span></p>}
           <h2 id={`${mission.id}-title`}>{mission.title}</h2>
           {overview?.title && <p className="sigc-overview-title">{overview.title}</p>}
           <p className="sigc-mission-tagline">{data.tagline}</p>
