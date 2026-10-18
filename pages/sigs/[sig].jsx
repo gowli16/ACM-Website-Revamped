@@ -110,16 +110,17 @@ function DomainExplorer({ mission }) {
 
     const handleWheel = (event) => {
       const rect = explorer.getBoundingClientRect();
-      const inExplorer = rect.top < window.innerHeight * 0.72 && rect.bottom > window.innerHeight * 0.28;
+      const inExplorer = rect.top < window.innerHeight && rect.bottom > 0;
       if (!inExplorer || Math.abs(event.deltaY) < 12) return;
 
       const direction = event.deltaY > 0 ? 1 : -1;
       const nextIndex = Math.max(0, Math.min(domains.length - 1, activeIndex + direction));
       if (nextIndex === activeIndex) return;
 
+      // Consume wheel movement while another topic remains, keeping the page still.
       event.preventDefault();
       const now = Date.now();
-      if (now - lastWheelChangeRef.current < 380) return;
+      if (now - lastWheelChangeRef.current < 320) return;
       lastWheelChangeRef.current = now;
       setActiveIndex(nextIndex);
     };
