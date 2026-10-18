@@ -212,12 +212,6 @@ export default function SpaceShooter() {
     <aside className="sigc-shooter" aria-label="Mini space shooter game">
       <canvas ref={canvasRef} className="sigc-shooter-canvas" width={WIDTH} height={HEIGHT}
         aria-label="Pixel-art rocket automatically fires energy beams. Use the Up and Down arrow keys to move." />
-      <div className="sigc-shooter-interface">
-        <div className="sigc-shooter-instructions" aria-live="polite">
-          <p className="sigc-shooter-move-instruction">↑ / ↓ <strong>MOVE</strong></p>
-          <p className="sigc-shooter-fire-instruction">PRESS <strong>F</strong> TO FIRE</p>
-        </div>
-      </div>
     </aside>
   );
 }
