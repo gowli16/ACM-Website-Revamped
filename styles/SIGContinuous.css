@@ -2038,3 +2038,28 @@
   border: 0 !important;
   box-shadow: none !important;
 }
+
+
+/* The selected domain gets a restrained white glow, without a card background. */
+.sigc-domain-topic {
+  position: relative;
+  isolation: isolate;
+  transition: color 260ms ease, text-shadow 260ms ease, transform 260ms ease;
+}
+.sigc-domain-topic.is-active {
+  color: #f7fbff !important;
+  background: transparent !important;
+  text-shadow: 0 0 18px rgba(235, 245, 255, 0.3);
+  transform: translateX(5px);
+}
+.sigc-domain-topic.is-active .sigc-domain-topic-title {
+  text-shadow: 0 0 22px rgba(235, 245, 255, 0.28);
+}
+.sigc-domain-topic.is-active .sigc-domain-number {
+  color: #f1f7fc !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sigc-domain-topic {
+    transition: none !important;
+  }
+}
