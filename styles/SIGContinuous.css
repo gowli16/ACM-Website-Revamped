@@ -2218,3 +2218,84 @@
     transition: none !important;
   }
 }
+
+
+/* AI mission neural-network background. Connections draw layer by layer from left to right. */
+.sigc-mission[data-sigc-mission="ai"] {
+  isolation: isolate;
+}
+.sigc-mission[data-sigc-mission="ai"] > .sigc-neural-bg {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  width: min(100%, 1120px);
+  height: min(78vh, 700px);
+  min-height: 420px;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.32;
+  color: #56DCE0;
+  mask-image: linear-gradient(to bottom, #000 0%, #000 68%, transparent 100%);
+}
+.sigc-neural-bg__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.sigc-neural-link {
+  fill: none;
+  stroke: #56DCE0;
+  stroke-width: 1.15;
+  stroke-opacity: 0.78;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: sigc-neural-link-draw 680ms cubic-bezier(0.22, 0.7, 0.25, 1) var(--link-delay) forwards;
+}
+.sigc-neural-link--layer-0 { stroke: #53A9FF; }
+.sigc-neural-link--layer-1,
+.sigc-neural-link--layer-2 { stroke: #56DCE0; }
+.sigc-neural-link--layer-3 { stroke: #82DDF0; }
+.sigc-neural-node {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sigc-neural-node-appear 520ms cubic-bezier(0.16, 1, 0.3, 1) var(--node-delay) forwards;
+}
+.sigc-neural-node-core {
+  fill: #56DCE0;
+  stroke: rgba(226, 252, 255, 0.75);
+  stroke-width: 1;
+  filter: drop-shadow(0 0 7px rgba(86, 220, 224, 0.38));
+}
+.sigc-neural-layer--0 .sigc-neural-node-core { fill: #398DFF; }
+.sigc-neural-layer--4 .sigc-neural-node-core { fill: #78A9FF; }
+@keyframes sigc-neural-link-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes sigc-neural-node-appear {
+  from { opacity: 0; transform: scale(0.35); }
+  to { opacity: 1; transform: scale(1); }
+}
+@media (max-width: 700px) {
+  .sigc-mission[data-sigc-mission="ai"] > .sigc-neural-bg {
+    top: 0;
+    width: 125%;
+    right: -25%;
+    height: 480px;
+    min-height: 0;
+    opacity: 0.2;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sigc-neural-link {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .sigc-neural-node {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
