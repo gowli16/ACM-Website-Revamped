@@ -288,11 +288,11 @@ function MissionContent({ mission }) {
       data-sigc-mission={mission.id}
       aria-labelledby={`${mission.id}-title`}
     >
-      {mission.id === "ai" && <NeuralNetworkBackground />}
       {mission.id === "glitch" && <div className="sigc-glitch-star-animation" aria-hidden="true"><span /><span /><span /><span /><span /><span /><span /><span /><span /><span /><span /><span /></div>}
       <span className="sigc-mission-marker" data-sigc-marker={mission.id} />
       <div className="sigc-mission-inner">
         <header className="sigc-mission-header">
+          {mission.id === "ai" && <NeuralNetworkBackground />}
           <h2 id={`${mission.id}-title`}>{mission.id === "glitch" ? <GlitchTitle>{mission.title}</GlitchTitle> : mission.title}</h2>
           {mission.id === "glitch" && <div className="sigc-glitch-title-game-background" aria-hidden="true"><SpaceShooter /></div>}
           {mission.id !== "glitch" && (
