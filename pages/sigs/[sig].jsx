@@ -294,20 +294,18 @@ function MissionContent({ mission }) {
       <span className="sigc-mission-marker" data-sigc-marker={mission.id} />
       <div className="sigc-mission-inner">
         <header className="sigc-mission-header">
-          {mission.id !== "ai" && <p className="sigc-eyebrow">{mission.station} <span>{data.heroEyebrow || mission.signal}</span></p>}
           <h2 id={`${mission.id}-title`}>{mission.id === "glitch" ? <GlitchTitle>{mission.title}</GlitchTitle> : mission.title}</h2>
-          {overview?.title && <p className="sigc-overview-title">{overview.title}</p>}
-          <p className="sigc-mission-tagline">{data.tagline}</p>
-          {overview?.lines?.map((line, index) => <p className="sigc-overview-copy" key={index}>{line}</p>)}
-          {overview?.closing && <p className="sigc-overview-closing">{overview.closing}</p>}
-          {data.description && <p className="sigc-overview-copy">{data.description}</p>}
+          {mission.id === "glitch" && <div className="sigc-glitch-title-game-background" aria-hidden="true"><SpaceShooter /></div>}
+          {mission.id !== "glitch" && (
+            <>
+              {overview?.title && <p className="sigc-overview-title">{overview.title}</p>}
+              <p className="sigc-mission-tagline">{data.tagline}</p>
+              {overview?.lines?.map((line, index) => <p className="sigc-overview-copy" key={index}>{line}</p>)}
+              {overview?.closing && <p className="sigc-overview-closing">{overview.closing}</p>}
+              {data.description && <p className="sigc-overview-copy">{data.description}</p>}
+            </>
+          )}}
         </header>
-
-        {mission.id === "glitch" && (
-          <div className="sigc-glitch-game" aria-label="Glitch Gaming arcade">
-            <SpaceShooter />
-          </div>
-        )}
 
         <StorySection mission={mission} />
 
