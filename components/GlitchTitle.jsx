@@ -22,9 +22,13 @@ export default function GlitchTitle({ children }) {
     let frame = 0;
     const interval = window.setInterval(() => {
       frame += 1;
-      // Keep the title in a continuous signal-corruption loop.
-      // Brief clean frames preserve readability without pausing the effect.
-      setDisplayText(frame % 9 === 0 ? original : scrambleText(original));
+      // Scramble continuously for 3 seconds, then settle on the original title.
+      if (frame * 85 >= 3000) {
+        window.clearInterval(interval);
+        setDisplayText(original);
+        return;
+      }
+      setDisplayText(scrambleText(original));
     }, 85);
 
     return () => window.clearInterval(interval);
@@ -32,7 +36,7 @@ export default function GlitchTitle({ children }) {
 
   return (
     <span
-      className="sigc-glitch-title is-glitching"
+      className="sigc-glitch-title"
       data-text={displayText}
       aria-label={original}
     >
