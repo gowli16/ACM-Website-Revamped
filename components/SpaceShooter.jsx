@@ -147,6 +147,62 @@ export default function SpaceShooter() {
       ctx.restore();
     };
 
+    const drawMiniRocket = () => {
+      // A small decorative rocket cruises through the background without affecting gameplay.
+      const x = (game.frame * 0.9) % (WIDTH + 100) - 50;
+      const y = 76 + Math.sin(game.frame * 0.025) * 20;
+
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(0.42, 0.42);
+
+      const flameLength = 10 + Math.sin(game.frame * 0.35) * 3;
+      ctx.shadowColor = "rgba(255, 145, 77, .8)";
+      ctx.shadowBlur = 9;
+      ctx.fillStyle = "#FF914D";
+      ctx.beginPath();
+      ctx.moveTo(-17, 0);
+      ctx.lineTo(-17 - flameLength, -4);
+      ctx.lineTo(-11 - flameLength * 0.5, 0);
+      ctx.lineTo(-17 - flameLength, 4);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.shadowColor = "rgba(221, 238, 246, .6)";
+      ctx.shadowBlur = 7;
+      ctx.fillStyle = "#F4F7FA";
+      ctx.beginPath();
+      ctx.moveTo(23, 0);
+      ctx.quadraticCurveTo(12, -9, -12, -7);
+      ctx.lineTo(-18, -3);
+      ctx.lineTo(-18, 3);
+      ctx.lineTo(-12, 7);
+      ctx.quadraticCurveTo(12, 9, 23, 0);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = "#62D4E8";
+      ctx.beginPath();
+      ctx.ellipse(5, 0, 6, 3.5, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#91A9B8";
+      ctx.beginPath();
+      ctx.moveTo(-7, -6);
+      ctx.lineTo(-14, -12);
+      ctx.lineTo(1, -7);
+      ctx.closePath();
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(-7, 6);
+      ctx.lineTo(-14, 12);
+      ctx.lineTo(1, 7);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    };
+
     const loop = () => {
       game.frame += 1;
       ctx.clearRect(0, 0, WIDTH, HEIGHT);
@@ -158,6 +214,8 @@ export default function SpaceShooter() {
         ctx.fillRect((i * 97 + 19) % WIDTH, (i * 67 + 13) % HEIGHT, 1.5, 1.5);
       }
       ctx.globalAlpha = 1;
+
+      drawMiniRocket();
 
       if (!paused) {
         if (game.up) game.shipY -= 4;
