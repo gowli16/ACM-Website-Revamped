@@ -304,7 +304,7 @@ function MissionContent({ mission }) {
               {overview?.closing && <p className="sigc-overview-closing">{overview.closing}</p>}
               {data.description && <p className="sigc-overview-copy">{data.description}</p>}
             </>
-          )}}
+          )}
         </header>
 
         <StorySection mission={mission} />
