@@ -62,6 +62,7 @@ export default function GlitchTitle({ children }) {
       data-text={displayText}
       aria-label={original}
     >
+      <span className="sigc-glitch-title__reserve" aria-hidden="true">{original}</span>
       <span className="sigc-glitch-title__main" aria-hidden="true">
         {displayText}
       </span>
