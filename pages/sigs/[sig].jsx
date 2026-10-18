@@ -471,6 +471,35 @@ export default function RecruitmentPage() {
   useEffect(() => () => window.clearTimeout(rocketTimeoutRef.current), []);
 
   useEffect(() => {
+    // Replay each SIG's entrance animations whenever its section enters the viewport,
+    // whether the user arrives by scrolling down or back up.
+    const missions = Array.from(document.querySelectorAll(".sigc-mission"));
+    if (!("IntersectionObserver" in window)) return undefined;
+
+    const replayObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const section = entry.target;
+        section.dispatchEvent(new CustomEvent("sigc:mission-enter", { bubbles: true }));
+        section.querySelectorAll("*").forEach((element) => {
+          element.getAnimations().forEach((animation) => {
+            try {
+              animation.cancel();
+              animation.play();
+            } catch {
+              // Ignore animations that cannot be restarted by the browser.
+            }
+          });
+        });
+      });
+    }, { threshold: 0.08 });
+
+    missions.forEach((section) => replayObserver.observe(section));
+
+    return () => replayObserver.disconnect();
+  }, []);
+
+  useEffect(() => {
     const markers = document.querySelectorAll("[data-sigc-marker]");
     const observer = new IntersectionObserver(
       (entries) => {
