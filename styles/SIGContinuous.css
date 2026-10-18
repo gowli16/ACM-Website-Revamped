@@ -2000,3 +2000,41 @@
     animation: none !important;
   }
 }
+
+
+/* Final pass: remove visible borders and dividers from the continuous SIG page. */
+.sigc-page-content,
+.sigc-page-content *,
+.sigc-page-content *::before,
+.sigc-page-content *::after {
+  border-color: transparent !important;
+  outline-color: transparent !important;
+}
+
+.sigc-page-content hr,
+.sigc-page-content [class*="divider"],
+.sigc-page-content [class*="separator"],
+.sigc-page-content [class*="rule"] {
+  display: none !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.sigc-page-content :is(
+  .sigc-domain-list,
+  .sigc-domain-topic,
+  .sigc-domain-detail,
+  .sigc-content-section,
+  .sigc-record,
+  .sigc-record-grid,
+  .sigc-structured-grid,
+  .sigc-structured-item,
+  .sigc-contact,
+  .sigc-briefing-list li,
+  .sigc-tags li,
+  .sigc-social-links a,
+  .sigc-email
+) {
+  border: 0 !important;
+  box-shadow: none !important;
+}
