@@ -154,7 +154,6 @@ function DomainExplorer({ mission }) {
             >
               <span className="sigc-domain-number">{String(index + 1).padStart(2, "0")}</span>
               <span className="sigc-domain-topic-title">{values[0]}</span>
-              <span className="sigc-domain-arrow" aria-hidden="true">↗</span>
             </button>
           );
         })}
@@ -285,8 +284,7 @@ function MissionContent({ mission }) {
         {Array.isArray(data.domains) && data.domains.length > 0 && (
           <section className="sigc-content-section sigc-domain-section" id={`${mission.id}-domains`}>
             <SectionHeading
-              eyebrow="AREAS OF PRACTICE"
-              title={[data.domainsHeadingPlain, data.domainsHeadingHighlight].filter(Boolean).join(" ") || "Domains"}
+              title="Domains"
               description={data.domainsDescription}
             />
             <DomainExplorer key={mission.id} mission={mission} />
