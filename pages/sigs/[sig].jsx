@@ -98,36 +98,49 @@ function DomainExplorer({ mission }) {
   const domains = Array.isArray(mission.data.domains) ? mission.data.domains : [];
   const [activeIndex, setActiveIndex] = useState(0);
   const explorerRef = useRef(null);
+  const activeIndexRef = useRef(0);
   const lastWheelChangeRef = useRef(0);
 
+  const chooseDomain = useCallback((index) => {
+    const nextIndex = Math.max(0, Math.min(domains.length - 1, index));
+    activeIndexRef.current = nextIndex;
+    setActiveIndex(nextIndex);
+  }, [domains.length]);
+
   useEffect(() => {
+    activeIndexRef.current = 0;
     setActiveIndex(0);
   }, [mission.id]);
 
   useEffect(() => {
-    const explorer = explorerRef.current;
-    if (!explorer || domains.length < 2) return undefined;
+    if (domains.length < 2) return undefined;
 
     const handleWheel = (event) => {
+      const explorer = explorerRef.current;
+      if (!explorer || Math.abs(event.deltaY) < 8) return;
       const rect = explorer.getBoundingClientRect();
-      const inExplorer = rect.top < window.innerHeight && rect.bottom > 0;
-      if (!inExplorer || Math.abs(event.deltaY) < 12) return;
+      const inExplorer = rect.top <= window.innerHeight * 0.55 &&
+        rect.bottom >= window.innerHeight * 0.45;
+      if (!inExplorer) return;
 
+      const currentIndex = activeIndexRef.current;
       const direction = event.deltaY > 0 ? 1 : -1;
-      const nextIndex = Math.max(0, Math.min(domains.length - 1, activeIndex + direction));
-      if (nextIndex === activeIndex) return;
+      const nextIndex = currentIndex + direction;
+      const canChange = nextIndex >= 0 && nextIndex < domains.length;
+      if (!canChange) return;
 
-      // Consume wheel movement while another topic remains, keeping the page still.
+      // Prevent the document from moving while changing between domain topics.
       event.preventDefault();
       const now = Date.now();
-      if (now - lastWheelChangeRef.current < 320) return;
+      if (now - lastWheelChangeRef.current < 420) return;
       lastWheelChangeRef.current = now;
+      activeIndexRef.current = nextIndex;
       setActiveIndex(nextIndex);
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
     return () => window.removeEventListener("wheel", handleWheel);
-  }, [activeIndex, domains.length]);
+  }, [domains.length]);
 
   if (!domains.length) return null;
   const activeDomain = domains[activeIndex] || domains[0];
@@ -150,7 +163,7 @@ function DomainExplorer({ mission }) {
               key={values[0] || index}
               type="button"
               aria-pressed={isActive}
-              onClick={() => setActiveIndex(index)}
+              onClick={() => chooseDomain(index)}
             >
               <span className="sigc-domain-number">{String(index + 1).padStart(2, "0")}</span>
               <span className="sigc-domain-topic-title">{values[0]}</span>
