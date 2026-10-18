@@ -7,7 +7,7 @@ function scrambleText(text) {
     .split("")
     .map((character) => {
       if (character === " ") return " ";
-      return Math.random() > 0.32
+      return Math.random() > 0.38
         ? SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)]
         : character;
     })
@@ -17,48 +17,22 @@ function scrambleText(text) {
 export default function GlitchTitle({ children }) {
   const original = String(children);
   const [displayText, setDisplayText] = useState(original);
-  const [glitching, setGlitching] = useState(false);
 
   useEffect(() => {
-    let mounted = true;
-    let timeout;
-    let scrambleInterval;
+    let frame = 0;
+    const interval = window.setInterval(() => {
+      frame += 1;
+      // Keep the title in a continuous signal-corruption loop.
+      // Brief clean frames preserve readability without pausing the effect.
+      setDisplayText(frame % 9 === 0 ? original : scrambleText(original));
+    }, 85);
 
-    const runBurst = () => {
-      if (!mounted) return;
-      setGlitching(true);
-      let frames = 0;
-      scrambleInterval = window.setInterval(() => {
-        if (!mounted) return;
-        frames += 1;
-        setDisplayText(scrambleText(original));
-        if (frames >= 7) {
-          window.clearInterval(scrambleInterval);
-          setDisplayText(original);
-          setGlitching(false);
-        }
-      }, 55);
-    };
-
-    const schedule = () => {
-      runBurst();
-      timeout = window.setTimeout(() => {
-        runBurst();
-        timeout = window.setTimeout(schedule, 3900);
-      }, 2050);
-    };
-
-    timeout = window.setTimeout(schedule, 250);
-    return () => {
-      mounted = false;
-      window.clearTimeout(timeout);
-      window.clearInterval(scrambleInterval);
-    };
+    return () => window.clearInterval(interval);
   }, [original]);
 
   return (
     <span
-      className={`sigc-glitch-title${glitching ? " is-glitching" : ""}`}
+      className="sigc-glitch-title is-glitching"
       data-text={displayText}
       aria-label={original}
     >
