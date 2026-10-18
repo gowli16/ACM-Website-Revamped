@@ -2522,3 +2522,49 @@
     transform: none;
   }
 }
+
+
+/* Chromatic glitch-title animation inspired by the supplied reference, using the site's existing palette. */
+.sigc-mission[data-sigc-mission="glitch"] .sigc-mission-header h2.sigc-glitch-title {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  text-shadow: 0 0 24px rgba(244, 247, 250, 0.08);
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title::before,
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title::before {
+  color: var(--sigc-orange);
+  clip-path: inset(8% 0 64% 0);
+  animation: sigc-glitch-channel-warm 5.4s steps(1, end) infinite;
+}
+.sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title::after {
+  color: var(--sigc-muted);
+  clip-path: inset(58% 0 12% 0);
+  animation: sigc-glitch-channel-cool 5.4s steps(1, end) infinite;
+}
+@keyframes sigc-glitch-channel-warm {
+  0%, 82%, 85%, 100% { opacity: 0; transform: translateX(0); }
+  83% { opacity: .9; transform: translateX(3px); }
+  84% { opacity: .65; transform: translateX(-2px); }
+}
+@keyframes sigc-glitch-channel-cool {
+  0%, 82%, 85%, 100% { opacity: 0; transform: translateX(0); }
+  83% { opacity: .8; transform: translateX(-3px); }
+  84% { opacity: .55; transform: translateX(2px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title::before,
+  .sigc-mission[data-sigc-mission="glitch"] .sigc-glitch-title::after {
+    animation: none;
+    display: none;
+  }
+}
