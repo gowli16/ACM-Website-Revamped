@@ -94,6 +94,91 @@ function RecordCards({ records, type }) {
   );
 }
 
+function DomainExplorer({ mission }) {
+  const domains = Array.isArray(mission.data.domains) ? mission.data.domains : [];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const topicRefs = useRef([]);
+
+  useEffect(() => {
+    setActiveIndex(0);
+    const nodes = topicRefs.current.filter(Boolean);
+    if (!nodes.length) return undefined;
+
+    const observer = new IntersectionObserver((entries) => {
+      const candidates = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) =>
+          Math.abs(a.boundingClientRect.top - window.innerHeight * 0.42) -
+          Math.abs(b.boundingClientRect.top - window.innerHeight * 0.42)
+        );
+      if (candidates[0]) {
+        const index = Number(candidates[0].target.dataset.domainIndex);
+        if (Number.isFinite(index)) setActiveIndex(index);
+      }
+    }, { rootMargin: "-22% 0px -48% 0px", threshold: 0 });
+
+    nodes.forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
+  }, [mission.id, domains.length]);
+
+  if (!domains.length) return null;
+  const activeDomain = domains[activeIndex] || domains[0];
+  const activeValues = Array.isArray(activeDomain)
+    ? activeDomain
+    : [activeDomain.title, activeDomain.description, activeDomain.tags];
+  const activeTags = Array.isArray(activeValues[2]) ? activeValues[2] : [];
+
+  return (
+    <div className="sigc-domain-explorer">
+      <div className="sigc-domain-list" aria-label="Domain topics">
+        {domains.map((domain, index) => {
+          const values = Array.isArray(domain)
+            ? domain
+            : [domain.title, domain.description, domain.tags];
+          const isActive = index === activeIndex;
+          return (
+            <button
+              className={`sigc-domain-topic${isActive ? " is-active" : ""}`}
+              key={values[0] || index}
+              ref={(node) => { topicRefs.current[index] = node; }}
+              data-domain-index={index}
+              type="button"
+              aria-pressed={isActive}
+              onClick={() => {
+                setActiveIndex(index);
+                topicRefs.current[index]?.scrollIntoView({
+                  behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+                  block: "center",
+                });
+              }}
+            >
+              <span className="sigc-domain-number">{String(index + 1).padStart(2, "0")}</span>
+              <span className="sigc-domain-topic-title">{values[0]}</span>
+              <span className="sigc-domain-arrow" aria-hidden="true">↗</span>
+            </button>
+          );
+        })}
+      </div>
+      <aside className="sigc-domain-detail" aria-live="polite" aria-atomic="true">
+        <p className="sigc-eyebrow">DOMAIN / {String(activeIndex + 1).padStart(2, "0")}</p>
+        <h4 key={activeValues[0]}>{activeValues[0]}</h4>
+        <p className="sigc-domain-description">{activeValues[1]}</p>
+        {activeTags.length > 0 && (
+          <div className="sigc-domain-tools">
+            <p className="sigc-domain-tools-label">TOOLS & CONCEPTS</p>
+            <ul className="sigc-tags">
+              {activeTags.filter((tag) => typeof tag === "string").map((tag) => <li key={tag}>{tag}</li>)}
+            </ul>
+          </div>
+        )}
+        <div className="sigc-domain-progress" aria-hidden="true">
+          <span style={{ width: `${((activeIndex + 1) / domains.length) * 100}%` }} />
+        </div>
+      </aside>
+    </div>
+  );
+}
+
 function StructuredData({ value }) {
   if (value == null || value === "") return null;
 
@@ -198,13 +283,13 @@ function MissionContent({ mission }) {
         <StorySection mission={mission} />
 
         {Array.isArray(data.domains) && data.domains.length > 0 && (
-          <section className="sigc-content-section" id={`${mission.id}-domains`}>
+          <section className="sigc-content-section sigc-domain-section" id={`${mission.id}-domains`}>
             <SectionHeading
               eyebrow="AREAS OF PRACTICE"
               title={[data.domainsHeadingPlain, data.domainsHeadingHighlight].filter(Boolean).join(" ") || "Domains"}
               description={data.domainsDescription}
             />
-            <RecordCards records={data.domains} type="domains" />
+            <DomainExplorer key={mission.id} mission={mission} />
           </section>
         )}
 
