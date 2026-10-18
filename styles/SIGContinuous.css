@@ -2909,3 +2909,30 @@
     opacity: 0.24;
   }
 }
+
+
+/* Medium-scale AI network: full viewport width without oversized, stretched nodes. */
+.sigc-mission[data-sigc-mission="ai"] .sigc-mission-header > .sigc-neural-bg {
+  top: 175px;
+  bottom: -180px;
+  left: 50%;
+  width: 100vw;
+  height: auto;
+  inset-inline: auto;
+  transform: translateX(-50%);
+  opacity: 0.34;
+  overflow: hidden;
+}
+.sigc-mission[data-sigc-mission="ai"] .sigc-mission-header > .sigc-neural-bg .sigc-neural-bg__svg {
+  width: 100%;
+  height: 100%;
+  transform: none;
+}
+@media (max-width: 700px) {
+  .sigc-mission[data-sigc-mission="ai"] .sigc-mission-header > .sigc-neural-bg {
+    top: 190px;
+    bottom: -120px;
+    width: 100vw;
+    opacity: 0.24;
+  }
+}
