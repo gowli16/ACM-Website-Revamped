@@ -97,29 +97,36 @@ function RecordCards({ records, type }) {
 function DomainExplorer({ mission }) {
   const domains = Array.isArray(mission.data.domains) ? mission.data.domains : [];
   const [activeIndex, setActiveIndex] = useState(0);
-  const topicRefs = useRef([]);
+  const explorerRef = useRef(null);
+  const lastWheelChangeRef = useRef(0);
 
   useEffect(() => {
     setActiveIndex(0);
-    const nodes = topicRefs.current.filter(Boolean);
-    if (!nodes.length) return undefined;
+  }, [mission.id]);
 
-    const observer = new IntersectionObserver((entries) => {
-      const candidates = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) =>
-          Math.abs(a.boundingClientRect.top - window.innerHeight * 0.42) -
-          Math.abs(b.boundingClientRect.top - window.innerHeight * 0.42)
-        );
-      if (candidates[0]) {
-        const index = Number(candidates[0].target.dataset.domainIndex);
-        if (Number.isFinite(index)) setActiveIndex(index);
-      }
-    }, { rootMargin: "-22% 0px -48% 0px", threshold: 0 });
+  useEffect(() => {
+    const explorer = explorerRef.current;
+    if (!explorer || domains.length < 2) return undefined;
 
-    nodes.forEach((node) => observer.observe(node));
-    return () => observer.disconnect();
-  }, [mission.id, domains.length]);
+    const handleWheel = (event) => {
+      const rect = explorer.getBoundingClientRect();
+      const inExplorer = rect.top < window.innerHeight * 0.72 && rect.bottom > window.innerHeight * 0.28;
+      if (!inExplorer || Math.abs(event.deltaY) < 12) return;
+
+      const direction = event.deltaY > 0 ? 1 : -1;
+      const nextIndex = Math.max(0, Math.min(domains.length - 1, activeIndex + direction));
+      if (nextIndex === activeIndex) return;
+
+      event.preventDefault();
+      const now = Date.now();
+      if (now - lastWheelChangeRef.current < 380) return;
+      lastWheelChangeRef.current = now;
+      setActiveIndex(nextIndex);
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    return () => window.removeEventListener("wheel", handleWheel);
+  }, [activeIndex, domains.length]);
 
   if (!domains.length) return null;
   const activeDomain = domains[activeIndex] || domains[0];
@@ -129,7 +136,7 @@ function DomainExplorer({ mission }) {
   const activeTags = Array.isArray(activeValues[2]) ? activeValues[2] : [];
 
   return (
-    <div className="sigc-domain-explorer">
+    <div className="sigc-domain-explorer" ref={explorerRef}>
       <div className="sigc-domain-list" aria-label="Domain topics">
         {domains.map((domain, index) => {
           const values = Array.isArray(domain)
@@ -140,17 +147,9 @@ function DomainExplorer({ mission }) {
             <button
               className={`sigc-domain-topic${isActive ? " is-active" : ""}`}
               key={values[0] || index}
-              ref={(node) => { topicRefs.current[index] = node; }}
-              data-domain-index={index}
               type="button"
               aria-pressed={isActive}
-              onClick={() => {
-                setActiveIndex(index);
-                topicRefs.current[index]?.scrollIntoView({
-                  behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-                  block: "center",
-                });
-              }}
+              onClick={() => setActiveIndex(index)}
             >
               <span className="sigc-domain-number">{String(index + 1).padStart(2, "0")}</span>
               <span className="sigc-domain-topic-title">{values[0]}</span>
@@ -170,9 +169,6 @@ function DomainExplorer({ mission }) {
             </ul>
           </div>
         )}
-        <div className="sigc-domain-progress" aria-hidden="true">
-          <span style={{ width: `${((activeIndex + 1) / domains.length) * 100}%` }} />
-        </div>
       </aside>
     </div>
   );
