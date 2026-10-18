@@ -2442,3 +2442,20 @@
     height: calc(var(--sigc-domain-count, 5) * 82svh);
   }
 }
+
+
+/* Reduce the actual scroll track that was leaving a long tail after the final domain. */
+.sigc-domain-scroll-stage {
+  height: calc(var(--sigc-domain-count, 5) * 62svh) !important;
+}
+.sigc-mission-inner {
+  padding-bottom: 8px;
+}
+.sigc-domain-scroll-screen {
+  min-height: 0;
+}
+@media (max-width: 700px) {
+  .sigc-domain-scroll-stage {
+    height: calc(var(--sigc-domain-count, 5) * 70svh) !important;
+  }
+}
