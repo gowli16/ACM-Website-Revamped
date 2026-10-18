@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react";
+
 const layers = [
   { x: 45, count: 5 },
   { x: 245, count: 5 },
@@ -26,8 +28,29 @@ const connections = layers.slice(0, -1).flatMap((layer, layerIndex) => {
 });
 
 export default function NeuralNetworkBackground() {
+  const backgroundRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const element = backgroundRef.current;
+    if (!element || typeof IntersectionObserver === "undefined") {
+      setIsVisible(true);
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsVisible(true);
+        observer.disconnect();
+      }
+    }, { threshold: 0.05 });
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="sigc-neural-bg" aria-hidden="true">
+    <div ref={backgroundRef} className={`sigc-neural-bg${isVisible ? " is-visible" : ""}`} aria-hidden="true">
       <svg className="sigc-neural-bg__svg" viewBox="0 0 900 500" preserveAspectRatio="xMidYMid meet">
         <defs>
           <marker id="sigc-neural-arrow" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
