@@ -20,20 +20,35 @@ export default function GlitchTitle({ children }) {
   const [glitching, setGlitching] = useState(true);
 
   useEffect(() => {
-    let frame = 0;
-    const interval = window.setInterval(() => {
-      frame += 1;
-      // Scramble continuously for 3 seconds, then settle on the original title.
-      if (frame * 85 >= 3000) {
-        window.clearInterval(interval);
-        setDisplayText(original);
-        setGlitching(false);
-        return;
-      }
-      setDisplayText(scrambleText(original));
-    }, 85);
+    let interval = null;
 
-    return () => window.clearInterval(interval);
+    const startScramble = () => {
+      if (interval !== null) window.clearInterval(interval);
+      let elapsed = 0;
+      setGlitching(true);
+      setDisplayText(scrambleText(original));
+
+      interval = window.setInterval(() => {
+        elapsed += 85;
+        if (elapsed >= 3000) {
+          window.clearInterval(interval);
+          interval = null;
+          setDisplayText(original);
+          setGlitching(false);
+          return;
+        }
+        setDisplayText(scrambleText(original));
+      }, 85);
+    };
+
+    const section = document.querySelector('[data-sigc-mission="glitch"]');
+    startScramble();
+    section?.addEventListener("sigc:mission-enter", startScramble);
+
+    return () => {
+      if (interval !== null) window.clearInterval(interval);
+      section?.removeEventListener("sigc:mission-enter", startScramble);
+    };
   }, [original]);
 
   return (
