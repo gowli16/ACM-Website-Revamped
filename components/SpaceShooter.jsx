@@ -39,12 +39,13 @@ export default function SpaceShooter() {
     const ctx = canvas && canvas.getContext("2d");
     if (!ctx) return undefined;
     const game = gameRef.current;
+    game.firing = false;
     let raf;
     let lastShot = 0;
 
     const shoot = () => {
       if (!paused && performance.now() - lastShot > 220) {
-        game.bullets.push({ x: WIDTH - 52, y: game.shipY });
+        game.bullets.push({ x: WIDTH - 82, y: game.shipY, length: 34 });
         lastShot = performance.now();
       }
     };
@@ -52,13 +53,17 @@ export default function SpaceShooter() {
       if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(event.key)) event.preventDefault();
       if (event.key === "ArrowUp" || event.key.toLowerCase() === "w") game.up = true;
       if (event.key === "ArrowDown" || event.key.toLowerCase() === "s") game.down = true;
-      if (event.key.toLowerCase() === "f") shoot();
+      if (event.key.toLowerCase() === "f" || event.code === "Space") {
+        game.firing = true;
+        shoot();
+      }
     };
     const keyUp = (event) => {
       if (event.key === "ArrowUp" || event.key.toLowerCase() === "w") game.up = false;
       if (event.key === "ArrowDown" || event.key.toLowerCase() === "s") game.down = false;
+      if (event.key.toLowerCase() === "f" || event.code === "Space") game.firing = false;
     };
-    const clearKeys = () => { game.up = false; game.down = false; };
+    const clearKeys = () => { game.up = false; game.down = false; game.firing = false; };
     window.addEventListener("keydown", keyDown);
     window.addEventListener("keyup", keyUp);
     window.addEventListener("blur", clearKeys);
@@ -94,6 +99,7 @@ export default function SpaceShooter() {
       // A clearly visible little rocket, with an animated exhaust flame.
       ctx.save();
       ctx.translate(WIDTH - 58, game.shipY);
+      ctx.scale(-1, 1);
 
       const flameLength = 12 + Math.sin(game.frame * 0.55) * 5;
       ctx.shadowColor = "rgba(255, 145, 77, .75)";
@@ -147,62 +153,6 @@ export default function SpaceShooter() {
       ctx.restore();
     };
 
-    const drawMiniRocket = () => {
-      // A small decorative rocket cruises through the background without affecting gameplay.
-      const x = (game.frame * 0.9) % (WIDTH + 100) - 50;
-      const y = 76 + Math.sin(game.frame * 0.025) * 20;
-
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.scale(0.42, 0.42);
-
-      const flameLength = 10 + Math.sin(game.frame * 0.35) * 3;
-      ctx.shadowColor = "rgba(255, 145, 77, .8)";
-      ctx.shadowBlur = 9;
-      ctx.fillStyle = "#FF914D";
-      ctx.beginPath();
-      ctx.moveTo(-17, 0);
-      ctx.lineTo(-17 - flameLength, -4);
-      ctx.lineTo(-11 - flameLength * 0.5, 0);
-      ctx.lineTo(-17 - flameLength, 4);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.shadowColor = "rgba(221, 238, 246, .6)";
-      ctx.shadowBlur = 7;
-      ctx.fillStyle = "#F4F7FA";
-      ctx.beginPath();
-      ctx.moveTo(23, 0);
-      ctx.quadraticCurveTo(12, -9, -12, -7);
-      ctx.lineTo(-18, -3);
-      ctx.lineTo(-18, 3);
-      ctx.lineTo(-12, 7);
-      ctx.quadraticCurveTo(12, 9, 23, 0);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.shadowBlur = 0;
-      ctx.fillStyle = "#62D4E8";
-      ctx.beginPath();
-      ctx.ellipse(5, 0, 6, 3.5, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = "#91A9B8";
-      ctx.beginPath();
-      ctx.moveTo(-7, -6);
-      ctx.lineTo(-14, -12);
-      ctx.lineTo(1, -7);
-      ctx.closePath();
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(-7, 6);
-      ctx.lineTo(-14, 12);
-      ctx.lineTo(1, 7);
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
-    };
-
     const loop = () => {
       game.frame += 1;
       ctx.clearRect(0, 0, WIDTH, HEIGHT);
@@ -215,9 +165,8 @@ export default function SpaceShooter() {
       }
       ctx.globalAlpha = 1;
 
-      drawMiniRocket();
-
       if (!paused) {
+        if (game.firing) shoot();
         if (game.up) game.shipY -= 4;
         if (game.down) game.shipY += 4;
         game.shipY = Math.max(18, Math.min(HEIGHT - 18, game.shipY));
@@ -256,8 +205,18 @@ export default function SpaceShooter() {
       }
 
       game.rocks.forEach(drawAsteroid);
-      ctx.fillStyle = "#FF914D";
-      game.bullets.forEach((bullet) => ctx.fillRect(bullet.x - 1, bullet.y - 1, 10, 2));
+      game.bullets.forEach((bullet) => {
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        ctx.shadowColor = "#62D4E8";
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = "#62D4E8";
+        ctx.fillRect(bullet.x - (bullet.length || 34), bullet.y - 2, bullet.length || 34, 4);
+        ctx.shadowBlur = 3;
+        ctx.fillStyle = "#F4F7FA";
+        ctx.fillRect(bullet.x - (bullet.length || 34), bullet.y - 0.75, bullet.length || 34, 1.5);
+        ctx.restore();
+      });
       drawShip();
 
       if (paused) {
@@ -289,11 +248,11 @@ export default function SpaceShooter() {
   return (
     <aside className="sigc-shooter" aria-label="Mini space shooter game">
       <canvas ref={canvasRef} className="sigc-shooter-canvas" width={WIDTH} height={HEIGHT}
-        aria-label="Asteroids travel from left to right. Use up and down arrow keys or W and S to move. Press space to fire." />
+        aria-label="Asteroids spawn on the left and travel toward your rocket on the right. Use up and down arrow keys or W and S to move. Hold Space or F to fire energy beams." />
       <div className="sigc-shooter-interface">
         <div className="sigc-shooter-instructions" aria-live="polite">
           <p><span>{instruction}</span><i aria-hidden="true" /></p>
-          <p className="sigc-shooter-fire-instruction">PRESS <strong>F</strong> TO FIRE</p>
+          <p className="sigc-shooter-fire-instruction">HOLD <strong>SPACE</strong> / <strong>F</strong> TO FIRE BEAMS</p>
         </div>
       </div>
     </aside>
