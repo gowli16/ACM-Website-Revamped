@@ -473,13 +473,15 @@ export default function RecruitmentPage() {
   useEffect(() => {
     // Replay each SIG's entrance animations whenever its section enters the viewport,
     // whether the user arrives by scrolling down or back up.
-    const missions = Array.from(document.querySelectorAll(".sigc-mission"));
+    const missions = Array.from(document.querySelectorAll(".sigc-mission-header"));
     if (!("IntersectionObserver" in window)) return undefined;
 
     const replayObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        const section = entry.target;
+        const header = entry.target;
+        const section = header.closest(".sigc-mission");
+        if (!section) return;
         section.dispatchEvent(new CustomEvent("sigc:mission-enter", { bubbles: true }));
         section.querySelectorAll("*").forEach((element) => {
           element.getAnimations().forEach((animation) => {
@@ -492,7 +494,7 @@ export default function RecruitmentPage() {
           });
         });
       });
-    }, { threshold: 0.08 });
+    }, { threshold: 0.08, rootMargin: "0px 0px -18% 0px" });
 
     missions.forEach((section) => replayObserver.observe(section));
 
