@@ -2836,3 +2836,37 @@
   position: relative;
   z-index: 1;
 }
+
+
+/* Let the AI neural network fill the full visible mission-header area. */
+.sigc-mission[data-sigc-mission="ai"] .sigc-mission-header {
+  min-height: min(78vh, 560px);
+}
+.sigc-mission[data-sigc-mission="ai"] .sigc-mission-header > .sigc-neural-bg {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.42;
+  overflow: hidden;
+  mask-image: none;
+}
+.sigc-mission[data-sigc-mission="ai"] .sigc-mission-header > .sigc-neural-bg .sigc-neural-bg__svg {
+  width: 100%;
+  height: 100%;
+  transform: scale(1.02);
+  transform-origin: center;
+}
+@media (max-width: 700px) {
+  .sigc-mission[data-sigc-mission="ai"] .sigc-mission-header {
+    min-height: 430px;
+  }
+  .sigc-mission[data-sigc-mission="ai"] .sigc-mission-header > .sigc-neural-bg {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+  }
+  .sigc-mission[data-sigc-mission="ai"] .sigc-mission-header > .sigc-neural-bg .sigc-neural-bg__svg {
+    transform: scale(1.12);
+  }
+}
