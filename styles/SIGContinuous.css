@@ -1878,3 +1878,57 @@
     padding-left: 10px;
   }
 }
+
+
+/* Keep the domain explorer in place while wheel input changes the selected topic. */
+.sigc-domain-section,
+.sigc-domain-section .sigc-section-heading,
+.sigc-domain-explorer,
+.sigc-domain-list,
+.sigc-domain-topic,
+.sigc-domain-detail {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  outline: 0;
+  box-shadow: none !important;
+}
+.sigc-domain-explorer {
+  min-height: min(66vh, 650px);
+  align-items: center;
+}
+.sigc-domain-list {
+  border: 0 !important;
+}
+.sigc-domain-topic {
+  border: 0 !important;
+  min-height: 96px;
+}
+.sigc-domain-detail {
+  position: relative;
+  top: auto;
+  min-height: 280px;
+  padding: 28px 8px;
+  border: 0 !important;
+  background: transparent !important;
+}
+.sigc-domain-progress,
+.sigc-domain-progress span {
+  display: none !important;
+}
+.sigc-domain-section > .sigc-section-heading h3 {
+  margin-bottom: 0;
+}
+@media (max-width: 700px) {
+  .sigc-domain-explorer {
+    min-height: auto;
+    align-items: start;
+  }
+  .sigc-domain-topic {
+    min-height: 72px;
+  }
+  .sigc-domain-detail {
+    position: relative;
+    top: auto;
+    padding: 20px 8px;
+  }
+}
