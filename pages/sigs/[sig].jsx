@@ -411,19 +411,7 @@ function MissionContent({ mission }) {
           </section>
         )}
 
-        <section className="sigc-contact" id={`${mission.id}-contact`}>
-          <div>
-            <p className="sigc-eyebrow">NEXT TRANSMISSION</p>
-            <h3>Build with {mission.label}.</h3>
-            <p>Get in touch with ACM Amritapuri to learn more about this SIG.</p>
-            {data.email && <a className="sigc-email" href={`mailto:${data.email}`}>{data.email}</a>}
-          </div>
-          <nav className="sigc-social-links" aria-label="ACM Amritapuri social links">
-            {contactLinks.map((link) => (
-              <a href={link.href} key={link.label} target="_blank" rel="noreferrer">{link.label}</a>
-            ))}
-          </nav>
-        </section>
+
       </div>
     </section>
   );
