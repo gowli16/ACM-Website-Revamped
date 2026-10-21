@@ -37,6 +37,8 @@ function SectionHeading({ eyebrow, title, description }) {
 function AIAnimatedTitle({ onComplete }) {
   const wrapRef = useRef(null);
   const canvasRef = useRef(null);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
   useEffect(() => {
     const wrap = wrapRef.current;
     const canvas = canvasRef.current;
@@ -74,14 +76,14 @@ function AIAnimatedTitle({ onComplete }) {
       octx.fillText("ARTIFICIAL", width / 2, height * 0.34);
       octx.fillText("INTELLIGENCE", width / 2, height * 0.76);
       const pixels = octx.getImageData(0, 0, width, height).data;
-      const step = width < 520 ? 6 : 8;
+      const step = width < 520 ? 5 : 6;
       const targets = [];
       for (let y = 2; y < height - 2; y += step) {
         for (let x = 2; x < width - 2; x += step) {
           if (pixels[(y * width + x) * 4 + 3] > 80) {
             const angle = Math.random() * Math.PI * 2;
             const distance = Math.max(width * 0.38, height * 1.2) * (0.65 + Math.random() * 0.7);
-            targets.push({ x, y, sx: width / 2 + Math.cos(angle) * distance, sy: height / 2 + Math.sin(angle) * distance, r: Math.random() < 0.1 ? 1.35 : 0.78, delay: Math.random() * 0.48, twinkle: Math.random() * Math.PI * 2 });
+            targets.push({ x: x + step / 2, y: y + step / 2, sx: width / 2 + Math.cos(angle) * distance, sy: height / 2 + Math.sin(angle) * distance, r: Math.random() < 0.08 ? 1.2 : 0.95, delay: Math.random() * 0.48, twinkle: Math.random() * Math.PI * 2 });
           }
         }
       }
@@ -111,7 +113,7 @@ function AIAnimatedTitle({ onComplete }) {
         ctx.fillStyle = "rgba(245,245,241," + alpha + ")"; ctx.fill();
       });
       if (progress < 1) { raf = requestAnimationFrame(draw); return; }
-      if (!completionSent) { completionSent = true; onComplete?.(); }
+      if (!completionSent) { completionSent = true; onCompleteRef.current?.(); }
       particles.forEach((point) => {
         const pulse = 0.78 + Math.sin(elapsed * 1.2 + point.twinkle) * 0.12;
         ctx.beginPath(); ctx.arc(point.x, point.y, point.r, 0, Math.PI * 2);
@@ -126,7 +128,7 @@ function AIAnimatedTitle({ onComplete }) {
     const resize = () => { cancelAnimationFrame(raf); buildScene(); if (wrap.getBoundingClientRect().top < window.innerHeight) raf = requestAnimationFrame(draw); };
     window.addEventListener("resize", resize);
     return () => { disposed = true; observer.disconnect(); window.removeEventListener("resize", resize); cancelAnimationFrame(raf); };
-  }, [onComplete]);
+  }, []);
   return (
     <div ref={wrapRef} className="sigc-ai-network-wordmark" role="img" aria-label="Artificial Intelligence">
       <canvas ref={canvasRef} className="sigc-ai-network-canvas" aria-hidden="true" />
