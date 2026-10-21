@@ -35,49 +35,122 @@ function SectionHeading({ eyebrow, title, description }) {
 }
 
 function AIAnimatedTitle() {
-  const titleRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const wrapRef = useRef(null);
+  const canvasRef = useRef(null);
   useEffect(() => {
-    const element = titleRef.current;
-    if (!element || typeof IntersectionObserver === "undefined") { setIsVisible(true); return undefined; }
-    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { setIsVisible(true); observer.disconnect(); } }, { threshold: 0.2 });
-    observer.observe(element);
-    return () => observer.disconnect();
+    const wrap = wrapRef.current;
+    const canvas = canvasRef.current;
+    if (!wrap || !canvas) return undefined;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return undefined;
+    let raf = 0;
+    let disposed = false;
+    let started = 0;
+    let particles = [];
+    let links = [];
+    let width = 0;
+    let height = 0;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const buildTargets = () => {
+      const rect = wrap.getBoundingClientRect();
+      width = Math.max(320, Math.floor(rect.width));
+      height = Math.max(160, Math.floor(rect.width * 0.25));
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = "100%";
+      canvas.style.height = "auto";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, width, height);
+      const off = document.createElement("canvas");
+      off.width = width;
+      off.height = height;
+      const octx = off.getContext("2d", { willReadFrequently: true });
+      if (!octx) return;
+      octx.fillStyle = "#fff";
+      octx.textAlign = "center";
+      octx.textBaseline = "middle";
+      let fontSize = Math.min(width * 0.105, 112);
+      octx.font = "700 " + fontSize + "px Arial, Helvetica, sans-serif";
+      while ((octx.measureText("INTELLIGENCE").width > width * 0.96 || octx.measureText("ARTIFICIAL").width > width * 0.96) && fontSize > 24) { fontSize -= 2; octx.font = "700 " + fontSize + "px Arial, Helvetica, sans-serif"; }
+      octx.fillText("ARTIFICIAL", width / 2, height * 0.34);
+      octx.fillText("INTELLIGENCE", width / 2, height * 0.76);
+      const pixels = octx.getImageData(0, 0, width, height).data;
+      const step = width < 520 ? 5 : 6;
+      const targets = [];
+      const grid = new Map();
+      for (let y = 2; y < height - 2; y += step) {
+        for (let x = 2; x < width - 2; x += step) {
+          if (pixels[(y * width + x) * 4 + 3] > 80) {
+            const target = { x, y, sx: Math.random() * width, sy: Math.random() * height, r: Math.random() < 0.12 ? 1.5 : 0.85, phase: Math.random() * Math.PI * 2 };
+            targets.push(target);
+            grid.set(Math.floor(x / step) + "," + Math.floor(y / step), target);
+          }
+        }
+      }
+      particles = targets;
+      links = [];
+      targets.forEach((point) => {
+        const gx = Math.floor(point.x / step);
+        const gy = Math.floor(point.y / step);
+        [[1,0],[0,1],[1,1],[-1,1]].forEach(([dx,dy]) => {
+          const neighbor = grid.get((gx + dx) + "," + (gy + dy));
+          if (neighbor) links.push({ a: point, b: neighbor, delay: Math.random() * 0.8 });
+        });
+      });
+      started = performance.now();
+    };
+    const draw = (now) => {
+      if (disposed) return;
+      const elapsed = (now - started) / 1000;
+      const progress = reducedMotion ? 1 : Math.max(0, Math.min(1, (elapsed - 0.12) / 2.15));
+      const eased = 1 - Math.pow(1 - progress, 3);
+      ctx.clearRect(0, 0, width, height);
+      links.forEach(({ a, b, delay }) => {
+        const local = Math.max(0, Math.min(1, (progress - delay * 0.18) / 0.82));
+        if (local <= 0) return;
+        const lx = a.sx + (a.x - a.sx) * eased;
+        const ly = a.sy + (a.y - a.sy) * eased;
+        const bx = b.sx + (b.x - b.sx) * eased;
+        const by = b.sy + (b.y - b.sy) * eased;
+        ctx.beginPath();
+        ctx.moveTo(lx, ly);
+        ctx.lineTo(bx, by);
+        ctx.strokeStyle = "rgba(205, 208, 210, " + (0.04 + local * 0.38) + ")";
+        ctx.lineWidth = 0.55;
+        ctx.stroke();
+      });
+      particles.forEach((point) => {
+        const local = Math.max(0, Math.min(1, (progress - (point.phase % 1) * 0.12) / 0.88));
+        const easedPoint = 1 - Math.pow(1 - local, 3);
+        const x = point.sx + (point.x - point.sx) * easedPoint;
+        const y = point.sy + (point.y - point.sy) * easedPoint;
+        ctx.beginPath();
+        ctx.arc(x, y, point.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(245, 245, 241, " + (0.08 + local * 0.88) + ")";
+        ctx.fill();
+      });
+      if (progress < 1) raf = requestAnimationFrame(draw);
+      else {
+        particles.forEach((point) => { point.sx = point.x; point.sy = point.y; });
+        raf = requestAnimationFrame((time) => {
+          ctx.clearRect(0, 0, width, height);
+          links.forEach(({ a, b }) => { ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.strokeStyle = "rgba(205,208,210,0.34)"; ctx.lineWidth = 0.55; ctx.stroke(); });
+          particles.forEach((point) => { ctx.beginPath(); ctx.arc(point.x, point.y, point.r, 0, Math.PI * 2); ctx.fillStyle = "rgba(245,245,241,0.92)"; ctx.fill(); });
+        });
+      }
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !started) { buildTargets(); raf = requestAnimationFrame(draw); observer.disconnect(); }
+    }, { threshold: 0.15 });
+    observer.observe(wrap);
+    const resize = () => { if (started) { cancelAnimationFrame(raf); buildTargets(); raf = requestAnimationFrame(draw); } };
+    window.addEventListener("resize", resize);
+    return () => { disposed = true; observer.disconnect(); window.removeEventListener("resize", resize); cancelAnimationFrame(raf); };
   }, []);
-  const nodes = Array.from({ length: 260 }, (_, index) => {
-    const x = 3 + ((index * 73 + Math.floor(index / 7) * 11) % 294);
-    const y = 3 + ((index * 47 + Math.floor(index / 5) * 7) % 114);
-    return { x, y, startX: index % 2 === 0 ? -8 - ((index * 17) % 90) : 308 + ((index * 13) % 90), startY: (index * 37 + 13) % 120, delay: ((index % 44) * 0.025).toFixed(3), radius: index % 9 === 0 ? 0.95 : 0.58 };
-  });
-  const links = Array.from({ length: 180 }, (_, index) => {
-    const a = nodes[(index * 7 + 3) % nodes.length]; const b = nodes[(index * 13 + 19) % nodes.length];
-    return { x1: a.x, y1: a.y, x2: b.x, y2: b.y, delay: ((index % 40) * 0.025).toFixed(3) };
-  });
   return (
-    <div ref={titleRef} className={"sigc-ai-network-wordmark" + (isVisible ? " is-visible" : "")} role="img" aria-label="Artificial Intelligence">
-      <svg viewBox="0 0 300 120" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-        <defs>
-          <mask id="sigc-ai-title-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="300" height="120">
-            <rect width="300" height="120" fill="black" />
-            <text x="150" y="52" textAnchor="middle" className="sigc-ai-title-mask-text">ARTIFICIAL</text>
-            <text x="150" y="101" textAnchor="middle" className="sigc-ai-title-mask-text">INTELLIGENCE</text>
-          </mask>
-          <linearGradient id="sigc-ai-network-gradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#8b8d90" /><stop offset="50%" stopColor="#f1f1ee" /><stop offset="100%" stopColor="#b8babd" /></linearGradient>
-        </defs>
-        <g mask="url(#sigc-ai-title-mask)" className="sigc-ai-title-particles" aria-hidden="true">
-          {nodes.map((node, index) => (
-            <circle key={"particle-" + index} cx={node.startX} cy={node.startY} r={node.radius} className="sigc-ai-title-particle">
-              <animate attributeName="cx" from={node.startX} to={node.x} dur="1.7s" begin={node.delay + "s"} fill="freeze" />
-              <animate attributeName="cy" from={node.startY} to={node.y} dur="1.7s" begin={node.delay + "s"} fill="freeze" />
-              <animate attributeName="opacity" values="0;1;0.82" keyTimes="0;0.72;1" dur="1.7s" begin={node.delay + "s"} fill="freeze" />
-            </circle>
-          ))}
-        </g>
-        <g mask="url(#sigc-ai-title-mask)" className="sigc-ai-network-ink">
-          {links.map((link, index) => <line key={"link-" + index} x1={link.x1} y1={link.y1} x2={link.x2} y2={link.y2} pathLength="1" className="sigc-ai-title-link" style={{ "--title-delay": link.delay + "s" }} />)}
-          {nodes.map((node, index) => <circle key={"node-" + index} cx={node.x} cy={node.y} r={node.radius * 1.15} className="sigc-ai-title-node" style={{ "--title-delay": node.delay + "s" }} />)}
-        </g>
-      </svg>
+    <div ref={wrapRef} className="sigc-ai-network-wordmark" role="img" aria-label="Artificial Intelligence">
+      <canvas ref={canvasRef} className="sigc-ai-network-canvas" aria-hidden="true" />
       <span className="sigc-ai-network-wordmark__accessible">Artificial Intelligence</span>
     </div>
   );
