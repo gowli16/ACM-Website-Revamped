@@ -77,20 +77,20 @@ function AIAnimatedTitle({ onComplete }) {
       octx.fillText("ARTIFICIAL", width / 2, height * 0.34);
       octx.fillText("INTELLIGENCE", width / 2, height * 0.76);
       const pixels = octx.getImageData(0, 0, width, height).data;
-      const step = width < 520 ? 8 : 10;
+      const step = width < 520 ? 10 : 13;
       const targets = [];
       for (let y = 2; y < height - 2; y += step) {
         for (let x = 2; x < width - 2; x += step) {
           if (pixels[(y * width + x) * 4 + 3] > 80) {
             const angle = Math.random() * Math.PI * 2;
             const distance = Math.max(width * 0.38, height * 1.2) * (0.65 + Math.random() * 0.7);
-            targets.push({ x: x + step / 2, y: y + step / 2, sx: width / 2 + Math.cos(angle) * distance, sy: height / 2 + Math.sin(angle) * distance, r: Math.random() < 0.18 ? 1.8 : 1.35, delay: Math.random() * 0.48, twinkle: Math.random() * Math.PI * 2 });
+            targets.push({ x: x + step / 2, y: y + step / 2, z: (Math.random() - 0.5) * 34, sx: width / 2 + Math.cos(angle) * distance, sy: height / 2 + Math.sin(angle) * distance, r: Math.random() < 0.18 ? 1.8 : 1.35, delay: Math.random() * 0.48, twinkle: Math.random() * Math.PI * 2 });
           }
         }
       }
       particles = targets;
       connections = [];
-      const cellSize = step * 2.2;
+      const cellSize = step * 2.35;
       const cells = new Map();
       targets.forEach((point, index) => {
         const key = Math.floor(point.x / cellSize) + "," + Math.floor(point.y / cellSize);
@@ -108,12 +108,12 @@ function AIAnimatedTitle({ onComplete }) {
               if (otherIndex === index) return;
               const other = targets[otherIndex];
               const distance = Math.hypot(other.x - point.x, other.y - point.y);
-              if (distance >= step * 0.9 && distance <= step * 1.8) nearby.push({ index: otherIndex, distance });
+              if (distance >= step * 0.85 && distance <= step * 2.05) nearby.push({ index: otherIndex, distance });
             });
           }
         }
         nearby.sort((a, b) => a.distance - b.distance);
-        nearby.slice(0, 2).forEach((neighbor) => {
+        nearby.slice(0, 3).forEach((neighbor) => {
           const a = Math.min(index, neighbor.index);
           const b = Math.max(index, neighbor.index);
           const key = a + ":" + b;
@@ -139,7 +139,7 @@ function AIAnimatedTitle({ onComplete }) {
         ctx.fillStyle = "rgba(224,226,227," + (star.alpha * twinkle * (1 - progress * 0.82)) + ")"; ctx.fill();
       });
       const particleProgress = (point) => reducedMotion ? 1 : Math.max(0, Math.min(1, (progress - point.delay) / (1 - point.delay)));
-      ctx.lineWidth = 0.9;
+      ctx.lineWidth = 0.85;
       connections.forEach((edge) => {
         const a = particles[edge.a];
         const b = particles[edge.b];
@@ -149,28 +149,29 @@ function AIAnimatedTitle({ onComplete }) {
         if (local <= 0.06) return;
         const easeA = 1 - Math.pow(1 - localA, 3);
         const easeB = 1 - Math.pow(1 - localB, 3);
-        const ax = a.sx + (a.x - a.sx) * easeA;
-        const ay = a.sy + (a.y - a.sy) * easeA;
-        const bx = b.sx + (b.x - b.sx) * easeB;
-        const by = b.sy + (b.y - b.sy) * easeB;
+        const ax = a.sx + (a.x - a.sx) * easeA + a.z * 0.22;
+        const ay = a.sy + (a.y - a.sy) * easeA - a.z * 0.18;
+        const bx = b.sx + (b.x - b.sx) * easeB + b.z * 0.22;
+        const by = b.sy + (b.y - b.sy) * easeB - b.z * 0.18;
         ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by);
-        ctx.strokeStyle = "rgba(194,198,202," + (local * 0.72) + ")";
+        ctx.strokeStyle = "rgba(194,198,202," + (local * (0.42 + ((a.z + b.z + 68) / 136) * 0.34)) + ")";
         ctx.stroke();
       });
       particles.forEach((point) => {
         const local = particleProgress(point);
         const eased = 1 - Math.pow(1 - local, 3);
-        const x = point.sx + (point.x - point.sx) * eased;
-        const y = point.sy + (point.y - point.sy) * eased;
+        const x = point.sx + (point.x - point.sx) * eased + point.z * 0.22;
+        const y = point.sy + (point.y - point.sy) * eased - point.z * 0.18;
         const alpha = 0.1 + local * 0.86;
-        ctx.beginPath(); ctx.arc(x, y, point.r, 0, Math.PI * 2);
+        const depthScale = 0.78 + (point.z + 17) / 34 * 0.42;
+        ctx.beginPath(); ctx.arc(x, y, point.r * depthScale, 0, Math.PI * 2);
         ctx.fillStyle = "rgba(245,245,241," + alpha + ")"; ctx.fill();
       });
       if (progress < 1) { raf = requestAnimationFrame(draw); return; }
       if (!completionSent) { completionSent = true; onCompleteRef.current?.(); }
       particles.forEach((point) => {
         const pulse = 0.78 + Math.sin(elapsed * 1.2 + point.twinkle) * 0.12;
-        ctx.beginPath(); ctx.arc(point.x, point.y, point.r, 0, Math.PI * 2);
+        ctx.beginPath(); ctx.arc(point.x + point.z * 0.22, point.y - point.z * 0.18, point.r * (0.78 + (point.z + 17) / 34 * 0.42), 0, Math.PI * 2);
         ctx.fillStyle = "rgba(239,239,236," + pulse + ")"; ctx.fill();
       });
     };
