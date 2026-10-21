@@ -1,0 +1,101 @@
+/* Scroll-driven domain explorer: the document scrolls while the viewport stays pinned. */
+.sigc-domain-scroll-stage {
+  position: relative;
+  height: calc(var(--sigc-domain-count, 2) * 100svh);
+  min-height: calc(var(--sigc-domain-count, 2) * 100vh);
+}
+
+.sigc-domain-scroll-screen {
+  position: sticky;
+  top: 0;
+  display: flex;
+  height: 100svh;
+  min-height: 560px;
+  max-height: 100svh;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  padding: clamp(74px, 10vh, 112px) 0 clamp(24px, 5vh, 52px);
+}
+
+.sigc-domain-scroll-screen .sigc-section-heading {
+  flex: 0 0 auto;
+  margin-bottom: clamp(14px, 3vh, 28px);
+}
+
+.sigc-domain-scroll-screen .sigc-domain-explorer {
+  min-height: 0;
+  flex: 1 1 auto;
+  align-items: center;
+  overflow: hidden;
+}
+
+.sigc-domain-scroll-screen .sigc-domain-list {
+  max-height: 100%;
+  overflow: auto;
+  scrollbar-width: thin;
+}
+
+.sigc-domain-scroll-screen .sigc-domain-detail {
+  max-height: 100%;
+  overflow: auto;
+}
+
+@media (max-width: 760px) {
+  .sigc-domain-scroll-screen {
+    min-height: 0;
+    padding-top: 84px;
+    padding-bottom: 24px;
+  }
+
+  .sigc-domain-scroll-screen .sigc-domain-explorer {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    gap: 18px;
+  }
+
+  .sigc-domain-scroll-screen .sigc-domain-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .sigc-domain-scroll-screen .sigc-domain-topic {
+    min-width: 0;
+  }
+
+  .sigc-domain-scroll-screen .sigc-domain-topic-title {
+    overflow-wrap: anywhere;
+  }
+
+  .sigc-domain-scroll-screen .sigc-domain-detail {
+    padding-top: 12px;
+  }
+}
+
+@media (max-height: 620px) and (min-width: 761px) {
+  .sigc-domain-scroll-screen {
+    min-height: 0;
+    padding-top: 70px;
+    padding-bottom: 16px;
+  }
+
+  .sigc-domain-scroll-screen .sigc-section-heading {
+    margin-bottom: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sigc-domain-scroll-screen {
+    position: relative;
+    top: auto;
+    height: auto;
+    max-height: none;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .sigc-domain-scroll-stage {
+    height: auto;
+  }
+}
