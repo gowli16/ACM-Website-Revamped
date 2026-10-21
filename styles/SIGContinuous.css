@@ -3343,3 +3343,30 @@
     width: 96vw;
   }
 }
+
+
+/* AI supporting copy waits until the star particles finish assembling the title. */
+.sigc-mission[data-sigc-mission="ai"] .sigc-ai-intro-copy {
+  width: min(100% - 48px, 1120px);
+  margin: clamp(20px, 3vh, 34px) auto 0;
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(18px);
+  pointer-events: none;
+}
+.sigc-mission[data-sigc-mission="ai"] .sigc-ai-intro-copy.is-revealed {
+  visibility: visible;
+  pointer-events: auto;
+  animation: sigc-ai-intro-copy-reveal 700ms cubic-bezier(.2,.7,.2,1) forwards;
+}
+@keyframes sigc-ai-intro-copy-reveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sigc-mission[data-sigc-mission="ai"] .sigc-ai-intro-copy.is-revealed {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
