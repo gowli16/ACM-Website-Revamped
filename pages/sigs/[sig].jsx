@@ -34,7 +34,7 @@ function SectionHeading({ eyebrow, title, description }) {
   );
 }
 
-function AIAnimatedTitle() {
+function AIAnimatedTitle({ onComplete }) {
   const wrapRef = useRef(null);
   const canvasRef = useRef(null);
   useEffect(() => {
@@ -46,6 +46,7 @@ function AIAnimatedTitle() {
     let raf = 0;
     let disposed = false;
     let started = 0;
+    let completionSent = false;
     let particles = [];
     let stars = [];
     let width = 0;
@@ -110,6 +111,7 @@ function AIAnimatedTitle() {
         ctx.fillStyle = "rgba(245,245,241," + alpha + ")"; ctx.fill();
       });
       if (progress < 1) { raf = requestAnimationFrame(draw); return; }
+      if (!completionSent) { completionSent = true; onComplete?.(); }
       particles.forEach((point) => {
         const pulse = 0.78 + Math.sin(elapsed * 1.2 + point.twinkle) * 0.12;
         ctx.beginPath(); ctx.arc(point.x, point.y, point.r, 0, Math.PI * 2);
@@ -124,7 +126,7 @@ function AIAnimatedTitle() {
     const resize = () => { cancelAnimationFrame(raf); buildScene(); if (wrap.getBoundingClientRect().top < window.innerHeight) raf = requestAnimationFrame(draw); };
     window.addEventListener("resize", resize);
     return () => { disposed = true; observer.disconnect(); window.removeEventListener("resize", resize); cancelAnimationFrame(raf); };
-  }, []);
+  }, [onComplete]);
   return (
     <div ref={wrapRef} className="sigc-ai-network-wordmark" role="img" aria-label="Artificial Intelligence">
       <canvas ref={canvasRef} className="sigc-ai-network-canvas" aria-hidden="true" />
@@ -397,6 +399,7 @@ function StorySection({ mission }) {
 
 function MissionContent({ mission }) {
   const { data } = mission;
+  const [aiTitleComplete, setAiTitleComplete] = useState(false);
   const overview = data.heroStory;
   const achievements = data.achievements || data.metrics;
 
@@ -412,7 +415,7 @@ function MissionContent({ mission }) {
       <div className="sigc-mission-inner">
         <header className="sigc-mission-header">
           {mission.id === "ai" && <NeuralNetworkBackground />}
-          {mission.id === "ai" ? <div id="ai-title" className="sigc-ai-title-heading"><AIAnimatedTitle /></div> : <h2 id={`${mission.id}-title`}>{mission.id === "glitch" ? <GlitchTitle>{mission.title}</GlitchTitle> : mission.title}</h2>}
+          {mission.id === "ai" ? <div id="ai-title" className="sigc-ai-title-heading"><AIAnimatedTitle onComplete={() => setAiTitleComplete(true)} /></div> : <h2 id={`${mission.id}-title`}>{mission.id === "glitch" ? <GlitchTitle>{mission.title}</GlitchTitle> : mission.title}</h2>}
           {mission.id === "glitch" && <div className="sigc-glitch-title-game-background" aria-hidden="true"><SpaceShooter /></div>}
           {mission.id !== "glitch" && mission.id !== "ai" && (
             <>
@@ -422,6 +425,15 @@ function MissionContent({ mission }) {
               {overview?.closing && <p className="sigc-overview-closing">{overview.closing}</p>}
               {data.description && <p className="sigc-overview-copy">{data.description}</p>}
             </>
+          )}
+          {mission.id === "ai" && (
+            <div className={"sigc-ai-intro-copy" + (aiTitleComplete ? " is-revealed" : "")} aria-hidden={!aiTitleComplete}>
+              {overview?.title && <p className="sigc-overview-title">{overview.title}</p>}
+              <p className="sigc-mission-tagline">{data.tagline}</p>
+              {overview?.lines?.map((line, index) => <p className="sigc-overview-copy" key={index}>{line}</p>)}
+              {overview?.closing && <p className="sigc-overview-closing">{overview.closing}</p>}
+              {data.description && <p className="sigc-overview-copy">{data.description}</p>}
+            </div>
           )}
         </header>
 
