@@ -51,6 +51,7 @@ function AIAnimatedTitle({ onComplete }) {
     let completionSent = false;
     let isPlaying = false;
     let isInFrame = false;
+    let scrollProgress = 0;
     let particles = [];
     let connections = [];
     let stars = [];
@@ -133,7 +134,7 @@ function AIAnimatedTitle({ onComplete }) {
       if (disposed) return;
       if (!started) started = now;
       const elapsed = (now - started) / 1000;
-      const progress = reducedMotion ? 1 : Math.max(0, Math.min(1, elapsed / 2.8));
+      const progress = reducedMotion ? 1 : scrollProgress;
       ctx.clearRect(0, 0, width, height);
       stars.forEach((star) => {
         const twinkle = 0.72 + Math.sin(elapsed * 1.7 + star.phase) * 0.28;
@@ -178,34 +179,61 @@ function AIAnimatedTitle({ onComplete }) {
       });
     };
     buildScene();
-    const observer = new IntersectionObserver(([entry]) => {
-      isInFrame = entry.isIntersecting;
-      if (isInFrame && !isPlaying) {
-        isPlaying = true;
-        completionSent = false;
-        started = 0;
-        cancelAnimationFrame(raf);
-        raf = requestAnimationFrame(draw);
-      } else if (!isInFrame && isPlaying) {
-        isPlaying = false;
-        started = 0;
-        cancelAnimationFrame(raf);
-        ctx.clearRect(0, 0, width, height);
-      }
-    }, { threshold: 0.15 });
-    observer.observe(wrap);
+    let trigger = null;
+    let observer = null;
+    let cancelled = false;
+    const setupScrollTrigger = async () => {
+      const { gsap } = await import("gsap");
+      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+      if (cancelled) return;
+      gsap.registerPlugin(ScrollTrigger);
+      const header = wrap.closest(".sigc-mission-header");
+      trigger = ScrollTrigger.create({
+        trigger: header || wrap,
+        pin: header || wrap,
+        start: "top top",
+        end: () => "+=" + Math.round(window.innerHeight * 1.65),
+        scrub: 0.6,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          isInFrame = self.isActive;
+          scrollProgress = self.progress;
+          if (self.isActive) {
+            if (!isPlaying) {
+              isPlaying = true;
+              completionSent = false;
+              started = 0;
+            }
+            if (!raf) raf = requestAnimationFrame(draw);
+          } else if (self.progress === 0 || self.progress === 1) {
+            isPlaying = false;
+            if (self.progress === 0) {
+              scrollProgress = 0;
+              completionSent = false;
+            }
+            if (self.progress === 1) scrollProgress = 1;
+            cancelAnimationFrame(raf);
+            raf = 0;
+            if (self.progress === 1) {
+              raf = requestAnimationFrame(draw);
+            } else {
+              ctx.clearRect(0, 0, width, height);
+            }
+          }
+        },
+      });
+      ScrollTrigger.refresh();
+    };
+    setupScrollTrigger();
     const resize = () => {
       cancelAnimationFrame(raf);
+      raf = 0;
       buildScene();
-      isPlaying = false;
-      if (isInFrame) {
-        isPlaying = true;
-        completionSent = false;
-        raf = requestAnimationFrame(draw);
-      }
+      if (trigger?.isActive) raf = requestAnimationFrame(draw);
     };
     window.addEventListener("resize", resize);
-    return () => { disposed = true; observer.disconnect(); window.removeEventListener("resize", resize); cancelAnimationFrame(raf); };
+    return () => { cancelled = true; disposed = true; trigger?.kill(); observer?.disconnect(); window.removeEventListener("resize", resize); cancelAnimationFrame(raf); };
   }, []);
   return (
     <div ref={wrapRef} className="sigc-ai-network-wordmark" role="img" aria-label="Artificial Intelligence">
