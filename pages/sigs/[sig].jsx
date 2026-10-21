@@ -90,17 +90,7 @@ function AIAnimatedTitle() {
       }
       particles = targets;
 
-      /* Dots only: each target is sampled directly from the letter pixels. */
-      /* Network links are intentionally disabled to keep the typography clean. */
-      /* targets.forEach((point) => {
-        const gx = Math.floor(point.x / step);
-        const gy = Math.floor(point.y / step);
-        [[1,0],[0,1],[1,1],[-1,1]].forEach(([dx,dy]) => {
-          const neighbor = grid.get((gx + dx) + "," + (gy + dy));
-          if (neighbor) links.push({ a: point, b: neighbor, delay: Math.random() * 0.8 });
-        });
-      }); */
-      started = performance.now();
+      // Dots-only construction: no connecting lines.\n      started = performance.now();
     };
     const draw = (now) => {
       if (disposed) return;
