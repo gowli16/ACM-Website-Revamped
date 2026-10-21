@@ -84,13 +84,13 @@ function AIAnimatedTitle({ onComplete }) {
           if (pixels[(y * width + x) * 4 + 3] > 80) {
             const angle = Math.random() * Math.PI * 2;
             const distance = Math.max(width * 0.38, height * 1.2) * (0.65 + Math.random() * 0.7);
-            targets.push({ x: x + step / 2 + (Math.random() - 0.5) * step * 0.72, y: y + step / 2 + (Math.random() - 0.5) * step * 0.72, sx: width / 2 + Math.cos(angle) * distance, sy: height / 2 + Math.sin(angle) * distance, r: Math.random() < 0.18 ? 1.8 : 1.35, delay: Math.random() * 0.48, twinkle: Math.random() * Math.PI * 2 });
+            targets.push({ x: x + step / 2, y: y + step / 2, sx: width / 2 + Math.cos(angle) * distance, sy: height / 2 + Math.sin(angle) * distance, r: Math.random() < 0.18 ? 1.8 : 1.35, delay: Math.random() * 0.48, twinkle: Math.random() * Math.PI * 2 });
           }
         }
       }
       particles = targets;
       connections = [];
-      const cellSize = step * 2.7;
+      const cellSize = step * 2.2;
       const cells = new Map();
       targets.forEach((point, index) => {
         const key = Math.floor(point.x / cellSize) + "," + Math.floor(point.y / cellSize);
@@ -108,12 +108,12 @@ function AIAnimatedTitle({ onComplete }) {
               if (otherIndex === index) return;
               const other = targets[otherIndex];
               const distance = Math.hypot(other.x - point.x, other.y - point.y);
-              if (distance > step * 0.75 && distance < step * 3.2) nearby.push({ index: otherIndex, distance });
+              if (distance >= step * 0.9 && distance <= step * 1.8) nearby.push({ index: otherIndex, distance });
             });
           }
         }
         nearby.sort((a, b) => a.distance - b.distance);
-        nearby.slice(0, 4).forEach((neighbor) => {
+        nearby.slice(0, 2).forEach((neighbor) => {
           const a = Math.min(index, neighbor.index);
           const b = Math.max(index, neighbor.index);
           const key = a + ":" + b;
@@ -139,7 +139,7 @@ function AIAnimatedTitle({ onComplete }) {
         ctx.fillStyle = "rgba(224,226,227," + (star.alpha * twinkle * (1 - progress * 0.82)) + ")"; ctx.fill();
       });
       const particleProgress = (point) => reducedMotion ? 1 : Math.max(0, Math.min(1, (progress - point.delay) / (1 - point.delay)));
-      ctx.lineWidth = 1.15;
+      ctx.lineWidth = 0.9;
       connections.forEach((edge) => {
         const a = particles[edge.a];
         const b = particles[edge.b];
@@ -154,7 +154,7 @@ function AIAnimatedTitle({ onComplete }) {
         const bx = b.sx + (b.x - b.sx) * easeB;
         const by = b.sy + (b.y - b.sy) * easeB;
         ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by);
-        ctx.strokeStyle = "rgba(194,198,202," + (local * 0.88) + ")";
+        ctx.strokeStyle = "rgba(194,198,202," + (local * 0.72) + ")";
         ctx.stroke();
       });
       particles.forEach((point) => {
