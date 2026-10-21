@@ -3306,3 +3306,37 @@
   white-space: nowrap;
   border: 0;
 }
+
+
+/* AI intro phase one: let the particle-built title own the entire frame. */
+.sigc-mission[data-sigc-mission="ai"] .sigc-mission-header {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: clamp(48px, 8vh, 100px);
+  padding-bottom: clamp(36px, 7vh, 80px);
+  overflow: visible;
+}
+.sigc-mission[data-sigc-mission="ai"] .sigc-ai-title-heading {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(96vw, 1600px);
+  max-width: none;
+  margin: 0;
+}
+.sigc-mission[data-sigc-mission="ai"] .sigc-ai-network-wordmark {
+  width: 100%;
+  max-width: none;
+}
+.sigc-mission[data-sigc-mission="ai"] .sigc-ai-network-canvas {
+  width: 100%;
+  height: auto;
+}
+@media (max-width: 700px) {
+  .sigc-mission[data-sigc-mission="ai"] .sigc-ai-title-heading {
+    width: 96vw;
+  }
+}
