@@ -67,7 +67,7 @@ function AIAnimatedTitle() {
       octx.fillStyle = "#fff";
       octx.textAlign = "center";
       octx.textBaseline = "middle";
-      let fontSize = Math.min(width * 0.105, 108);
+      let fontSize = Math.min(width * 0.14, 174);
       octx.font = "700 " + fontSize + "px Arial, Helvetica, sans-serif";
       while (octx.measureText("INTELLIGENCE").width > width * 0.94 && fontSize > 24) { fontSize -= 2; octx.font = "700 " + fontSize + "px Arial, Helvetica, sans-serif"; }
       octx.fillText("ARTIFICIAL", width / 2, height * 0.34);
