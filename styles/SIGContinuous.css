@@ -3049,3 +3049,9 @@
   .sigc-ai-title-node { opacity: 1; }
   .sigc-ai-title-scan { display: none; }
 }
+
+
+/* Keep the neural-network build inside the AI title only; remove the oversized backdrop below it. */
+.sigc-mission[data-sigc-mission="ai"] .sigc-mission-header > .sigc-neural-bg {
+  display: none !important;
+}
