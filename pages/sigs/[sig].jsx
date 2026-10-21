@@ -47,7 +47,7 @@ function AIAnimatedTitle() {
     let disposed = false;
     let started = 0;
     let particles = [];
-    let links = [];
+
     let width = 0;
     let height = 0;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -78,26 +78,28 @@ function AIAnimatedTitle() {
       const pixels = octx.getImageData(0, 0, width, height).data;
       const step = width < 520 ? 5 : 6;
       const targets = [];
-      const grid = new Map();
+
       for (let y = 2; y < height - 2; y += step) {
         for (let x = 2; x < width - 2; x += step) {
           if (pixels[(y * width + x) * 4 + 3] > 80) {
-            const target = { x, y, sx: Math.random() * width, sy: Math.random() * height, r: Math.random() < 0.12 ? 1.5 : 0.85, phase: Math.random() * Math.PI * 2 };
+            const target = { x, y, sx: Math.random() * width, sy: Math.random() * height, r: Math.random() < 0.10 ? 1.25 : 0.72, phase: Math.random() * Math.PI * 2 };
             targets.push(target);
-            grid.set(Math.floor(x / step) + "," + Math.floor(y / step), target);
+
           }
         }
       }
       particles = targets;
-      links = [];
-      targets.forEach((point) => {
+
+      /* Dots only: each target is sampled directly from the letter pixels. */
+      /* Network links are intentionally disabled to keep the typography clean. */
+      /* targets.forEach((point) => {
         const gx = Math.floor(point.x / step);
         const gy = Math.floor(point.y / step);
         [[1,0],[0,1],[1,1],[-1,1]].forEach(([dx,dy]) => {
           const neighbor = grid.get((gx + dx) + "," + (gy + dy));
           if (neighbor) links.push({ a: point, b: neighbor, delay: Math.random() * 0.8 });
         });
-      });
+      }); */
       started = performance.now();
     };
     const draw = (now) => {
@@ -106,20 +108,7 @@ function AIAnimatedTitle() {
       const progress = reducedMotion ? 1 : Math.max(0, Math.min(1, (elapsed - 0.12) / 2.15));
       const eased = 1 - Math.pow(1 - progress, 3);
       ctx.clearRect(0, 0, width, height);
-      links.forEach(({ a, b, delay }) => {
-        const local = Math.max(0, Math.min(1, (progress - delay * 0.18) / 0.82));
-        if (local <= 0) return;
-        const lx = a.sx + (a.x - a.sx) * eased;
-        const ly = a.sy + (a.y - a.sy) * eased;
-        const bx = b.sx + (b.x - b.sx) * eased;
-        const by = b.sy + (b.y - b.sy) * eased;
-        ctx.beginPath();
-        ctx.moveTo(lx, ly);
-        ctx.lineTo(bx, by);
-        ctx.strokeStyle = "rgba(205, 208, 210, " + (0.04 + local * 0.38) + ")";
-        ctx.lineWidth = 0.55;
-        ctx.stroke();
-      });
+
       particles.forEach((point) => {
         const local = Math.max(0, Math.min(1, (progress - (point.phase % 1) * 0.12) / 0.88));
         const easedPoint = 1 - Math.pow(1 - local, 3);
@@ -135,8 +124,8 @@ function AIAnimatedTitle() {
         particles.forEach((point) => { point.sx = point.x; point.sy = point.y; });
         raf = requestAnimationFrame((time) => {
           ctx.clearRect(0, 0, width, height);
-          links.forEach(({ a, b }) => { ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.strokeStyle = "rgba(205,208,210,0.34)"; ctx.lineWidth = 0.55; ctx.stroke(); });
-          particles.forEach((point) => { ctx.beginPath(); ctx.arc(point.x, point.y, point.r, 0, Math.PI * 2); ctx.fillStyle = "rgba(245,245,241,0.92)"; ctx.fill(); });
+
+          particles.forEach((point) => { ctx.beginPath(); ctx.arc(point.x, point.y, point.r, 0, Math.PI * 2); ctx.fillStyle = "rgba(235,235,232,0.88)"; ctx.fill(); });
         });
       }
     };
