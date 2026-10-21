@@ -37,88 +37,51 @@ function SectionHeading({ eyebrow, title, description }) {
 function AIAnimatedTitle() {
   const titleRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
-
   useEffect(() => {
     const element = titleRef.current;
-    if (!element || typeof IntersectionObserver === "undefined") {
-      setIsVisible(true);
-      return undefined;
-    }
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsVisible(true);
-        observer.disconnect();
-      }
-    }, { threshold: 0.35 });
+    if (!element || typeof IntersectionObserver === "undefined") { setIsVisible(true); return undefined; }
+    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) { setIsVisible(true); observer.disconnect(); } }, { threshold: 0.2 });
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
-
-  const links = Array.from({ length: 112 }, (_, index) => {
-    const x1 = 4 + (index % 15) * 20;
-    const y1 = 6 + (Math.floor(index / 15) % 6) * 21;
-    const x2 = Math.max(3, Math.min(297, x1 + (((index * 7) % 49) - 24)));
-    const y2 = Math.max(3, Math.min(117, y1 + ((index % 7) - 3) * 13));
-    return { x1, y1, x2, y2, delay: (index * 0.055).toFixed(3) };
+  const nodes = Array.from({ length: 260 }, (_, index) => {
+    const x = 3 + ((index * 73 + Math.floor(index / 7) * 11) % 294);
+    const y = 3 + ((index * 47 + Math.floor(index / 5) * 7) % 114);
+    return { x, y, startX: index % 2 === 0 ? -8 - ((index * 17) % 90) : 308 + ((index * 13) % 90), startY: (index * 37 + 13) % 120, delay: ((index % 44) * 0.025).toFixed(3), radius: index % 9 === 0 ? 0.95 : 0.58 };
   });
-  const nodes = Array.from({ length: 78 }, (_, index) => ({
-    x: 4 + ((index * 47) % 292),
-    y: 4 + ((index * 31) % 112),
-    delay: ((index % 26) * 0.035).toFixed(3),
-    radius: index % 5 === 0 ? 1.9 : 1.2,
-  }));
-
+  const links = Array.from({ length: 180 }, (_, index) => {
+    const a = nodes[(index * 7 + 3) % nodes.length]; const b = nodes[(index * 13 + 19) % nodes.length];
+    return { x1: a.x, y1: a.y, x2: b.x, y2: b.y, delay: ((index % 40) * 0.025).toFixed(3) };
+  });
   return (
-    <div ref={titleRef} className={`sigc-ai-network-wordmark${isVisible ? " is-visible" : ""}`} role="img" aria-label="Artificial Intelligence">
+    <div ref={titleRef} className={"sigc-ai-network-wordmark" + (isVisible ? " is-visible" : "")} role="img" aria-label="Artificial Intelligence">
       <svg viewBox="0 0 300 120" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
         <defs>
-          <mask id="sigc-ai-title-mask">
+          <mask id="sigc-ai-title-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="300" height="120">
             <rect width="300" height="120" fill="black" />
             <text x="150" y="52" textAnchor="middle" className="sigc-ai-title-mask-text">ARTIFICIAL</text>
             <text x="150" y="101" textAnchor="middle" className="sigc-ai-title-mask-text">INTELLIGENCE</text>
           </mask>
-          <linearGradient id="sigc-ai-network-gradient" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#398DFF" />
-            <stop offset="52%" stopColor="#56DCE0" />
-            <stop offset="100%" stopColor="#D9FAFF" />
-          </linearGradient>
+          <linearGradient id="sigc-ai-network-gradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#8b8d90" /><stop offset="50%" stopColor="#f1f1ee" /><stop offset="100%" stopColor="#b8babd" /></linearGradient>
         </defs>
-        <g className="sigc-ai-title-particles" aria-hidden="true">
-          {nodes.map((node, index) => {
-            const startX = (index * 71 + 19) % 300;
-            const startY = (index * 43 + 7) % 120;
-            return (
-              <circle key={`particle-${index}`} cx={startX} cy={startY} r={node.radius}
-                className="sigc-ai-title-particle">
-                <animate attributeName="cx" from={startX} to={node.x} dur="1.5s" begin={`${(index % 18) * 0.05}s`} fill="freeze" />
-                <animate attributeName="cy" from={startY} to={node.y} dur="1.5s" begin={`${(index % 18) * 0.05}s`} fill="freeze" />
-                <animate attributeName="opacity" values="0;0.95;0.45" keyTimes="0;0.7;1" dur="1.5s" begin={`${(index % 18) * 0.05}s`} fill="freeze" />
-              </circle>
-            );
-          })}
+        <g mask="url(#sigc-ai-title-mask)" className="sigc-ai-title-particles" aria-hidden="true">
+          {nodes.map((node, index) => (
+            <circle key={"particle-" + index} cx={node.startX} cy={node.startY} r={node.radius} className="sigc-ai-title-particle">
+              <animate attributeName="cx" from={node.startX} to={node.x} dur="1.7s" begin={node.delay + "s"} fill="freeze" />
+              <animate attributeName="cy" from={node.startY} to={node.y} dur="1.7s" begin={node.delay + "s"} fill="freeze" />
+              <animate attributeName="opacity" values="0;1;0.82" keyTimes="0;0.72;1" dur="1.7s" begin={node.delay + "s"} fill="freeze" />
+            </circle>
+          ))}
         </g>
         <g mask="url(#sigc-ai-title-mask)" className="sigc-ai-network-ink">
-          <rect width="300" height="120" fill="#e9fcff" opacity="0.035" />
-          {links.map((link, index) => (
-            <line key={`link-${index}`} x1={link.x1} y1={link.y1} x2={link.x2} y2={link.y2}
-              pathLength="1" className="sigc-ai-title-link" style={{ "--title-delay": `${link.delay}s` }} />
-          ))}
-          {nodes.map((node, index) => (
-            <circle key={`node-${index}`} cx={node.x} cy={node.y} r={node.radius}
-              className="sigc-ai-title-node" style={{ "--title-delay": `${node.delay}s` }} />
-          ))}
-          <rect className="sigc-ai-title-scan" x="-300" y="0" width="300" height="120" fill="url(#sigc-ai-network-gradient)" />
-        </g>
-        <g className="sigc-ai-title-outline" aria-hidden="true">
-          <text x="150" y="52" textAnchor="middle" className="sigc-ai-title-outline-text">ARTIFICIAL</text>
-          <text x="150" y="101" textAnchor="middle" className="sigc-ai-title-outline-text">INTELLIGENCE</text>
+          {links.map((link, index) => <line key={"link-" + index} x1={link.x1} y1={link.y1} x2={link.x2} y2={link.y2} pathLength="1" className="sigc-ai-title-link" style={{ "--title-delay": link.delay + "s" }} />)}
+          {nodes.map((node, index) => <circle key={"node-" + index} cx={node.x} cy={node.y} r={node.radius * 1.15} className="sigc-ai-title-node" style={{ "--title-delay": node.delay + "s" }} />)}
         </g>
       </svg>
       <span className="sigc-ai-network-wordmark__accessible">Artificial Intelligence</span>
     </div>
   );
 }
-
 function isMediaReference(value) {
   return typeof value === "string" &&
     (/^['"]?\$\{BASE\}/.test(value) ||
