@@ -77,7 +77,7 @@ function AIAnimatedTitle({ onComplete }) {
       octx.fillText("ARTIFICIAL", width / 2, height * 0.34);
       octx.fillText("INTELLIGENCE", width / 2, height * 0.76);
       const pixels = octx.getImageData(0, 0, width, height).data;
-      const step = width < 520 ? 5 : 6;
+      const step = width < 520 ? 8 : 10;
       const targets = [];
       for (let y = 2; y < height - 2; y += step) {
         for (let x = 2; x < width - 2; x += step) {
@@ -90,7 +90,7 @@ function AIAnimatedTitle({ onComplete }) {
       }
       particles = targets;
       connections = [];
-      const cellSize = step * 3.1;
+      const cellSize = step * 2.7;
       const cells = new Map();
       targets.forEach((point, index) => {
         const key = Math.floor(point.x / cellSize) + "," + Math.floor(point.y / cellSize);
@@ -108,12 +108,12 @@ function AIAnimatedTitle({ onComplete }) {
               if (otherIndex === index) return;
               const other = targets[otherIndex];
               const distance = Math.hypot(other.x - point.x, other.y - point.y);
-              if (distance > step * 0.8 && distance < step * 3.05) nearby.push({ index: otherIndex, distance });
+              if (distance > step * 0.75 && distance < step * 3.2) nearby.push({ index: otherIndex, distance });
             });
           }
         }
         nearby.sort((a, b) => a.distance - b.distance);
-        nearby.slice(0, 3).forEach((neighbor) => {
+        nearby.slice(0, 4).forEach((neighbor) => {
           const a = Math.min(index, neighbor.index);
           const b = Math.max(index, neighbor.index);
           const key = a + ":" + b;
@@ -139,7 +139,7 @@ function AIAnimatedTitle({ onComplete }) {
         ctx.fillStyle = "rgba(224,226,227," + (star.alpha * twinkle * (1 - progress * 0.82)) + ")"; ctx.fill();
       });
       const particleProgress = (point) => reducedMotion ? 1 : Math.max(0, Math.min(1, (progress - point.delay) / (1 - point.delay)));
-      ctx.lineWidth = 0.9;
+      ctx.lineWidth = 1.15;
       connections.forEach((edge) => {
         const a = particles[edge.a];
         const b = particles[edge.b];
@@ -154,7 +154,7 @@ function AIAnimatedTitle({ onComplete }) {
         const bx = b.sx + (b.x - b.sx) * easeB;
         const by = b.sy + (b.y - b.sy) * easeB;
         ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by);
-        ctx.strokeStyle = "rgba(176,182,188," + (local * 0.62) + ")";
+        ctx.strokeStyle = "rgba(194,198,202," + (local * 0.88) + ")";
         ctx.stroke();
       });
       particles.forEach((point) => {
