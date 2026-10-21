@@ -109,6 +109,10 @@ function AIAnimatedTitle() {
           ))}
           <rect className="sigc-ai-title-scan" x="-300" y="0" width="300" height="120" fill="url(#sigc-ai-network-gradient)" />
         </g>
+        <g className="sigc-ai-title-outline" aria-hidden="true">
+          <text x="150" y="52" textAnchor="middle" className="sigc-ai-title-outline-text">ARTIFICIAL</text>
+          <text x="150" y="101" textAnchor="middle" className="sigc-ai-title-outline-text">INTELLIGENCE</text>
+        </g>
       </svg>
       <span className="sigc-ai-network-wordmark__accessible">Artificial Intelligence</span>
     </div>
