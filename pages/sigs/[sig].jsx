@@ -149,7 +149,7 @@ function DomainExplorer({ mission }) {
         trigger: stage,
         pin: screen,
         start: "top top",
-        end: () => "+=" + window.innerHeight * (domains.length - 1),
+        end: () => "+=" + window.innerHeight * 0.6 * (domains.length - 1),
         scrub: 0.35,
         anticipatePin: 1,
         invalidateOnRefresh: true,
