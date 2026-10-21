@@ -3371,3 +3371,17 @@
     transform: none;
   }
 }
+
+
+/* Center the AI supporting copy directly beneath the particle wordmark. */
+.sigc-mission[data-sigc-mission="ai"] .sigc-ai-intro-copy {
+  width: min(100% - 48px, 1120px);
+  margin: clamp(22px, 3vh, 36px) auto 0;
+  text-align: center;
+}
+.sigc-mission[data-sigc-mission="ai"] .sigc-ai-intro-copy .sigc-mission-tagline,
+.sigc-mission[data-sigc-mission="ai"] .sigc-ai-intro-copy .sigc-overview-copy,
+.sigc-mission[data-sigc-mission="ai"] .sigc-ai-intro-copy .sigc-overview-title,
+.sigc-mission[data-sigc-mission="ai"] .sigc-ai-intro-copy .sigc-overview-closing {
+  text-align: center;
+}
