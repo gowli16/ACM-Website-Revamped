@@ -47,21 +47,18 @@ function AIAnimatedTitle() {
     let disposed = false;
     let started = 0;
     let particles = [];
-
+    let stars = [];
     let width = 0;
     let height = 0;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const buildTargets = () => {
+    const buildScene = () => {
       const rect = wrap.getBoundingClientRect();
       width = Math.max(320, Math.floor(rect.width));
-      height = Math.max(160, Math.floor(rect.width * 0.25));
+      height = Math.max(180, Math.floor(rect.width * 0.26));
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
-      canvas.style.width = "100%";
-      canvas.style.height = "auto";
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, width, height);
       const off = document.createElement("canvas");
       off.width = width;
       off.height = height;
@@ -70,60 +67,61 @@ function AIAnimatedTitle() {
       octx.fillStyle = "#fff";
       octx.textAlign = "center";
       octx.textBaseline = "middle";
-      let fontSize = Math.min(width * 0.105, 112);
+      let fontSize = Math.min(width * 0.105, 108);
       octx.font = "700 " + fontSize + "px Arial, Helvetica, sans-serif";
-      while ((octx.measureText("INTELLIGENCE").width > width * 0.96 || octx.measureText("ARTIFICIAL").width > width * 0.96) && fontSize > 24) { fontSize -= 2; octx.font = "700 " + fontSize + "px Arial, Helvetica, sans-serif"; }
+      while (octx.measureText("INTELLIGENCE").width > width * 0.94 && fontSize > 24) { fontSize -= 2; octx.font = "700 " + fontSize + "px Arial, Helvetica, sans-serif"; }
       octx.fillText("ARTIFICIAL", width / 2, height * 0.34);
       octx.fillText("INTELLIGENCE", width / 2, height * 0.76);
       const pixels = octx.getImageData(0, 0, width, height).data;
-      const step = width < 520 ? 5 : 6;
+      const step = width < 520 ? 6 : 8;
       const targets = [];
-
       for (let y = 2; y < height - 2; y += step) {
         for (let x = 2; x < width - 2; x += step) {
           if (pixels[(y * width + x) * 4 + 3] > 80) {
-            const target = { x, y, sx: Math.random() * width, sy: Math.random() * height, r: Math.random() < 0.10 ? 1.25 : 0.72, phase: Math.random() * Math.PI * 2 };
-            targets.push(target);
-
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.max(width * 0.38, height * 1.2) * (0.65 + Math.random() * 0.7);
+            targets.push({ x, y, sx: width / 2 + Math.cos(angle) * distance, sy: height / 2 + Math.sin(angle) * distance, r: Math.random() < 0.1 ? 1.35 : 0.78, delay: Math.random() * 0.48, twinkle: Math.random() * Math.PI * 2 });
           }
         }
       }
       particles = targets;
-
-      // Dots-only construction: no connecting lines.\n      started = performance.now();
+      stars = Array.from({ length: Math.max(90, Math.floor(width / 3.5)) }, () => ({ x: Math.random() * width, y: Math.random() * height, r: Math.random() < 0.08 ? 1.15 : 0.48 + Math.random() * 0.3, alpha: 0.16 + Math.random() * 0.38, phase: Math.random() * Math.PI * 2 }));
+      ctx.clearRect(0, 0, width, height);
+      started = 0;
     };
     const draw = (now) => {
       if (disposed) return;
+      if (!started) started = now;
       const elapsed = (now - started) / 1000;
-      const progress = reducedMotion ? 1 : Math.max(0, Math.min(1, (elapsed - 0.12) / 2.15));
-      const eased = 1 - Math.pow(1 - progress, 3);
+      const progress = reducedMotion ? 1 : Math.max(0, Math.min(1, elapsed / 2.8));
       ctx.clearRect(0, 0, width, height);
-
-      particles.forEach((point) => {
-        const local = Math.max(0, Math.min(1, (progress - (point.phase % 1) * 0.12) / 0.88));
-        const easedPoint = 1 - Math.pow(1 - local, 3);
-        const x = point.sx + (point.x - point.sx) * easedPoint;
-        const y = point.sy + (point.y - point.sy) * easedPoint;
-        ctx.beginPath();
-        ctx.arc(x, y, point.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(245, 245, 241, " + (0.08 + local * 0.88) + ")";
-        ctx.fill();
+      stars.forEach((star) => {
+        const twinkle = 0.72 + Math.sin(elapsed * 1.7 + star.phase) * 0.28;
+        ctx.beginPath(); ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(224,226,227," + (star.alpha * twinkle * (1 - progress * 0.82)) + ")"; ctx.fill();
       });
-      if (progress < 1) raf = requestAnimationFrame(draw);
-      else {
-        particles.forEach((point) => { point.sx = point.x; point.sy = point.y; });
-        raf = requestAnimationFrame((time) => {
-          ctx.clearRect(0, 0, width, height);
-
-          particles.forEach((point) => { ctx.beginPath(); ctx.arc(point.x, point.y, point.r, 0, Math.PI * 2); ctx.fillStyle = "rgba(235,235,232,0.88)"; ctx.fill(); });
-        });
-      }
+      particles.forEach((point) => {
+        const local = reducedMotion ? 1 : Math.max(0, Math.min(1, (progress - point.delay) / (1 - point.delay)));
+        const eased = 1 - Math.pow(1 - local, 3);
+        const x = point.sx + (point.x - point.sx) * eased;
+        const y = point.sy + (point.y - point.sy) * eased;
+        const alpha = 0.1 + local * 0.86;
+        ctx.beginPath(); ctx.arc(x, y, point.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(245,245,241," + alpha + ")"; ctx.fill();
+      });
+      if (progress < 1) { raf = requestAnimationFrame(draw); return; }
+      particles.forEach((point) => {
+        const pulse = 0.78 + Math.sin(elapsed * 1.2 + point.twinkle) * 0.12;
+        ctx.beginPath(); ctx.arc(point.x, point.y, point.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(239,239,236," + pulse + ")"; ctx.fill();
+      });
     };
+    buildScene();
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !started) { buildTargets(); raf = requestAnimationFrame(draw); observer.disconnect(); }
+      if (entry.isIntersecting && !started) { raf = requestAnimationFrame(draw); observer.disconnect(); }
     }, { threshold: 0.15 });
     observer.observe(wrap);
-    const resize = () => { if (started) { cancelAnimationFrame(raf); buildTargets(); raf = requestAnimationFrame(draw); } };
+    const resize = () => { cancelAnimationFrame(raf); buildScene(); if (wrap.getBoundingClientRect().top < window.innerHeight) raf = requestAnimationFrame(draw); };
     window.addEventListener("resize", resize);
     return () => { disposed = true; observer.disconnect(); window.removeEventListener("resize", resize); cancelAnimationFrame(raf); };
   }, []);
