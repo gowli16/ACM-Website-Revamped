@@ -71,8 +71,8 @@ function AIAnimatedTitle({ onComplete }) {
       octx.textAlign = "center";
       octx.textBaseline = "middle";
       let fontSize = Math.min(width * 0.105, 142);
-      octx.font = "700 " + fontSize + "px Arial, Helvetica, sans-serif";
-      while (octx.measureText("INTELLIGENCE").width > width * 0.94 && fontSize > 24) { fontSize -= 2; octx.font = "700 " + fontSize + "px Arial, Helvetica, sans-serif"; }
+      octx.font = "500 " + fontSize + "px Arial, Helvetica, sans-serif";
+      while (octx.measureText("INTELLIGENCE").width > width * 0.94 && fontSize > 24) { fontSize -= 2; octx.font = "500 " + fontSize + "px Arial, Helvetica, sans-serif"; }
       octx.fillText("ARTIFICIAL", width / 2, height * 0.34);
       octx.fillText("INTELLIGENCE", width / 2, height * 0.76);
       const pixels = octx.getImageData(0, 0, width, height).data;
@@ -83,7 +83,7 @@ function AIAnimatedTitle({ onComplete }) {
           if (pixels[(y * width + x) * 4 + 3] > 80) {
             const angle = Math.random() * Math.PI * 2;
             const distance = Math.max(width * 0.38, height * 1.2) * (0.65 + Math.random() * 0.7);
-            targets.push({ x: x + step / 2, y: y + step / 2, sx: width / 2 + Math.cos(angle) * distance, sy: height / 2 + Math.sin(angle) * distance, r: Math.random() < 0.08 ? 1.2 : 0.95, delay: Math.random() * 0.48, twinkle: Math.random() * Math.PI * 2 });
+            targets.push({ x: x + step / 2, y: y + step / 2, sx: width / 2 + Math.cos(angle) * distance, sy: height / 2 + Math.sin(angle) * distance, r: Math.random() < 0.12 ? 1.45 : 1.2, delay: Math.random() * 0.48, twinkle: Math.random() * Math.PI * 2 });
           }
         }
       }
