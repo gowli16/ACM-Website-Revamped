@@ -314,7 +314,7 @@ function MissionContent({ mission }) {
       <div className="sigc-mission-inner">
         <header className="sigc-mission-header">
           {mission.id === "ai" && <NeuralNetworkBackground />}
-          <h2 id={`${mission.id}-title`}>{mission.id === "glitch" ? <GlitchTitle>{mission.title}</GlitchTitle> : mission.title}</h2>
+          <h2 id={`${mission.id}-title`} className={mission.id === "ai" ? "sigc-ai-network-title" : undefined}>{mission.id === "glitch" ? <GlitchTitle>{mission.title}</GlitchTitle> : mission.title}</h2>
           {mission.id === "glitch" && <div className="sigc-glitch-title-game-background" aria-hidden="true"><SpaceShooter /></div>}
           {mission.id !== "glitch" && (
             <>
