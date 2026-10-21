@@ -84,19 +84,20 @@ function AIAnimatedTitle({ onComplete }) {
           if (pixels[(y * width + x) * 4 + 3] > 80) {
             const angle = Math.random() * Math.PI * 2;
             const distance = Math.max(width * 0.38, height * 1.2) * (0.65 + Math.random() * 0.7);
-            targets.push({ x: x + step / 2, y: y + step / 2, sx: width / 2 + Math.cos(angle) * distance, sy: height / 2 + Math.sin(angle) * distance, r: Math.random() < 0.12 ? 1.45 : 1.2, delay: Math.random() * 0.48, twinkle: Math.random() * Math.PI * 2 });
+            targets.push({ x: x + step / 2 + (Math.random() - 0.5) * step * 0.72, y: y + step / 2 + (Math.random() - 0.5) * step * 0.72, sx: width / 2 + Math.cos(angle) * distance, sy: height / 2 + Math.sin(angle) * distance, r: Math.random() < 0.18 ? 1.8 : 1.35, delay: Math.random() * 0.48, twinkle: Math.random() * Math.PI * 2 });
           }
         }
       }
       particles = targets;
       connections = [];
-      const cellSize = step * 2.25;
+      const cellSize = step * 3.1;
       const cells = new Map();
       targets.forEach((point, index) => {
         const key = Math.floor(point.x / cellSize) + "," + Math.floor(point.y / cellSize);
         if (!cells.has(key)) cells.set(key, []);
         cells.get(key).push(index);
       });
+      const connected = new Set();
       targets.forEach((point, index) => {
         const gx = Math.floor(point.x / cellSize);
         const gy = Math.floor(point.y / cellSize);
@@ -104,15 +105,23 @@ function AIAnimatedTitle({ onComplete }) {
         for (let cy = gy - 1; cy <= gy + 1; cy++) {
           for (let cx = gx - 1; cx <= gx + 1; cx++) {
             (cells.get(cx + "," + cy) || []).forEach((otherIndex) => {
-              if (otherIndex <= index) return;
+              if (otherIndex === index) return;
               const other = targets[otherIndex];
               const distance = Math.hypot(other.x - point.x, other.y - point.y);
-              if (distance > step * 1.05 && distance < step * 2.05) nearby.push({ index: otherIndex, distance });
+              if (distance > step * 0.8 && distance < step * 3.05) nearby.push({ index: otherIndex, distance });
             });
           }
         }
         nearby.sort((a, b) => a.distance - b.distance);
-        nearby.slice(0, 2).forEach((neighbor) => connections.push({ a: index, b: neighbor.index }));
+        nearby.slice(0, 3).forEach((neighbor) => {
+          const a = Math.min(index, neighbor.index);
+          const b = Math.max(index, neighbor.index);
+          const key = a + ":" + b;
+          if (!connected.has(key)) {
+            connected.add(key);
+            connections.push({ a, b });
+          }
+        });
       });
       stars = Array.from({ length: Math.max(90, Math.floor(width / 3.5)) }, () => ({ x: Math.random() * width, y: Math.random() * height, r: Math.random() < 0.08 ? 1.15 : 0.48 + Math.random() * 0.3, alpha: 0.16 + Math.random() * 0.38, phase: Math.random() * Math.PI * 2 }));
       ctx.clearRect(0, 0, width, height);
@@ -130,7 +139,7 @@ function AIAnimatedTitle({ onComplete }) {
         ctx.fillStyle = "rgba(224,226,227," + (star.alpha * twinkle * (1 - progress * 0.82)) + ")"; ctx.fill();
       });
       const particleProgress = (point) => reducedMotion ? 1 : Math.max(0, Math.min(1, (progress - point.delay) / (1 - point.delay)));
-      ctx.lineWidth = 0.7;
+      ctx.lineWidth = 0.9;
       connections.forEach((edge) => {
         const a = particles[edge.a];
         const b = particles[edge.b];
@@ -145,7 +154,7 @@ function AIAnimatedTitle({ onComplete }) {
         const bx = b.sx + (b.x - b.sx) * easeB;
         const by = b.sy + (b.y - b.sy) * easeB;
         ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by);
-        ctx.strokeStyle = "rgba(176,182,188," + (local * 0.42) + ")";
+        ctx.strokeStyle = "rgba(176,182,188," + (local * 0.62) + ")";
         ctx.stroke();
       });
       particles.forEach((point) => {
