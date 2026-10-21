@@ -3226,3 +3226,52 @@
     opacity: 1;
   }
 }
+
+
+/* Final correction: particles are clipped to the letterforms, so the dots themselves form the words. */
+.sigc-ai-network-wordmark {
+  width: min(100%, 980px);
+  max-width: 980px;
+  margin-inline: auto;
+}
+.sigc-ai-network-wordmark svg {
+  width: 100%;
+  height: auto;
+}
+.sigc-ai-title-mask-text {
+  fill: #fff !important;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 29px;
+  font-weight: 700;
+  letter-spacing: -1.1px;
+}
+.sigc-ai-title-outline {
+  display: none !important;
+}
+.sigc-ai-title-particles {
+  opacity: 0;
+}
+.sigc-ai-network-wordmark.is-visible .sigc-ai-title-particles {
+  opacity: 1;
+}
+.sigc-ai-title-particle {
+  fill: #ededeb !important;
+  opacity: 0;
+  filter: none !important;
+}
+.sigc-ai-title-link {
+  stroke: #aeb2b5 !important;
+  stroke-width: 0.42 !important;
+  stroke-opacity: 0.72 !important;
+}
+.sigc-ai-title-node {
+  fill: #f4f4f1 !important;
+  opacity: 0;
+  filter: none !important;
+}
+.sigc-ai-network-wordmark.is-visible .sigc-ai-title-node {
+  animation: sigc-ai-title-node-build 380ms ease-out var(--title-delay) forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sigc-ai-title-particle { opacity: 0.9; }
+}
