@@ -3323,7 +3323,7 @@
   position: relative;
   left: auto;
   right: auto;
-  transform: translateX(40px);
+  transform: translateX(100px);
   width: 100vw;
   max-width: none;
   margin: 0 0 0 calc(50% - 50vw);
