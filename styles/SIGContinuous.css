@@ -3385,3 +3385,27 @@
 .sigc-mission[data-sigc-mission="ai"] .sigc-ai-intro-copy .sigc-overview-closing {
   text-align: center;
 }
+
+
+/* Keep both AI intro lines centered under the particle title, as one composition. */
+.sigc-mission[data-sigc-mission="ai"] .sigc-ai-intro-copy {
+  position: relative;
+  left: calc(50% - 50vw);
+  width: min(100vw, 1440px);
+  max-width: none;
+  margin: clamp(22px, 3vh, 36px) 0 0;
+  padding: 0 28px;
+  text-align: center !important;
+  transform: translateX(calc((100vw - min(100vw, 1440px)) / 2 + 125px));
+}
+.sigc-mission[data-sigc-mission="ai"] .sigc-ai-intro-copy p,
+.sigc-mission[data-sigc-mission="ai"] .sigc-ai-intro-copy .sigc-mission-tagline,
+.sigc-mission[data-sigc-mission="ai"] .sigc-ai-intro-copy .sigc-overview-copy,
+.sigc-mission[data-sigc-mission="ai"] .sigc-ai-intro-copy .sigc-overview-title,
+.sigc-mission[data-sigc-mission="ai"] .sigc-ai-intro-copy .sigc-overview-closing {
+  width: 100%;
+  max-width: none;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center !important;
+}
