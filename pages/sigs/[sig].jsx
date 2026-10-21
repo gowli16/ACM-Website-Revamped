@@ -77,7 +77,7 @@ function AIAnimatedTitle({ onComplete }) {
       octx.fillText("ARTIFICIAL", width / 2, height * 0.34);
       octx.fillText("INTELLIGENCE", width / 2, height * 0.76);
       const pixels = octx.getImageData(0, 0, width, height).data;
-      const step = width < 520 ? 10 : 13;
+      const step = width < 520 ? 7 : 8;
       const targets = [];
       for (let y = 2; y < height - 2; y += step) {
         for (let x = 2; x < width - 2; x += step) {
@@ -90,7 +90,7 @@ function AIAnimatedTitle({ onComplete }) {
       }
       particles = targets;
       connections = [];
-      const cellSize = step * 2.35;
+      const cellSize = step * 2.15;
       const cells = new Map();
       targets.forEach((point, index) => {
         const key = Math.floor(point.x / cellSize) + "," + Math.floor(point.y / cellSize);
@@ -108,7 +108,7 @@ function AIAnimatedTitle({ onComplete }) {
               if (otherIndex === index) return;
               const other = targets[otherIndex];
               const distance = Math.hypot(other.x - point.x, other.y - point.y);
-              if (distance >= step * 0.85 && distance <= step * 2.05) nearby.push({ index: otherIndex, distance });
+              if (distance >= step * 0.85 && distance <= step * 1.55) nearby.push({ index: otherIndex, distance });
             });
           }
         }
@@ -139,7 +139,7 @@ function AIAnimatedTitle({ onComplete }) {
         ctx.fillStyle = "rgba(224,226,227," + (star.alpha * twinkle * (1 - progress * 0.82)) + ")"; ctx.fill();
       });
       const particleProgress = (point) => reducedMotion ? 1 : Math.max(0, Math.min(1, (progress - point.delay) / (1 - point.delay)));
-      ctx.lineWidth = 0.85;
+      ctx.lineWidth = 0.7;
       connections.forEach((edge) => {
         const a = particles[edge.a];
         const b = particles[edge.b];
