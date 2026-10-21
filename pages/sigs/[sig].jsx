@@ -9,7 +9,6 @@ import { ai } from "../../data/sigs/ai";
 import { web } from "../../data/sigs/web";
 import { cyber } from "../../data/sigs/cyber";
 import { glitch } from "../../data/sigs/glitch";
-import "../../styles/SIGPinnedScroll.css";
 
 const missions = [
   { id: "ai", index: 0, label: "AI", title: "Artificial Intelligence", station: "AI / 01", signal: ai.signal, data: ai },
