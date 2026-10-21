@@ -3321,11 +3321,11 @@
 }
 .sigc-mission[data-sigc-mission="ai"] .sigc-ai-title-heading {
   position: relative;
-  left: 50%;
-  transform: translateX(-50%);
+  left: auto;
+  transform: none;
   width: min(96vw, 1600px);
   max-width: none;
-  margin: 0;
+  margin: 0 0 0 calc(50% - min(48vw, 800px));
 }
 .sigc-mission[data-sigc-mission="ai"] .sigc-ai-network-wordmark {
   width: 100%;
