@@ -100,22 +100,31 @@ function DomainExplorer({ mission }) {
   const domains = Array.isArray(mission.data.domains) ? mission.data.domains : [];
   const [activeIndex, setActiveIndex] = useState(0);
   const stageRef = useRef(null);
+  const screenRef = useRef(null);
   const activeIndexRef = useRef(0);
+  const triggerRef = useRef(null);
 
-  const setDomain = useCallback((index) => {
+  const setActiveDomain = useCallback((index) => {
     const nextIndex = Math.max(0, Math.min(domains.length - 1, index));
     activeIndexRef.current = nextIndex;
     setActiveIndex(nextIndex);
-    const stage = stageRef.current;
-    if (!stage || domains.length < 2) return;
-    const stageTop = stage.getBoundingClientRect().top + window.scrollY;
-    const travel = Math.max(1, stage.offsetHeight - window.innerHeight);
-    const target = stageTop + (nextIndex / (domains.length - 1)) * travel;
+  }, [domains.length]);
+
+  const setDomain = useCallback((index) => {
+    const nextIndex = Math.max(0, Math.min(domains.length - 1, index));
+    const trigger = triggerRef.current;
+    if (!trigger || domains.length < 2) {
+      setActiveDomain(nextIndex);
+      return;
+    }
+    const startY = trigger.start;
+    const travel = trigger.end - trigger.start;
+    const targetY = startY + (nextIndex / (domains.length - 1)) * travel;
     window.scrollTo({
-      top: target,
+      top: targetY,
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
     });
-  }, [domains.length]);
+  }, [domains.length, setActiveDomain]);
 
   useEffect(() => {
     activeIndexRef.current = 0;
@@ -124,32 +133,48 @@ function DomainExplorer({ mission }) {
 
   useEffect(() => {
     const stage = stageRef.current;
-    if (!stage || domains.length < 2) return undefined;
-    let frame = 0;
+    const screen = screenRef.current;
+    if (!stage || !screen || domains.length < 2) return undefined;
 
-    const updateFromScroll = () => {
-      frame = 0;
-      const rect = stage.getBoundingClientRect();
-      const travel = Math.max(1, stage.offsetHeight - window.innerHeight);
-      const progress = Math.min(1, Math.max(0, -rect.top / travel));
-      const nextIndex = Math.round(progress * (domains.length - 1));
-      if (nextIndex !== activeIndexRef.current) {
-        activeIndexRef.current = nextIndex;
-        setActiveIndex(nextIndex);
-      }
+    let disposed = false;
+    let trigger;
+
+    const setup = async () => {
+      const { gsap } = await import("gsap");
+      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+      if (disposed) return;
+      gsap.registerPlugin(ScrollTrigger);
+
+      trigger = ScrollTrigger.create({
+        trigger: stage,
+        pin: screen,
+        start: "top top",
+        end: () => "+=" + window.innerHeight * (domains.length - 1),
+        scrub: 0.35,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          const nextIndex = Math.min(
+            domains.length - 1,
+            Math.round(self.progress * (domains.length - 1))
+          );
+          if (nextIndex !== activeIndexRef.current) {
+            activeIndexRef.current = nextIndex;
+            setActiveIndex(nextIndex);
+          }
+        },
+      });
+      triggerRef.current = trigger;
+      ScrollTrigger.refresh();
     };
-    const onScroll = () => {
-      if (!frame) frame = window.requestAnimationFrame(updateFromScroll);
-    };
-    updateFromScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+
+    setup();
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (frame) window.cancelAnimationFrame(frame);
+      disposed = true;
+      trigger?.kill();
+      triggerRef.current = null;
     };
-  }, [domains.length]);
+  }, [domains.length, mission.id]);
 
   if (!domains.length) return null;
   const activeDomain = domains[activeIndex] || domains[0];
@@ -159,12 +184,8 @@ function DomainExplorer({ mission }) {
   const activeTags = Array.isArray(activeValues[2]) ? activeValues[2] : [];
 
   return (
-    <div
-      className="sigc-domain-scroll-stage"
-      ref={stageRef}
-      style={{ "--sigc-domain-count": domains.length }}
-    >
-      <div className="sigc-domain-scroll-screen">
+    <div className="sigc-domain-scroll-stage" ref={stageRef}>
+      <div className="sigc-domain-scroll-screen" ref={screenRef}>
         <SectionHeading title="Domains" />
         <div className="sigc-domain-explorer">
           <div className="sigc-domain-list" aria-label="Domain topics">
