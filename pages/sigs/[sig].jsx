@@ -34,6 +34,73 @@ function SectionHeading({ eyebrow, title, description }) {
   );
 }
 
+function AIAnimatedTitle() {
+  const titleRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const element = titleRef.current;
+    if (!element || typeof IntersectionObserver === "undefined") {
+      setIsVisible(true);
+      return undefined;
+    }
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsVisible(true);
+        observer.disconnect();
+      }
+    }, { threshold: 0.35 });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  const links = Array.from({ length: 34 }, (_, index) => {
+    const x1 = 12 + (index % 9) * 30;
+    const y1 = 14 + (Math.floor(index / 9) % 4) * 25;
+    const x2 = Math.min(286, x1 + 18 + ((index * 7) % 25));
+    const y2 = Math.max(5, Math.min(108, y1 + ((index % 5) - 2) * 13));
+    return { x1, y1, x2, y2, delay: (index * 0.055).toFixed(3) };
+  });
+  const nodes = Array.from({ length: 38 }, (_, index) => ({
+    x: 8 + ((index * 37) % 292),
+    y: 8 + ((index * 23) % 104),
+    delay: (index * 0.045).toFixed(3),
+    radius: index % 5 === 0 ? 1.9 : 1.2,
+  }));
+
+  return (
+    <div ref={titleRef} className={`sigc-ai-network-wordmark${isVisible ? " is-visible" : ""}`} role="img" aria-label="Artificial Intelligence">
+      <svg viewBox="0 0 300 120" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <defs>
+          <mask id="sigc-ai-title-mask">
+            <rect width="300" height="120" fill="black" />
+            <text x="150" y="52" textAnchor="middle" className="sigc-ai-title-mask-text">ARTIFICIAL</text>
+            <text x="150" y="101" textAnchor="middle" className="sigc-ai-title-mask-text">INTELLIGENCE</text>
+          </mask>
+          <linearGradient id="sigc-ai-network-gradient" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#398DFF" />
+            <stop offset="52%" stopColor="#56DCE0" />
+            <stop offset="100%" stopColor="#D9FAFF" />
+          </linearGradient>
+        </defs>
+        <g mask="url(#sigc-ai-title-mask)" className="sigc-ai-network-ink">
+          <rect width="300" height="120" fill="#e9fcff" opacity="0.08" />
+          {links.map((link, index) => (
+            <line key={`link-${index}`} x1={link.x1} y1={link.y1} x2={link.x2} y2={link.y2}
+              pathLength="1" className="sigc-ai-title-link" style={{ "--title-delay": `${link.delay}s` }} />
+          ))}
+          {nodes.map((node, index) => (
+            <circle key={`node-${index}`} cx={node.x} cy={node.y} r={node.radius}
+              className="sigc-ai-title-node" style={{ "--title-delay": `${node.delay}s` }} />
+          ))}
+          <rect className="sigc-ai-title-scan" x="-300" y="0" width="300" height="120" fill="url(#sigc-ai-network-gradient)" />
+        </g>
+      </svg>
+      <span className="sigc-ai-network-wordmark__accessible">Artificial Intelligence</span>
+    </div>
+  );
+}
+
 function isMediaReference(value) {
   return typeof value === "string" &&
     (/^['"]?\$\{BASE\}/.test(value) ||
@@ -314,7 +381,7 @@ function MissionContent({ mission }) {
       <div className="sigc-mission-inner">
         <header className="sigc-mission-header">
           {mission.id === "ai" && <NeuralNetworkBackground />}
-          <h2 id={`${mission.id}-title`} className={mission.id === "ai" ? "sigc-ai-network-title" : undefined}>{mission.id === "glitch" ? <GlitchTitle>{mission.title}</GlitchTitle> : mission.title}</h2>
+          {mission.id === "ai" ? <div id="ai-title" className="sigc-ai-title-heading"><AIAnimatedTitle /></div> : <h2 id={`${mission.id}-title`}>{mission.id === "glitch" ? <GlitchTitle>{mission.title}</GlitchTitle> : mission.title}</h2>}
           {mission.id === "glitch" && <div className="sigc-glitch-title-game-background" aria-hidden="true"><SpaceShooter /></div>}
           {mission.id !== "glitch" && (
             <>
