@@ -54,17 +54,17 @@ function AIAnimatedTitle() {
     return () => observer.disconnect();
   }, []);
 
-  const links = Array.from({ length: 34 }, (_, index) => {
-    const x1 = 12 + (index % 9) * 30;
-    const y1 = 14 + (Math.floor(index / 9) % 4) * 25;
-    const x2 = Math.min(286, x1 + 18 + ((index * 7) % 25));
-    const y2 = Math.max(5, Math.min(108, y1 + ((index % 5) - 2) * 13));
+  const links = Array.from({ length: 112 }, (_, index) => {
+    const x1 = 4 + (index % 15) * 20;
+    const y1 = 6 + (Math.floor(index / 15) % 6) * 21;
+    const x2 = Math.max(3, Math.min(297, x1 + (((index * 7) % 49) - 24)));
+    const y2 = Math.max(3, Math.min(117, y1 + ((index % 7) - 3) * 13));
     return { x1, y1, x2, y2, delay: (index * 0.055).toFixed(3) };
   });
-  const nodes = Array.from({ length: 38 }, (_, index) => ({
-    x: 8 + ((index * 37) % 292),
-    y: 8 + ((index * 23) % 104),
-    delay: (index * 0.045).toFixed(3),
+  const nodes = Array.from({ length: 78 }, (_, index) => ({
+    x: 4 + ((index * 47) % 292),
+    y: 4 + ((index * 31) % 112),
+    delay: ((index % 26) * 0.035).toFixed(3),
     radius: index % 5 === 0 ? 1.9 : 1.2,
   }));
 
