@@ -3324,10 +3324,11 @@
   left: auto;
   right: auto;
   transform: none;
-  width: min(96vw, 1600px);
-  max-width: none;
+  width: min(90vw, 1450px);
+  max-width: 1450px;
   margin: 0 auto;
   align-self: center;
+  flex: 0 1 auto;
 }
 .sigc-mission[data-sigc-mission="ai"] .sigc-ai-network-wordmark {
   width: 100%;
