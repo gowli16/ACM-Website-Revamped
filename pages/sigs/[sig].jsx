@@ -49,6 +49,8 @@ function AIAnimatedTitle({ onComplete }) {
     let disposed = false;
     let started = 0;
     let completionSent = false;
+    let isPlaying = false;
+    let isInFrame = false;
     let particles = [];
     let connections = [];
     let stars = [];
@@ -177,10 +179,31 @@ function AIAnimatedTitle({ onComplete }) {
     };
     buildScene();
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !started) { raf = requestAnimationFrame(draw); observer.disconnect(); }
+      isInFrame = entry.isIntersecting;
+      if (isInFrame && !isPlaying) {
+        isPlaying = true;
+        completionSent = false;
+        started = 0;
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(draw);
+      } else if (!isInFrame && isPlaying) {
+        isPlaying = false;
+        started = 0;
+        cancelAnimationFrame(raf);
+        ctx.clearRect(0, 0, width, height);
+      }
     }, { threshold: 0.15 });
     observer.observe(wrap);
-    const resize = () => { cancelAnimationFrame(raf); buildScene(); if (wrap.getBoundingClientRect().top < window.innerHeight) raf = requestAnimationFrame(draw); };
+    const resize = () => {
+      cancelAnimationFrame(raf);
+      buildScene();
+      isPlaying = false;
+      if (isInFrame) {
+        isPlaying = true;
+        completionSent = false;
+        raf = requestAnimationFrame(draw);
+      }
+    };
     window.addEventListener("resize", resize);
     return () => { disposed = true; observer.disconnect(); window.removeEventListener("resize", resize); cancelAnimationFrame(raf); };
   }, []);
