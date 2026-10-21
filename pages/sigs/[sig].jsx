@@ -83,8 +83,22 @@ function AIAnimatedTitle() {
             <stop offset="100%" stopColor="#D9FAFF" />
           </linearGradient>
         </defs>
+        <g className="sigc-ai-title-particles" aria-hidden="true">
+          {nodes.map((node, index) => {
+            const startX = (index * 71 + 19) % 300;
+            const startY = (index * 43 + 7) % 120;
+            return (
+              <circle key={`particle-${index}`} cx={startX} cy={startY} r={node.radius}
+                className="sigc-ai-title-particle">
+                <animate attributeName="cx" from={startX} to={node.x} dur="1.5s" begin={`${(index % 18) * 0.05}s`} fill="freeze" />
+                <animate attributeName="cy" from={startY} to={node.y} dur="1.5s" begin={`${(index % 18) * 0.05}s`} fill="freeze" />
+                <animate attributeName="opacity" values="0;0.95;0.45" keyTimes="0;0.7;1" dur="1.5s" begin={`${(index % 18) * 0.05}s`} fill="freeze" />
+              </circle>
+            );
+          })}
+        </g>
         <g mask="url(#sigc-ai-title-mask)" className="sigc-ai-network-ink">
-          <rect width="300" height="120" fill="#e9fcff" opacity="0.08" />
+          <rect width="300" height="120" fill="#e9fcff" opacity="0.035" />
           {links.map((link, index) => (
             <line key={`link-${index}`} x1={link.x1} y1={link.y1} x2={link.x2} y2={link.y2}
               pathLength="1" className="sigc-ai-title-link" style={{ "--title-delay": `${link.delay}s` }} />
