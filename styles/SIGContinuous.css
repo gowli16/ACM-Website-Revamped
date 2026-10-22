@@ -3447,3 +3447,175 @@
     transform: none;
   }
 }
+
+/* Monochrome perspective tunnel for the SIG journey. The grid moves with page scroll. */
+.sigc-page {
+  --sigc-background: #08090b;
+  --sigc-panel: #101114;
+  --sigc-panel-raised: #151619;
+  --sigc-cyan: #d7d7d5;
+  --sigc-orange: #bcbcb8;
+  --sigc-muted: #a3a3a0;
+  --sigc-paper: #f0f0ed;
+  --sigc-rule: rgba(210, 210, 205, 0.17);
+  background: #08090b;
+}
+.sigc-tunnel-scene {
+  --sigc-tunnel-scroll: 0px;
+  position: fixed;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  perspective: 900px;
+  perspective-origin: 50% 48%;
+  opacity: 0.72;
+}
+.sigc-tunnel-geometry {
+  position: absolute;
+  inset: -22% -12%;
+  transform-style: preserve-3d;
+  transform: translateY(calc(var(--sigc-tunnel-scroll) * -0.018));
+}
+.sigc-tunnel-wall,
+.sigc-tunnel-ceiling,
+.sigc-tunnel-floor {
+  position: absolute;
+  overflow: hidden;
+  background-color: rgba(10, 11, 13, 0.42);
+  background-image:
+    linear-gradient(rgba(190, 192, 194, 0.13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(190, 192, 194, 0.13) 1px, transparent 1px);
+  background-size: 54px 54px;
+}
+.sigc-tunnel-wall--left,
+.sigc-tunnel-wall--right {
+  top: 7%;
+  bottom: 8%;
+  width: 62%;
+  background-size: 58px 58px;
+}
+.sigc-tunnel-wall--left {
+  left: -16%;
+  transform-origin: right center;
+  transform: rotateY(57deg);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 46%, #000 100%);
+}
+.sigc-tunnel-wall--right {
+  right: -16%;
+  transform-origin: left center;
+  transform: rotateY(-57deg);
+  mask-image: linear-gradient(270deg, transparent 0%, #000 46%, #000 100%);
+}
+.sigc-tunnel-ceiling,
+.sigc-tunnel-floor {
+  left: 5%;
+  right: 5%;
+  height: 58%;
+  background-size: 58px 58px;
+}
+.sigc-tunnel-ceiling {
+  top: -32%;
+  transform-origin: center bottom;
+  transform: rotateX(-63deg);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 60%, transparent 100%);
+}
+.sigc-tunnel-floor {
+  bottom: -34%;
+  transform-origin: center top;
+  transform: rotateX(63deg);
+  background-position: 0 var(--sigc-tunnel-scroll);
+  mask-image: linear-gradient(0deg, transparent 0%, #000 44%, transparent 100%);
+}
+.sigc-tunnel-end {
+  position: absolute;
+  width: min(24vw, 320px);
+  aspect-ratio: 1.35;
+  left: 50%;
+  top: 49%;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(210, 210, 205, 0.12);
+  box-shadow: 0 0 0 34px rgba(210, 210, 205, 0.018), 0 0 0 72px rgba(210, 210, 205, 0.014);
+  opacity: 0.5;
+}
+.sigc-page-content {
+  position: relative;
+  z-index: 2;
+}
+.sigc-intro,
+.sigc-mission,
+.sigc-page-footer {
+  position: relative;
+  z-index: 2;
+}
+.sigc-intro {
+  background: linear-gradient(180deg, rgba(8,9,11,0.24), rgba(8,9,11,0.04) 55%, rgba(8,9,11,0.4));
+}
+.sigc-mission {
+  background: linear-gradient(180deg, rgba(8,9,11,0.16), rgba(8,9,11,0.52) 48%, rgba(8,9,11,0.2));
+}
+.sigc-mission-header {
+  position: relative;
+  isolation: isolate;
+  min-height: min(82svh, 850px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.sigc-mission-header > * {
+  position: relative;
+  z-index: 1;
+}
+.sigc-mission-header h2,
+.sigc-section-heading h3,
+.sigc-overview-title,
+.sigc-mission-tagline {
+  color: #ededeb;
+  text-shadow: none;
+}
+.sigc-eyebrow,
+.sigc-tags li,
+.sigc-enter-button,
+.sigc-domain-section button,
+.sigc-record-grid a {
+  color: #c8c8c4;
+}
+.sigc-enter-button,
+.sigc-tags li,
+.sigc-record-grid > *,
+.sigc-domain-section button {
+  border-color: rgba(205, 205, 200, 0.25);
+  box-shadow: none;
+}
+.sigc-enter-button:hover,
+.sigc-tags li:hover,
+.sigc-domain-section button:hover {
+  color: #f4f4f1;
+  border-color: rgba(225, 225, 220, 0.5);
+  box-shadow: none;
+}
+.sigc-intro h1,
+.sigc-intro h1 span,
+.sigc-section-heading h3 span,
+.sigc-content-section h3 span {
+  color: #f0f0ed;
+  text-shadow: none;
+}
+.sigc-intro-summary,
+.sigc-overview-copy,
+.sigc-section-description {
+  color: #b8b8b4;
+}
+@media (max-width: 700px) {
+  .sigc-tunnel-scene { opacity: 0.45; perspective: 680px; }
+  .sigc-tunnel-wall--left,
+  .sigc-tunnel-wall--right { width: 76%; }
+  .sigc-tunnel-floor,
+  .sigc-tunnel-ceiling { left: -18%; right: -18%; }
+  .sigc-tunnel-end { width: 34vw; }
+  .sigc-mission-header { min-height: 68svh; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sigc-tunnel-geometry { transform: none; }
+  .sigc-tunnel-floor { background-position: 0 0; }
+}
