@@ -703,7 +703,6 @@ export default function RecruitmentPage() {
     };
   }, []);
   const galleryRef = useRef(null);
-  const tunnelRef = useRef(null);
   const pendingMissionRef = useRef(null);
 
   useEffect(() => {
