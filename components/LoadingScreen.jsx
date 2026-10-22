@@ -55,8 +55,12 @@ export default function LoadingScreen({ onComplete }) {
       initial={{ opacity: 1 }}
       exit={{ opacity: 0, scale: 1.03, filter: "blur(8px)" }}
       transition={{ duration: 0.85, ease: "easeInOut" }}
-      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#071A2B] overflow-hidden select-none"
-      style={{ perspective: "1200px" }}
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#050506] overflow-hidden select-none"
+      style={{
+        perspective: "1200px",
+        // Black + grey mix: lighter grey in the centre fading to near-black at the edges
+        background: "radial-gradient(ellipse at center, #232326 0%, #141416 42%, #060607 100%)",
+      }}
     >
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes traceTextSlow {
@@ -141,7 +145,7 @@ export default function LoadingScreen({ onComplete }) {
       <div 
         className="absolute w-[480px] h-[480px] rounded-full pointer-events-none"
         style={{
-          background: "radial-gradient(circle, rgba(0, 136, 198, 0.08) 0%, rgba(27, 92, 162, 0.03) 45%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(190, 190, 200, 0.07) 0%, rgba(120, 120, 130, 0.03) 45%, transparent 70%)",
           filter: "blur(30px)"
         }}
       />
@@ -162,7 +166,7 @@ export default function LoadingScreen({ onComplete }) {
             className="relative z-10 w-[90%] max-w-md flex flex-col items-center"
           >
             <div 
-              className={`w-full flex items-center justify-between px-6 py-4 rounded-full bg-[#0B2033]/90 border transition-all duration-500 ${
+              className={`w-full flex items-center justify-between px-6 py-4 rounded-full bg-[#18181B]/90 border transition-all duration-500 ${
                 isSearching 
                   ? "border-[#009BDE]/60 shadow-[0_0_20px_rgba(0,155,222,0.2)]" 
                   : "border-[#009BDE]/30 shadow-[0_0_15px_rgba(0,155,222,0.1)]"
@@ -181,7 +185,7 @@ export default function LoadingScreen({ onComplete }) {
               <div 
                 className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-500 ${
                   isSearching 
-                    ? "bg-[#009BDE]/85 text-[#071A2B] scale-105" 
+                    ? "bg-[#009BDE]/85 text-[#0A0A0B] scale-105" 
                     : "bg-[#009BDE]/15 text-[#009BDE]/80"
                 }`}
               >
