@@ -703,7 +703,29 @@ export default function RecruitmentPage() {
     };
   }, []);
   const galleryRef = useRef(null);
+  const tunnelRef = useRef(null);
   const pendingMissionRef = useRef(null);
+
+  useEffect(() => {
+    const tunnel = document.querySelector(".sigc-tunnel-scene");
+    if (!tunnel) return undefined;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let frame = 0;
+    const updateTunnel = () => {
+      frame = 0;
+      const progress = Math.max(0, window.scrollY || 0);
+      tunnel.style.setProperty("--sigc-tunnel-scroll", reducedMotion ? "0px" : `${Math.min(progress * 0.16, 1800)}px`);
+    };
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateTunnel);
+    };
+    updateTunnel();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
   const pendingMissionTimeoutRef = useRef(null);
   const selectMission = useCallback((id) => {
     const mission = missions.find((item) => item.id === id);
@@ -820,6 +842,15 @@ export default function RecruitmentPage() {
       />
       <div className="sigc-page">
         <ControlRoom />
+        <div className="sigc-tunnel-scene" aria-hidden="true">
+          <div className="sigc-tunnel-geometry">
+            <div className="sigc-tunnel-wall sigc-tunnel-wall--left" />
+            <div className="sigc-tunnel-wall sigc-tunnel-wall--right" />
+            <div className="sigc-tunnel-ceiling" />
+            <div className="sigc-tunnel-floor" />
+            <div className="sigc-tunnel-end" />
+          </div>
+        </div>
         <div className="sigc-page-content">
         <section className="sigc-intro" id="sigc-intro" aria-labelledby="sigc-intro-title">
           <div className="sigc-intro-copy">
