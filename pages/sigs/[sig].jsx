@@ -546,7 +546,7 @@ function MissionContent({ mission }) {
           )}
         </header>
 
-        <StorySection mission={mission} />
+        {false && <StorySection mission={mission} />}
 
         {Array.isArray(data.domains) && data.domains.length > 0 && (
           <section className="sigc-content-section sigc-domain-section" id={`${mission.id}-domains`}>
@@ -565,7 +565,7 @@ function MissionContent({ mission }) {
           </section>
         )}
 
-        {Array.isArray(data.explorations) && data.explorations.filter(Boolean).length > 0 && (
+        {false && Array.isArray(data.explorations) && data.explorations.filter(Boolean).length > 0 && (
           <section className="sigc-content-section" id={`${mission.id}-explorations`}>
             <SectionHeading
               eyebrow={data.explorationsEyebrow || "LAB NOTES"}
@@ -616,7 +616,7 @@ function MissionContent({ mission }) {
           </section>
         )}
 
-        {Array.isArray(data.benefits) && data.benefits.length > 0 && (
+        {false && Array.isArray(data.benefits) && data.benefits.length > 0 && (
           <section className="sigc-content-section" id={`${mission.id}-why-join`}>
             <SectionHeading
               eyebrow={data.whyJoinHeading || "WHY JOIN"}
@@ -627,7 +627,7 @@ function MissionContent({ mission }) {
           </section>
         )}
 
-        {data.manifesto && (
+        {false && data.manifesto && (
           <section className="sigc-content-section" id={`${mission.id}-manifesto`}>
             <SectionHeading
               eyebrow={data.manifesto.eyebrow}
