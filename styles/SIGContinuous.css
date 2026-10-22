@@ -3586,6 +3586,29 @@
   letter-spacing: 0.22em;
   color: #a8a8a3;
 }
+.sigc-tunnel-mission-tagline {
+  max-width: 620px;
+  margin: 0 auto 22px !important;
+  font-size: clamp(13px, 1.3vw, 17px) !important;
+  line-height: 1.55;
+  letter-spacing: 0.015em !important;
+  color: #b8b8b4 !important;
+}
+.sigc-tunnel-mission-words {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto 26px;
+}
+.sigc-tunnel-mission-words span {
+  border: 1px solid rgba(205,205,200,0.22);
+  padding: 6px 10px;
+  color: #b8b8b4;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 .sigc-tunnel-mission h2 {
   margin: 10px 0 8px;
   font-size: clamp(68px, 15vw, 190px);
