@@ -3713,3 +3713,11 @@
   .sigc-tunnel-frames span:nth-child(6) { inset: 37% 37%; }
   .sigc-tunnel-frames span:nth-child(7) { inset: 42% 41%; }
 }
+
+.sigc-tunnel-frames {
+  transform: translateZ(calc(var(--sigc-tunnel-scroll) * -0.16));
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sigc-tunnel-frames { transform: none; }
+}
