@@ -3619,3 +3619,97 @@
   .sigc-tunnel-geometry { transform: none; }
   .sigc-tunnel-floor { background-position: 0 0; }
 }
+
+
+/* Make the tunnel read as a corridor at first glance, even behind page content. */
+.sigc-tunnel-scene {
+  z-index: 1;
+  opacity: 1;
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(8,9,11,0.08) 38%, rgba(8,9,11,0.52) 100%);
+}
+.sigc-tunnel-geometry {
+  inset: 0;
+  transform: none;
+}
+.sigc-tunnel-wall,
+.sigc-tunnel-ceiling,
+.sigc-tunnel-floor {
+  background-color: transparent;
+  background-image:
+    linear-gradient(rgba(205, 205, 200, 0.19) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(205, 205, 200, 0.19) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+.sigc-tunnel-wall--left,
+.sigc-tunnel-wall--right {
+  top: 8%;
+  bottom: 7%;
+  width: 68%;
+  background-size: 64px 64px;
+}
+.sigc-tunnel-wall--left {
+  left: -20%;
+  transform: perspective(700px) rotateY(56deg);
+  transform-origin: right center;
+  mask-image: linear-gradient(90deg, transparent 0%, #000 58%, #000 100%);
+}
+.sigc-tunnel-wall--right {
+  right: -20%;
+  transform: perspective(700px) rotateY(-56deg);
+  transform-origin: left center;
+  mask-image: linear-gradient(270deg, transparent 0%, #000 58%, #000 100%);
+}
+.sigc-tunnel-ceiling,
+.sigc-tunnel-floor {
+  left: -4%;
+  right: -4%;
+  height: 62%;
+  background-size: 64px 64px;
+}
+.sigc-tunnel-ceiling {
+  top: -37%;
+  transform: perspective(700px) rotateX(-59deg);
+  transform-origin: center bottom;
+}
+.sigc-tunnel-floor {
+  bottom: -38%;
+  transform: perspective(700px) rotateX(59deg);
+  transform-origin: center top;
+  background-position: 0 var(--sigc-tunnel-scroll);
+  mask-image: linear-gradient(0deg, transparent 0%, #000 28%, #000 76%, transparent 100%);
+}
+.sigc-tunnel-frames {
+  position: absolute;
+  inset: 0;
+  perspective: 900px;
+  perspective-origin: 50% 48%;
+  transform-style: preserve-3d;
+}
+.sigc-tunnel-frames span {
+  position: absolute;
+  inset: 9% 16%;
+  border: 1px solid rgba(200, 200, 195, 0.20);
+  transform: translateZ(-60px) scale(0.94);
+  transform-origin: center;
+}
+.sigc-tunnel-frames span:nth-child(2) { inset: 14% 21%; transform: translateZ(-150px) scale(0.84); }
+.sigc-tunnel-frames span:nth-child(3) { inset: 19% 26%; transform: translateZ(-250px) scale(0.73); }
+.sigc-tunnel-frames span:nth-child(4) { inset: 24% 31%; transform: translateZ(-350px) scale(0.62); }
+.sigc-tunnel-frames span:nth-child(5) { inset: 29% 36%; transform: translateZ(-450px) scale(0.51); }
+.sigc-tunnel-frames span:nth-child(6) { inset: 34% 40%; transform: translateZ(-550px) scale(0.42); }
+.sigc-tunnel-frames span:nth-child(7) { inset: 39% 43%; transform: translateZ(-650px) scale(0.34); }
+.sigc-tunnel-end {
+  width: min(18vw, 240px);
+  border-color: rgba(220, 220, 215, 0.22);
+  box-shadow: none;
+}
+@media (max-width: 700px) {
+  .sigc-tunnel-scene { opacity: 0.68; }
+  .sigc-tunnel-frames span { inset: 12% 8%; }
+  .sigc-tunnel-frames span:nth-child(2) { inset: 17% 14%; }
+  .sigc-tunnel-frames span:nth-child(3) { inset: 22% 20%; }
+  .sigc-tunnel-frames span:nth-child(4) { inset: 27% 26%; }
+  .sigc-tunnel-frames span:nth-child(5) { inset: 32% 32%; }
+  .sigc-tunnel-frames span:nth-child(6) { inset: 37% 37%; }
+  .sigc-tunnel-frames span:nth-child(7) { inset: 42% 41%; }
+}
