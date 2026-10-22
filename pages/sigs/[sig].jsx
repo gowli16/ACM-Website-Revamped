@@ -37,17 +37,42 @@ function TunnelFrame({ index, progress, reducedMotion }) {
 }
 
 function TunnelMission({ mission, progress, index, reducedMotion }) {
+  // Each title starts at the vanishing point, approaches the viewer, then passes the camera.
+  // The next SIG starts its approach as the previous title exits.
   const start = index / 4;
-  const enter = Math.min(start + 0.07, 0.94);
-  const hold = Math.min(start + 0.18, 0.98);
-  const exit = Math.min(start + 0.25, 1);
-  const opacity = useTransform(progress, [start, enter, hold, exit], [0, 1, 1, index === 3 ? 1 : 0]);
-  const scale = useTransform(progress, [start, enter, hold, exit], [0.42, 1, 1, index === 3 ? 1.12 : 1.65]);
-  const y = useTransform(progress, [start, enter, hold, exit], [58, 0, 0, index === 3 ? -10 : -72]);
+  const approach = start + 0.045;
+  const foreground = start + 0.17;
+  const pass = Math.min(start + 0.25, 1);
+  const opacity = useTransform(
+    progress,
+    [start, approach, foreground, pass],
+    [0, 0.72, 1, 0]
+  );
+  const scale = useTransform(
+    progress,
+    [start, approach, foreground, pass],
+    [0.055, 0.42, 1, 3.4]
+  );
+  const z = useTransform(
+    progress,
+    [start, approach, foreground, pass],
+    [-1350, -620, 0, 1650]
+  );
+  const y = useTransform(
+    progress,
+    [start, approach, foreground, pass],
+    [0, 0, 0, -24]
+  );
+
   return (
     <motion.div
       className={`sigc-tunnel-mission sigc-tunnel-mission--${mission.id}`}
-      style={{ opacity: reducedMotion ? 1 : opacity, scale: reducedMotion ? 1 : scale, y: reducedMotion ? 0 : y }}
+      style={{
+        opacity: reducedMotion ? 1 : opacity,
+        scale: reducedMotion ? 1 : scale,
+        z: reducedMotion ? 0 : z,
+        y: reducedMotion ? 0 : y,
+      }}
       aria-hidden="true"
     >
       <span className="sigc-tunnel-mission-index">{String(index + 1).padStart(2, "0")} / 04</span>
