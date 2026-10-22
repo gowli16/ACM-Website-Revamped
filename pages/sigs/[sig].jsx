@@ -53,6 +53,10 @@ function TunnelMission({ mission, progress, index, reducedMotion }) {
       <span className="sigc-tunnel-mission-index">{String(index + 1).padStart(2, "0")} / 04</span>
       <h2>{mission.label}</h2>
       <p>{mission.title}</p>
+      <p className="sigc-tunnel-mission-tagline">{mission.data.tagline}</p>
+      <div className="sigc-tunnel-mission-words">
+        {(mission.data.words || []).slice(0, 4).map((word) => <span key={word}>{word}</span>)}
+      </div>
       <span className="sigc-tunnel-mission-line">{mission.station}</span>
     </motion.div>
   );
