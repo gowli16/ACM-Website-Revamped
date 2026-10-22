@@ -3448,7 +3448,7 @@
   }
 }
 
-/* Monochrome perspective tunnel for the SIG journey. The grid moves with page scroll. */
+/* Scroll-driven SIG tunnel: geometry stays in CSS; Framer Motion owns movement. */
 .sigc-page {
   --sigc-background: #08090b;
   --sigc-panel: #101114;
@@ -3461,82 +3461,80 @@
   background: #08090b;
 }
 .sigc-tunnel-scene {
-  --sigc-tunnel-scroll: 0px;
   position: fixed;
   z-index: 1;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
-  perspective: 900px;
+  perspective: 1100px;
   perspective-origin: 50% 48%;
-  opacity: 0.72;
+  opacity: 0.62;
 }
 .sigc-tunnel-geometry {
   position: absolute;
-  inset: -22% -12%;
+  inset: 0;
   transform-style: preserve-3d;
-  transform: translateY(calc(var(--sigc-tunnel-scroll) * -0.018));
 }
 .sigc-tunnel-wall,
 .sigc-tunnel-ceiling,
 .sigc-tunnel-floor {
   position: absolute;
-  overflow: hidden;
-  background-color: rgba(10, 11, 13, 0.42);
+  background-color: transparent;
   background-image:
-    linear-gradient(rgba(190, 192, 194, 0.13) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(190, 192, 194, 0.13) 1px, transparent 1px);
-  background-size: 54px 54px;
+    linear-gradient(rgba(205, 205, 200, 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(205, 205, 200, 0.16) 1px, transparent 1px);
+  background-size: 68px 68px;
 }
 .sigc-tunnel-wall--left,
 .sigc-tunnel-wall--right {
-  top: 7%;
-  bottom: 8%;
-  width: 62%;
-  background-size: 58px 58px;
+  top: 2%;
+  bottom: 2%;
+  width: 64%;
 }
 .sigc-tunnel-wall--left {
-  left: -16%;
+  left: -20%;
   transform-origin: right center;
-  transform: rotateY(57deg);
-  mask-image: linear-gradient(90deg, transparent 0%, #000 46%, #000 100%);
+  transform: rotateY(61deg);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 58%, #000 100%);
 }
 .sigc-tunnel-wall--right {
-  right: -16%;
+  right: -20%;
   transform-origin: left center;
-  transform: rotateY(-57deg);
-  mask-image: linear-gradient(270deg, transparent 0%, #000 46%, #000 100%);
+  transform: rotateY(-61deg);
+  mask-image: linear-gradient(270deg, transparent 0%, #000 58%, #000 100%);
 }
 .sigc-tunnel-ceiling,
 .sigc-tunnel-floor {
-  left: 5%;
-  right: 5%;
-  height: 58%;
-  background-size: 58px 58px;
+  left: -6%;
+  right: -6%;
+  height: 65%;
+  background-size: 68px 68px;
 }
 .sigc-tunnel-ceiling {
-  top: -32%;
+  top: -40%;
   transform-origin: center bottom;
-  transform: rotateX(-63deg);
-  mask-image: linear-gradient(180deg, transparent 0%, #000 60%, transparent 100%);
+  transform: perspective(700px) rotateX(-62deg);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 48%, #000 78%, transparent 100%);
 }
 .sigc-tunnel-floor {
-  bottom: -34%;
+  bottom: -40%;
   transform-origin: center top;
-  transform: rotateX(63deg);
-  background-position: 0 var(--sigc-tunnel-scroll);
-  mask-image: linear-gradient(0deg, transparent 0%, #000 44%, transparent 100%);
+  transform: perspective(700px) rotateX(62deg);
+  mask-image: linear-gradient(0deg, transparent 0%, #000 22%, #000 75%, transparent 100%);
 }
-.sigc-tunnel-end {
+.sigc-tunnel-frame-stack {
   position: absolute;
-  width: min(24vw, 320px);
-  aspect-ratio: 1.35;
-  left: 50%;
-  top: 49%;
-  transform: translate(-50%, -50%);
-  border: 1px solid rgba(210, 210, 205, 0.12);
-  box-shadow: 0 0 0 34px rgba(210, 210, 205, 0.018), 0 0 0 72px rgba(210, 210, 205, 0.014);
-  opacity: 0.5;
+  inset: 0;
+  transform-style: preserve-3d;
+  perspective: 1100px;
+  perspective-origin: 50% 48%;
+}
+.sigc-tunnel-frame {
+  position: absolute;
+  inset: 10% 18%;
+  border: 1px solid rgba(218, 218, 212, 0.27);
+  transform-origin: center;
+  will-change: transform, opacity;
 }
 .sigc-page-content {
   position: relative;
@@ -3607,117 +3605,15 @@
   color: #b8b8b4;
 }
 @media (max-width: 700px) {
-  .sigc-tunnel-scene { opacity: 0.45; perspective: 680px; }
+  .sigc-tunnel-scene { opacity: 0.42; perspective: 720px; }
   .sigc-tunnel-wall--left,
   .sigc-tunnel-wall--right { width: 76%; }
-  .sigc-tunnel-floor,
-  .sigc-tunnel-ceiling { left: -18%; right: -18%; }
-  .sigc-tunnel-end { width: 34vw; }
+  .sigc-tunnel-ceiling,
+  .sigc-tunnel-floor { left: -22%; right: -22%; }
+  .sigc-tunnel-frame { inset: 12% 8%; }
   .sigc-mission-header { min-height: 68svh; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .sigc-tunnel-geometry { transform: none; }
-  .sigc-tunnel-floor { background-position: 0 0; }
-}
-
-
-/* Make the tunnel read as a corridor at first glance, even behind page content. */
-.sigc-tunnel-scene {
-  z-index: 1;
-  opacity: 1;
-  background: radial-gradient(ellipse at center, transparent 0%, rgba(8,9,11,0.08) 38%, rgba(8,9,11,0.52) 100%);
-}
-.sigc-tunnel-geometry {
-  inset: 0;
-  transform: none;
-}
-.sigc-tunnel-wall,
-.sigc-tunnel-ceiling,
-.sigc-tunnel-floor {
-  background-color: transparent;
-  background-image:
-    linear-gradient(rgba(205, 205, 200, 0.19) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(205, 205, 200, 0.19) 1px, transparent 1px);
-  background-size: 64px 64px;
-}
-.sigc-tunnel-wall--left,
-.sigc-tunnel-wall--right {
-  top: 8%;
-  bottom: 7%;
-  width: 68%;
-  background-size: 64px 64px;
-}
-.sigc-tunnel-wall--left {
-  left: -20%;
-  transform: perspective(700px) rotateY(56deg);
-  transform-origin: right center;
-  mask-image: linear-gradient(90deg, transparent 0%, #000 58%, #000 100%);
-}
-.sigc-tunnel-wall--right {
-  right: -20%;
-  transform: perspective(700px) rotateY(-56deg);
-  transform-origin: left center;
-  mask-image: linear-gradient(270deg, transparent 0%, #000 58%, #000 100%);
-}
-.sigc-tunnel-ceiling,
-.sigc-tunnel-floor {
-  left: -4%;
-  right: -4%;
-  height: 62%;
-  background-size: 64px 64px;
-}
-.sigc-tunnel-ceiling {
-  top: -37%;
-  transform: perspective(700px) rotateX(-59deg);
-  transform-origin: center bottom;
-}
-.sigc-tunnel-floor {
-  bottom: -38%;
-  transform: perspective(700px) rotateX(59deg);
-  transform-origin: center top;
-  background-position: 0 var(--sigc-tunnel-scroll);
-  mask-image: linear-gradient(0deg, transparent 0%, #000 28%, #000 76%, transparent 100%);
-}
-.sigc-tunnel-frames {
-  position: absolute;
-  inset: 0;
-  perspective: 900px;
-  perspective-origin: 50% 48%;
-  transform-style: preserve-3d;
-}
-.sigc-tunnel-frames span {
-  position: absolute;
-  inset: 9% 16%;
-  border: 1px solid rgba(200, 200, 195, 0.20);
-  transform: translateZ(-60px) scale(0.94);
-  transform-origin: center;
-}
-.sigc-tunnel-frames span:nth-child(2) { inset: 14% 21%; transform: translateZ(-150px) scale(0.84); }
-.sigc-tunnel-frames span:nth-child(3) { inset: 19% 26%; transform: translateZ(-250px) scale(0.73); }
-.sigc-tunnel-frames span:nth-child(4) { inset: 24% 31%; transform: translateZ(-350px) scale(0.62); }
-.sigc-tunnel-frames span:nth-child(5) { inset: 29% 36%; transform: translateZ(-450px) scale(0.51); }
-.sigc-tunnel-frames span:nth-child(6) { inset: 34% 40%; transform: translateZ(-550px) scale(0.42); }
-.sigc-tunnel-frames span:nth-child(7) { inset: 39% 43%; transform: translateZ(-650px) scale(0.34); }
-.sigc-tunnel-end {
-  width: min(18vw, 240px);
-  border-color: rgba(220, 220, 215, 0.22);
-  box-shadow: none;
-}
-@media (max-width: 700px) {
-  .sigc-tunnel-scene { opacity: 0.68; }
-  .sigc-tunnel-frames span { inset: 12% 8%; }
-  .sigc-tunnel-frames span:nth-child(2) { inset: 17% 14%; }
-  .sigc-tunnel-frames span:nth-child(3) { inset: 22% 20%; }
-  .sigc-tunnel-frames span:nth-child(4) { inset: 27% 26%; }
-  .sigc-tunnel-frames span:nth-child(5) { inset: 32% 32%; }
-  .sigc-tunnel-frames span:nth-child(6) { inset: 37% 37%; }
-  .sigc-tunnel-frames span:nth-child(7) { inset: 42% 41%; }
-}
-
-.sigc-tunnel-frames {
-  transform: translateZ(calc(var(--sigc-tunnel-scroll) * -0.16));
-  will-change: transform;
-}
-@media (prefers-reduced-motion: reduce) {
-  .sigc-tunnel-frames { transform: none; }
+  .sigc-tunnel-scene { opacity: 0.3; }
+  .sigc-tunnel-frame { will-change: auto; }
 }
