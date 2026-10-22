@@ -3447,3 +3447,9 @@
     transform: none;
   }
 }
+
+/* Soften the AI particle field at its canvas edges instead of letting it read as a rectangle. */
+.sigc-mission[data-sigc-mission="ai"] .sigc-ai-network-canvas {
+  -webkit-mask-image: radial-gradient(ellipse 92% 72% at 50% 50%, #000 38%, rgba(0, 0, 0, 0.88) 55%, transparent 100%);
+  mask-image: radial-gradient(ellipse 92% 72% at 50% 50%, #000 38%, rgba(0, 0, 0, 0.88) 55%, transparent 100%);
+}
