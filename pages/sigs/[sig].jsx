@@ -848,6 +848,9 @@ export default function RecruitmentPage() {
             <div className="sigc-tunnel-ceiling" />
             <div className="sigc-tunnel-floor" />
             <div className="sigc-tunnel-end" />
+            <div className="sigc-tunnel-frames">
+              <span /><span /><span /><span /><span /><span /><span />
+            </div>
           </div>
         </div>
         <div className="sigc-page-content">
