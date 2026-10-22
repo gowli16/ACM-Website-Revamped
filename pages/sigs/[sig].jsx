@@ -25,106 +25,6 @@ const contactLinks = [
   { label: "Facebook", href: "https://www.facebook.com/acm.amrita" },
 ];
 
-function TunnelFrame({ index, progress, reducedMotion }) {
-  const scale = useTransform(progress, [0, 1], [0.28 + index * 0.09, 3.2 + index * 0.2]);
-  const opacity = useTransform(progress, [0, 0.12, 0.7, 1], [0.12, 0.34, 0.28, 0.05]);
-  return (
-    <motion.div
-      className="sigc-tunnel-frame"
-      style={{ scale: reducedMotion ? 0.55 + index * 0.08 : scale, opacity: reducedMotion ? 0.16 : opacity }}
-    />
-  );
-}
-
-function TunnelMission({ mission, progress, index, reducedMotion }) {
-  // Each title starts at the vanishing point, approaches the viewer, then passes the camera.
-  // The next SIG starts its approach as the previous title exits.
-  const start = index / 4;
-  const approach = start + 0.045;
-  const foreground = start + 0.17;
-  const pass = Math.min(start + 0.25, 1);
-  const opacity = useTransform(
-    progress,
-    [start, approach, foreground, pass],
-    [0, 0.72, 1, 0]
-  );
-  const scale = useTransform(
-    progress,
-    [start, approach, foreground, pass],
-    [0.055, 0.42, 1, 3.4]
-  );
-  const z = useTransform(
-    progress,
-    [start, approach, foreground, pass],
-    [-1350, -620, 0, 1650]
-  );
-  const y = useTransform(
-    progress,
-    [start, approach, foreground, pass],
-    [0, 0, 0, -24]
-  );
-
-  return (
-    <motion.div
-      className={`sigc-tunnel-mission sigc-tunnel-mission--${mission.id}`}
-      style={{
-        opacity: reducedMotion ? 1 : opacity,
-        scale: reducedMotion ? 1 : scale,
-        z: reducedMotion ? 0 : z,
-        y: reducedMotion ? 0 : y,
-      }}
-      aria-hidden="true"
-    >
-      <span className="sigc-tunnel-mission-index">{String(index + 1).padStart(2, "0")} / 04</span>
-      <h2>{mission.label}</h2>
-      <p>{mission.title}</p>
-      <p className="sigc-tunnel-mission-tagline">{mission.data.tagline}</p>
-      <div className="sigc-tunnel-mission-words">
-        {(mission.data.words || []).slice(0, 4).map((word) => <span key={word}>{word}</span>)}
-      </div>
-      <span className="sigc-tunnel-mission-line">{mission.station}</span>
-    </motion.div>
-  );
-}
-
-function TunnelJourney() {
-  const trackRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: trackRef,
-    offset: ["start start", "end end"],
-  });
-  const floorY = useTransform(scrollYProgress, [0, 1], [0, 1500]);
-  const reducedMotion = useReducedMotion();
-
-  return (
-    <section className="sigc-tunnel-journey" ref={trackRef} aria-label="SIG tunnel journey">
-      <div className="sigc-tunnel-scene">
-        <div className="sigc-tunnel-geometry">
-          <div className="sigc-tunnel-wall sigc-tunnel-wall--left" />
-          <div className="sigc-tunnel-wall sigc-tunnel-wall--right" />
-          <div className="sigc-tunnel-ceiling" />
-          <motion.div className="sigc-tunnel-floor" style={{ backgroundPositionY: reducedMotion ? 0 : floorY }} />
-          <div className="sigc-tunnel-frame-stack">
-            {Array.from({ length: 12 }, (_, index) => (
-              <TunnelFrame key={index} index={index} progress={scrollYProgress} reducedMotion={reducedMotion} />
-            ))}
-          </div>
-          <div className="sigc-tunnel-vanishing-point" />
-        </div>
-        <div className="sigc-tunnel-missions">
-          {missions.map((mission, index) => (
-            <TunnelMission key={mission.id} mission={mission} index={index} progress={scrollYProgress} reducedMotion={reducedMotion} />
-          ))}
-        </div>
-        <div className="sigc-tunnel-progress" aria-hidden="true">
-          <motion.span style={{ scaleX: scrollYProgress }} />
-        </div>
-        <p className="sigc-tunnel-scroll-hint">SCROLL TO MOVE THROUGH THE SIGS</p>
-      </div>
-    </section>
-  );
-}
-
 function SectionHeading({ eyebrow, title, description }) {
   return (
     <header className="sigc-section-heading">
@@ -945,11 +845,7 @@ export default function RecruitmentPage() {
           <div className="sigc-intro-gallery" ref={galleryRef}>
             <SigArchiveGallery />
           </div>
-        </section>
-
-        <TunnelJourney />
-
-        {missions.map((mission) => (
+        </section>{missions.map((mission) => (
           <MissionContent key={mission.id} mission={mission} />
         ))}
 
