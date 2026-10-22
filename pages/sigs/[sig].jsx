@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import GlitchTitle from "../../components/GlitchTitle";
 import ControlRoom from "../../components/ControlRoom";
 import SpaceShooter from "../../components/SpaceShooter";
@@ -23,6 +24,42 @@ const contactLinks = [
   { label: "Instagram", href: "https://www.instagram.com/acm.amrita/" },
   { label: "Facebook", href: "https://www.facebook.com/acm.amrita" },
 ];
+
+function TunnelFrame({ index, progress }) {
+  const startScale = 0.36 + index * 0.11;
+  const endScale = 2.05 + index * 0.13;
+  const scale = useTransform(progress, [0, 1], [startScale, endScale]);
+  const opacity = useTransform(progress, [0, 0.35, 0.72, 1], [0.18, 0.48, 0.3, 0.12]);
+  return (
+    <motion.div
+      className="sigc-tunnel-frame"
+      style={{ scale, opacity }}
+    />
+  );
+}
+
+function TunnelScene() {
+  const { scrollYProgress } = useScroll();
+  const floorY = useTransform(scrollYProgress, [0, 1], [0, 980]);
+  const reducedMotion = typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  return (
+    <motion.div className="sigc-tunnel-scene" aria-hidden="true">
+      <div className="sigc-tunnel-geometry">
+        <div className="sigc-tunnel-wall sigc-tunnel-wall--left" />
+        <div className="sigc-tunnel-wall sigc-tunnel-wall--right" />
+        <div className="sigc-tunnel-ceiling" />
+        <motion.div className="sigc-tunnel-floor" style={{ backgroundPositionY: reducedMotion ? 0 : floorY }} />
+        <div className="sigc-tunnel-frame-stack">
+          {Array.from({ length: 9 }, (_, index) => (
+            <TunnelFrame key={index} index={index} progress={reducedMotion ? { get: () => 0 } : scrollYProgress} />
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 function SectionHeading({ eyebrow, title, description }) {
   return (
@@ -705,26 +742,6 @@ export default function RecruitmentPage() {
   const galleryRef = useRef(null);
   const pendingMissionRef = useRef(null);
 
-  useEffect(() => {
-    const tunnel = document.querySelector(".sigc-tunnel-scene");
-    if (!tunnel) return undefined;
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let frame = 0;
-    const updateTunnel = () => {
-      frame = 0;
-      const progress = Math.max(0, window.scrollY || 0);
-      tunnel.style.setProperty("--sigc-tunnel-scroll", reducedMotion ? "0px" : `${Math.min(progress * 0.16, 1800)}px`);
-    };
-    const onScroll = () => {
-      if (!frame) frame = window.requestAnimationFrame(updateTunnel);
-    };
-    updateTunnel();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
-  }, []);
   const pendingMissionTimeoutRef = useRef(null);
   const selectMission = useCallback((id) => {
     const mission = missions.find((item) => item.id === id);
@@ -841,18 +858,7 @@ export default function RecruitmentPage() {
       />
       <div className="sigc-page">
         <ControlRoom />
-        <div className="sigc-tunnel-scene" aria-hidden="true">
-          <div className="sigc-tunnel-geometry">
-            <div className="sigc-tunnel-wall sigc-tunnel-wall--left" />
-            <div className="sigc-tunnel-wall sigc-tunnel-wall--right" />
-            <div className="sigc-tunnel-ceiling" />
-            <div className="sigc-tunnel-floor" />
-            <div className="sigc-tunnel-end" />
-            <div className="sigc-tunnel-frames">
-              <span /><span /><span /><span /><span /><span /><span />
-            </div>
-          </div>
-        </div>
+        <TunnelScene />
         <div className="sigc-page-content">
         <section className="sigc-intro" id="sigc-intro" aria-labelledby="sigc-intro-title">
           <div className="sigc-intro-copy">
