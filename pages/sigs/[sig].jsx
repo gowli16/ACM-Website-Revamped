@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import GlitchTitle from "../../components/GlitchTitle";
 import ControlRoom from "../../components/ControlRoom";
 import SpaceShooter from "../../components/SpaceShooter";
@@ -25,7 +25,7 @@ const contactLinks = [
   { label: "Facebook", href: "https://www.facebook.com/acm.amrita" },
 ];
 
-function TunnelFrame({ index, progress }) {
+function TunnelFrame({ index, progress, reducedMotion }) {
   const startScale = 0.36 + index * 0.11;
   const endScale = 2.05 + index * 0.13;
   const scale = useTransform(progress, [0, 1], [startScale, endScale]);
@@ -33,7 +33,7 @@ function TunnelFrame({ index, progress }) {
   return (
     <motion.div
       className="sigc-tunnel-frame"
-      style={{ scale, opacity }}
+      style={{ scale: reducedMotion ? startScale : scale, opacity: reducedMotion ? 0.18 : opacity }}
     />
   );
 }
@@ -41,8 +41,7 @@ function TunnelFrame({ index, progress }) {
 function TunnelScene() {
   const { scrollYProgress } = useScroll();
   const floorY = useTransform(scrollYProgress, [0, 1], [0, 980]);
-  const reducedMotion = typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reducedMotion = useReducedMotion();
 
   return (
     <motion.div className="sigc-tunnel-scene" aria-hidden="true">
@@ -53,7 +52,7 @@ function TunnelScene() {
         <motion.div className="sigc-tunnel-floor" style={{ backgroundPositionY: reducedMotion ? 0 : floorY }} />
         <div className="sigc-tunnel-frame-stack">
           {Array.from({ length: 9 }, (_, index) => (
-            <TunnelFrame key={index} index={index} progress={reducedMotion ? { get: () => 0 } : scrollYProgress} />
+            <TunnelFrame key={index} index={index} progress={scrollYProgress} reducedMotion={reducedMotion} />
           ))}
         </div>
       </div>
